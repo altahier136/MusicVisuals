@@ -2,7 +2,8 @@ package ie.tudublin;
 
 import processing.core.PApplet;
 import ddf.minim.*;
-import ddf.minim.analysis.FFT;
+// import ddf.minim.analysis.FFT;
+import ddf.minim.analysis.*;
 
 public abstract class Visual extends PApplet
 {
@@ -21,9 +22,7 @@ public abstract class Visual extends PApplet
 	private float amplitude  = 0;
 	private float smothedAmplitude = 0;
 
-	
-	
-	public void startMinim() 
+	public void startMinim()
 	{
 		minim = new Minim(this);
 
@@ -31,7 +30,6 @@ public abstract class Visual extends PApplet
 
 		bands = new float[(int) log2(frameSize)];
   		smoothedBands = new float[bands.length];
-
 	}
 
 	float log2(float f) {
@@ -51,7 +49,6 @@ public abstract class Visual extends PApplet
 		}
 	}
 
-	
 	public void calculateAverageAmplitude()
 	{
 		float total = 0;
@@ -62,7 +59,6 @@ public abstract class Visual extends PApplet
 		amplitude = total / ab.size();
 		smothedAmplitude = PApplet.lerp(smothedAmplitude, amplitude, 0.1f);
 	}
-
 
 	protected void calculateFrequencyBands() {
 		for (int i = 0; i < bands.length; i++) {
@@ -82,7 +78,7 @@ public abstract class Visual extends PApplet
 	public void startListening()
 	{
 		ai = minim.getLineIn(Minim.MONO, frameSize, 44100, 16);
-		ab = ai.left;
+		ab = ai.mix;
 	}
 
 	public void loadAudio(String filename)

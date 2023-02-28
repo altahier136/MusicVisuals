@@ -1,8 +1,11 @@
 # Music Visualiser Project
 
-Name:
+Name - Student Number:
 
-Student Number: 
+- Sarah Baron - C21415904
+- Adrian Thomas Capacite - C21348423
+- Jennifer Kearns - C21383126
+- Altahier Saleh - C21415952
 
 ## Instructions
 - Fork this repository and use it a starter project for your assignment
@@ -11,15 +14,15 @@ Student Number:
 - There is an example visualiser called MyVisual in the example package
 - Check out the WaveForm and AudioBandsVisual for examples of how to call the Processing functions from other classes that are not subclasses of PApplet
 
-# Description of the assignment
+## Description of the assignment
 
-# Instructions
+## Instructions
 
-# How it works
+## How it works
 
-# What I am most proud of in the assignment
+## What I am most proud of in the assignment
 
-# Markdown Tutorial
+## Markdown Tutorial
 
 This is *emphasis*
 
@@ -86,4 +89,3 @@ This is a table:
 |Some stuff | Some more stuff in this column |
 |Some stuff | Some more stuff in this column |
 |Some stuff | Some more stuff in this column |
-
