@@ -19,23 +19,23 @@ public class RotatingAudioBands extends Visual {
         {
             getAudioPlayer().cue(0);
             getAudioPlayer().play();
-            
+
         }
- 
+
     }
 
     public void setup()
     {
         colorMode(HSB);
         noCursor();
-        
+
         setFrameSize(256);
 
         startMinim();
         loadAudio("heroplanet.mp3");
         getAudioPlayer().play();
-        //startListening(); 
-        
+        //startListening();
+
     }
 
     float radius = 200;

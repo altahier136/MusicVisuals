@@ -2,7 +2,6 @@ package ie.tudublin;
 
 import processing.core.PApplet;
 import ddf.minim.*;
-// import ddf.minim.analysis.FFT;
 import ddf.minim.analysis.*;
 
 /**
@@ -20,7 +19,9 @@ public abstract class Visual extends PApplet
 	private Minim minim;
 	private AudioInput ai;
 	private AudioPlayer ap;
-	private AudioBuffer ab;
+	private AudioBuffer abMono;
+	private AudioBuffer abLeft;
+	private AudioBuffer abRight;
 	private FFT fft;
 
 	private float amplitude  = 0;
@@ -52,9 +53,9 @@ public abstract class Visual extends PApplet
 	protected void calculateFFT() throws VisualException
 	{
 		fft.window(FFT.HAMMING);
-		if (ab != null)
+		if (abMono != null)
 		{
-			fft.forward(ab);
+			fft.forward(abMono);
 		}
 		else
 		{
@@ -68,11 +69,11 @@ public abstract class Visual extends PApplet
 	public void calculateAverageAmplitude()
 	{
 		float total = 0;
-		for(int i = 0 ; i < ab.size() ; i ++)
+		for(int i = 0 ; i < abMono.size() ; i ++)
         {
-			total += abs(ab.get(i));
+			total += abs(abMono.get(i));
 		}
-		amplitude = total / ab.size();
+		amplitude = total / abMono.size();
 		smothedAmplitude = PApplet.lerp(smothedAmplitude, amplitude, 0.1f);
 	}
 
@@ -100,7 +101,9 @@ public abstract class Visual extends PApplet
 	public void startListening()
 	{
 		ai = minim.getLineIn(Minim.MONO, frameSize, 44100, 16);
-		ab = ai.mix;
+		abLeft = ai.left;
+		abRight = ai.right;
+		abMono = ai.mix;
 	}
 
 	/**
@@ -110,7 +113,9 @@ public abstract class Visual extends PApplet
 	public void loadAudio(String filename)
 	{
 		ap = minim.loadFile(filename, frameSize);
-		ab = ap.mix;
+		abLeft = ap.left;
+		abRight = ap.right;
+		abMono = ap.mix;
 	}
 
 	/**
@@ -182,7 +187,7 @@ public abstract class Visual extends PApplet
 	 * @return ab
 	 */
 	public AudioBuffer getAudioBuffer() {
-		return ab;
+		return abMono;
 	}
 
 	/**
