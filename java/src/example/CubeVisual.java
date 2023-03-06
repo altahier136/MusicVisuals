@@ -19,7 +19,7 @@ public class CubeVisual extends Visual
         {
             getAudioPlayer().cue(0);
             getAudioPlayer().play();
-            
+
         }
         if (key == '1')
         {
@@ -32,14 +32,14 @@ public class CubeVisual extends Visual
     {
         colorMode(HSB);
         noCursor();
-        
+
         setFrameSize(256);
 
         startMinim();
         loadAudio("heroplanet.mp3");
         //getAp().play();
-        //startListening(); 
-        
+        //startListening();
+
     }
 
     float smoothedBoxSize = 0;
@@ -53,9 +53,9 @@ public class CubeVisual extends Visual
         stroke(map(getSmoothedAmplitude(), 0, 1, 0, 255), 255, 255);
         camera(0, 0, 0, 0, 0, -1, 0, 1, 0);
         translate(0, 0, -250);
-               
-        float boxSize = 50 + (getAmplitude() * 300);//map(average, 0, 1, 100, 400); 
-        smoothedBoxSize = lerp(smoothedBoxSize, boxSize, 0.2f);        
+
+        float boxSize = 50 + (getAmplitude() * 300);//map(average, 0, 1, 100, 400);
+        smoothedBoxSize = lerp(smoothedBoxSize, boxSize, 0.2f);
         if (twocubes)
         {
             pushMatrix();
@@ -70,7 +70,7 @@ public class CubeVisual extends Visual
             translate(100, 0, 0);
             rotateY(angle);
             rotateX(angle);
-            strokeWeight(5); 
+            strokeWeight(5);
             box(smoothedBoxSize);
             popMatrix();
         }
@@ -79,12 +79,12 @@ public class CubeVisual extends Visual
             rotateY(angle);
             rotateX(angle);
             //strokeWeight(1);
-            //sphere(smoothedBoxSize/ 2);            
+            //sphere(smoothedBoxSize/ 2);
             strokeWeight(5);
-            
+
             box(smoothedBoxSize);
         }
         angle += 0.01f;
     }
     float angle = 0;
-} 
+}
