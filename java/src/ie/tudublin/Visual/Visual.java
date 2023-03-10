@@ -42,6 +42,10 @@ public abstract class Visual extends PApplet
     private float amplitude  = 0;
     private float smothedAmplitude = 0;
 
+    enum AudioChannel {
+        MONO, LEFT, RIGHT
+    }
+
     /**
      * Sets minim, fft, bands and smoothedBands
      */
@@ -56,29 +60,6 @@ public abstract class Visual extends PApplet
     }
 
     /**
-     * Log_2(x) = log_e(x) / log_e(2)
-     */
-    float log2(float f) {
-        return log(f) / log(2.0f);
-    }
-
-    /**
-     * Calculates the FFT of the audio buffer
-     */
-    protected void calculateFFT() throws VisualException
-    {
-        fft.window(FFT.HAMMING);
-        if (abMono != null)
-        {
-            fft.forward(abMono);
-        }
-        else
-        {
-            throw new VisualException("You must call startListening or loadAudio before calling fft");
-        }
-    }
-
-    /**
      * Calculates the average amplitude of the audio buffer
      */
     public void calculateAverageAmplitude()
@@ -90,24 +71,6 @@ public abstract class Visual extends PApplet
         }
         amplitude = total / abMono.size();
         smothedAmplitude = PApplet.lerp(smothedAmplitude, amplitude, 0.1f);
-    }
-
-    /**
-     * Calculates the frequency bands of the audio buffer
-     */
-    protected void calculateFrequencyBands() {
-        for (int i = 0; i < bands.length; i++) {
-            int start = (int) pow(2, i) - 1;
-            int w = (int) pow(2, i);
-            int end = start + w;
-            float average = 0;
-            for (int j = start; j < end; j++) {
-                average += fft.getBand(j) * (j + 1);
-            }
-            average /= (float) w;
-            bands[i] = average * 5.0f;
-            smoothedBands[i] = lerp(smoothedBands[i], bands[i], 0.05f);
-        }
     }
 
     /**
@@ -197,9 +160,6 @@ public abstract class Visual extends PApplet
         return ai;
     }
 
-    public final int MONO = 0;
-    public final int LEFT = 1;
-    public final int RIGHT = 2;
     /**
      * Gets the {@link #abMono} object if the parameter is {@link #MONO}. <br>
      * Gets the {@link #abLeft} object if the parameter is {@link #LEFT}. <br>
@@ -207,7 +167,7 @@ public abstract class Visual extends PApplet
      * @param mode
      * @return abMono
      */
-    public AudioBuffer getAudioBuffer(int mode) {
+    public AudioBuffer getAudioBuffer(AudioChannel mode) {
         switch (mode) {
         case MONO:
             return abMono;
@@ -219,7 +179,6 @@ public abstract class Visual extends PApplet
             return abMono;
         }
     }
-
     /**
      * Gets {@link #abMono}
      * @return abMono
@@ -227,7 +186,6 @@ public abstract class Visual extends PApplet
     public AudioBuffer getAudioBuffer() {
         return abMono;
     }
-
     /**
      * Gets the amplitude.
      * @return {@link #amplitude}
@@ -235,7 +193,6 @@ public abstract class Visual extends PApplet
     public float getAmplitude() {
         return amplitude;
     }
-
     /**
      * Gets the smoothed amplitude.
      * @return {@link #smothedAmplitude}
@@ -259,4 +216,47 @@ public abstract class Visual extends PApplet
     public FFT getFFT() {
         return fft;
     }
+
+    /**
+     * Calculates the FFT of the audio buffer
+     */
+    protected void calculateFFT() throws VisualException
+    {
+        fft.window(FFT.HAMMING);
+        if (abMono != null)
+        {
+            fft.forward(abMono);
+        }
+        else
+        {
+            throw new VisualException("You must call startListening or loadAudio before calling fft");
+        }
+    }
+
+    /**
+     * Calculates the frequency bands of the audio buffer
+     */
+    protected void calculateFrequencyBands() {
+        for (int i = 0; i < bands.length; i++) {
+            int start = (int) pow(2, i) - 1;
+            int w = (int) pow(2, i);
+            int end = start + w;
+            float average = 0;
+            for (int j = start; j < end; j++) {
+                average += fft.getBand(j) * (j + 1);
+            }
+            average /= (float) w;
+            bands[i] = average * 5.0f;
+            smoothedBands[i] = lerp(smoothedBands[i], bands[i], 0.05f);
+        }
+    }
+
+    /**
+     * Log_2(x) = log_e(x) / log_e(2)
+     */
+    float log2(float f) {
+        return log(f) / log(2.0f);
+    }
+
+
 }
