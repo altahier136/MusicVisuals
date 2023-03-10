@@ -20,9 +20,7 @@ import ddf.minim.analysis.*;
  * <li>{@link #getMinim}</li>
  * <li>{@link #getAudioInput}</li>
  * <li>{@link #getAudioPlayer}</li>
- * <li>{@link #getAudioBufferMono}</li>
- * <li>{@link #getAudioBufferLeft}</li>
- * <li>{@link #getAudioBufferRight}</li>
+ * <li>{@link #getAudioBuffer}</li>
  *
  */
 public abstract class Visual extends PApplet
@@ -137,14 +135,14 @@ public abstract class Visual extends PApplet
 
     /**
      * Gets the frame size.
-     * @return frameSize
+     * @return {@link #frameSize}
      */
     public int getFrameSize() {
         return frameSize;
     }
 
     /**
-     * Sets the frame size.
+     * Sets the {@link #frameSize}
      * @param frameSize
      */
     public void setFrameSize(int frameSize) {
@@ -153,14 +151,14 @@ public abstract class Visual extends PApplet
 
     /**
      * Gets the sample rate.
-     * @return sampleRate
+     * @return {@link #sampleRate}
      */
     public int getSampleRate() {
         return sampleRate;
     }
 
     /**
-     * Sets the sample rate.
+     * Sets the {@link #sampleRate}
      * @param sampleRate
      */
     public void setSampleRate(int sampleRate) {
@@ -169,7 +167,7 @@ public abstract class Visual extends PApplet
 
     /**
      * Gets the bands.
-     * @return bands
+     * @return {@link #bands}
      */
     public float[] getBands() {
         return bands;
@@ -177,23 +175,23 @@ public abstract class Visual extends PApplet
 
     /**
      * Gets the smoothed bands.
-     * @return smoothedBands
+     * @return {@link #smoothedBands}
      */
     public float[] getSmoothedBands() {
         return smoothedBands;
     }
 
     /**
-     * Gets the {@link Minim} object.
-     * @return minim
+     * Gets the Minim object.
+     * @return {@link #minim}
      */
     public Minim getMinim() {
         return minim;
     }
 
     /**
-     * Gets the {@link #ai} object.
-     * @return ai
+     * Gets the AudioPlayer object.
+     * @return {@link #ap}
      */
     public AudioInput getAudioInput() {
         return ai;
@@ -203,9 +201,9 @@ public abstract class Visual extends PApplet
     public final int LEFT = 1;
     public final int RIGHT = 2;
     /**
-     * Gets the {@link #abMono} object if the parameter is {@link #MONO}.
-     * Gets the {@link #abLeft} object if the parameter is {@link #LEFT}.
-     * Gets the {@link #abRight} object if the parameter is {@link #RIGHT}.
+     * Gets the {@link #abMono} object if the parameter is {@link #MONO}. <br>
+     * Gets the {@link #abLeft} object if the parameter is {@link #LEFT}. <br>
+     * Gets the {@link #abRight} object if the parameter is {@link #RIGHT}. <br>
      * @param mode
      * @return abMono
      */
@@ -232,8 +230,7 @@ public abstract class Visual extends PApplet
 
     /**
      * Gets the amplitude.
-     * @return amplitude
-     *
+     * @return {@link #amplitude}
      */
     public float getAmplitude() {
         return amplitude;
@@ -241,23 +238,23 @@ public abstract class Visual extends PApplet
 
     /**
      * Gets the smoothed amplitude.
-     * @return smothedAmplitude
+     * @return {@link #smothedAmplitude}
      */
     public float getSmoothedAmplitude() {
         return smothedAmplitude;
     }
 
     /**
-     * Gets the {@link ap} object.
-     * @return ap
+     * Gets the AudioPlayer object.
+     * @return {@plain #ap}
      */
     public AudioPlayer getAudioPlayer() {
         return ap;
     }
 
     /**
-     * Gets the {@link FFT} object.
-     * @return fft
+     * Gets the FFT object.
+     * @return {@link #fft}
      */
     public FFT getFFT() {
         return fft;
