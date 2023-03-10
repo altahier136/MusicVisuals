@@ -1,4 +1,4 @@
-package ie.tudublin.Visuals;
+package ie.tudublin.Visual;
 
 import ie.tudublin.*;
 

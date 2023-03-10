@@ -1,8 +1,5 @@
 package ie.tudublin;
 
-import example.MyVisual;
-import example.RotatingAudioBands;
-
 // Visuals
 import c21348423.AdriansVisual;
 

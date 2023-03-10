@@ -1,6 +1,8 @@
 package example;
 
 import ie.tudublin.*;
+import ie.tudublin.Visual.Visual;
+import ie.tudublin.Visual.VisualException;
 
 public class MyVisual extends Visual
 {
