@@ -12,7 +12,7 @@ import ie.tudublin.*;
  */
 public abstract class AudioReactive {
     Visual visual;
-    
+
     public AudioReactive(Visual visual) {
         this.visual = visual;
     }
