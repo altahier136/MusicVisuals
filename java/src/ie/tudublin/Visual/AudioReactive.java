@@ -1,4 +1,4 @@
-package ie.tudublin.Visual;
+package ie.tudublin.Visuals;
 
 import ie.tudublin.*;
 
@@ -11,10 +11,10 @@ import ie.tudublin.*;
  * @author AdrianCapacite
  */
 public abstract class AudioReactive {
-    protected Visual v;
+    Visual visual;
 
     public AudioReactive(Visual visual) {
-        this.v = visual;
+        this.visual = visual;
     }
     public abstract void render();
 
