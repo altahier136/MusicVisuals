@@ -11,10 +11,10 @@ import ie.tudublin.*;
  * @author AdrianCapacite
  */
 public abstract class AudioReactive {
-    Visual visual;
-    
+    Visual v;
+
     public AudioReactive(Visual visual) {
-        this.visual = visual;
+        this.v = visual;
     }
     public abstract void render();
 
