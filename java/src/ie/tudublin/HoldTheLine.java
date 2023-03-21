@@ -6,6 +6,10 @@ import c21348423.AdriansVisual;
 public class HoldTheLine extends Visual {
     AdriansVisual av;
 
+    HoldTheLine() throws VisualException {
+        super(1024, 44100);
+    }
+
     public void settings() {
         fullScreen(P3D);
     }
