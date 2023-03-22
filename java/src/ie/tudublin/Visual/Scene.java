@@ -16,7 +16,7 @@ public abstract class Scene extends Object {
         super(v, position, rotation);
     }
 
-    public void render() {
+    public void render(int elapsed) {
         applyTransforms();
         v.colorMode(PApplet.RGB);
         v.fill(255, 0, 255);

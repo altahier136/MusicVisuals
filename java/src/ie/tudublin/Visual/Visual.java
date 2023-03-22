@@ -226,6 +226,10 @@ public abstract class Visual extends PApplet implements VisualConstants {
         System.out.println("Playing " + filename);
     }
 
+    public void seek(int millis) {
+        ap.cue(millis);
+    }
+
     // ======== Waveform Analysis ========
 
     /**

@@ -13,6 +13,8 @@ import c21348423.AdriansVisual;
 */
 public class HoldTheLine extends Visual {
     Scene av;
+    int start;
+    int elapsed;
 
     HoldTheLine() {
         super(1024, 44100);
@@ -25,11 +27,13 @@ public class HoldTheLine extends Visual {
 
     public void setup() {
         beginAudio("Toto - Hold The Line.wav");
+        start = millis();
     }
 
     public void draw() {
+        elapsed = millis() - start;
         background(0);
         lerpAmplitude(0.9f);
-        av.render();
+        av.render(elapsed);
     }
 }
