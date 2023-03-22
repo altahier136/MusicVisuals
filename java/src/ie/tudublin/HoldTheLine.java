@@ -3,6 +3,14 @@ package ie.tudublin;
 import ie.tudublin.Visual.*;
 import c21348423.AdriansVisual;
 
+/*
+    Natural breaks in the song:
+    0:00 - 1:03 - Intro & first verse & chorus
+    1:03 - 1:48 - Second verse & chorus
+    1:48 - 2:30 - Instrumental
+    2:30 - 3:33 - Third verse & chorus(extra)
+    3:33 - 3:54 - Outro
+*/
 public class HoldTheLine extends Visual {
     AdriansVisual av;
 
@@ -15,24 +23,8 @@ public class HoldTheLine extends Visual {
     }
 
     public void setup() {
-        startMinim();
-        loadAudio("Toto - Hold The Line.wav");
-        getAudioPlayer().play();
-
-        colorMode(HSB, 360, 100, 100, 100);
-
-        // Scenes
-        av = new AdriansVisual(this);
-        av.setTransition(100);
     }
 
     public void draw() {
-        background(0);
-        calculateFrequencyBands();
-        calculateAverageAmplitude();
-
-        av.render();
-
-
     }
 }
