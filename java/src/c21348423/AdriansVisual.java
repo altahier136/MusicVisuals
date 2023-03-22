@@ -17,8 +17,11 @@ public class AdriansVisual extends Scene {
         circle = new Circle(v, new PVector(0, 0, 0), new PVector(0, 0, 0), ChannelEnum.MIX, true);
     }
 
-    public void render() {
-        circle.render();
+    public void render(int elapsed) {
+        // 1:48 - 2:30 - Instrumental
+        if (v.millis() > 108000 && v.millis() < 150000) {
+            circle.render();
+        }
     }
 
     class Circle extends Reactive {
