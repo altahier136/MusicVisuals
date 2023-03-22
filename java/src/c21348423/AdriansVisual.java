@@ -10,6 +10,7 @@ import processing.core.PVector;
 public class AdriansVisual extends Scene {
     Visual v;
     Reactive circle;
+
     public AdriansVisual(Visual v) {
         super(v);
         this.v = v;
@@ -17,10 +18,7 @@ public class AdriansVisual extends Scene {
     }
 
     public void render() {
-        applyTransforms();
-
-
-        v.popMatrix();
+        circle.render();
     }
 
     class Circle extends Reactive {
@@ -34,7 +32,7 @@ public class AdriansVisual extends Scene {
             applyTransforms();
             v.colorMode(PApplet.RGB);
             v.fill(255, 0, 255);
-            v.circle(v.width / 2, v.height / 2, v.lerpedAmplitude() * 100);
+            v.circle(v.width / 2, v.height / 2, v.lerpedAmplitude() * 1000);
             v.popMatrix();
         }
     }
