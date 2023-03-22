@@ -24,10 +24,12 @@ public class HoldTheLine extends Visual {
     }
 
     public void setup() {
+        beginAudio("Toto - Hold The Line.wav");
     }
 
     public void draw() {
         background(0);
+        lerpAmplitude(0.9f);
         av.render();
     }
 }

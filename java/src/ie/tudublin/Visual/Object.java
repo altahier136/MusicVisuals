@@ -24,15 +24,19 @@ public abstract class Object {
     }
 
     Object(Visual v) {
-        this(v, new PVector(0,0,0), new PVector(0,0,0));
+        this(v, new PVector(0,0,0), new PVector(0,0,0), new PVector(1,1,1));
     }
     Object(Visual v, PVector position) {
-        this(v, position, new PVector(0,0,0));
+        this(v, position, new PVector(0,0,0), new PVector(1,1,1));
     }
     Object(Visual v, PVector position, PVector rotation) {
+        this(v, position, rotation, new PVector(1,1,1));
+    }
+    protected Object(Visual v, PVector position, PVector rotation, PVector scale) {
         this.v = v;
         this.position = position;
         this.rotation = rotation;
+        this.scale = scale;
     }
 
     public void render() {

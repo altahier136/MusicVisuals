@@ -196,7 +196,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @throws VisualException
      */
-    public void beginAudio() throws VisualException {
+    public void beginAudio() {
         if (ap != null)
             ap.close();
         ai = minim.getLineIn(Minim.MONO, bufferSize, 44100, 16);
@@ -211,7 +211,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      * @param filename
      * @throws VisualException
      */
-    public void beginAudio(String filename) throws VisualException {
+    public void beginAudio(String filename) {
         if (ap != null)
             ap.close();
         if (filename == null || filename.isEmpty()) {
@@ -222,6 +222,8 @@ public abstract class Visual extends PApplet implements VisualConstants {
         abLeft = ap.left;
         abRight = ap.right;
         abMix = ap.mix;
+        ap.play();
+        System.out.println("Playing " + filename);
     }
 
     // ======== Waveform Analysis ========
