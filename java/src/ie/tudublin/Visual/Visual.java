@@ -47,6 +47,9 @@ import ddf.minim.analysis.*;
 public abstract class Visual extends PApplet implements VisualConstants {
     private int bufferSize;
     private int sampleRate;
+    private int start;
+    private int seek;
+    public int elapsed;
 
     private float[] bands, lerpedBands;
     private float amplitude, lerpedAmplitude;
@@ -203,6 +206,8 @@ public abstract class Visual extends PApplet implements VisualConstants {
         abLeft = ai.left;
         abRight = ai.right;
         abMix = ai.mix;
+        start = millis();
+        System.out.println("Using default audio input");
     }
 
     /**
@@ -223,11 +228,25 @@ public abstract class Visual extends PApplet implements VisualConstants {
         abRight = ap.right;
         abMix = ap.mix;
         ap.play();
+        start = millis();
         System.out.println("Playing " + filename);
     }
 
-    public void seek(int millis) {
-        ap.cue(millis);
+    public void seek(int t) {
+        ap.cue(t);
+        seek += t;
+    }
+
+    public void pause() {
+        ap.pause();
+    }
+
+    public void update() {
+        elapsed = seek + millis() - start;
+    }
+
+    public int toMs(int m, int s, int ms) {
+        return m * 60000 + s * 1000 + ms;
     }
 
     // ======== Waveform Analysis ========
@@ -253,12 +272,12 @@ public abstract class Visual extends PApplet implements VisualConstants {
     // ======== Fast Fourier Analysis ========
 
     /** Calculates the FFT of the audio buffer */
-    protected void calculateFFT() throws VisualException {
+    protected void calculateFFT() {
         fft.window(FFT.HAMMING);
         if (abMix != null) {
             fft.forward(abMix);
         } else {
-            throw new VisualException("You must call startListening or loadAudio before calling fft");
+            throw new IllegalStateException("You must call startListening or loadAudio before calling fft");
         }
     }
 

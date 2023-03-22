@@ -19,9 +19,10 @@ public class AdriansVisual extends Scene {
 
     public void render(int elapsed) {
         // 1:48 - 2:30 - Instrumental
-        if (v.millis() > 108000 && v.millis() < 150000) {
+        if (elapsed > v.toMs(1, 48, 0) && elapsed < v.toMs(2, 30, 0)) {
             circle.render();
         }
+        System.out.println(elapsed);
     }
 
     class Circle extends Reactive {
