@@ -27,3 +27,4 @@
 - Parametric Lines <https://www.youtube.com/watch?v=LaarVR1AOvs&t=895s&ab_channel=AlexanderMiller>
 - Polar Coordinates <https://www.youtube.com/watch?v=1gir2R7G9ws&ab_channel=TheCodingTrain>
 - Superformula <https://www.youtube.com/watch?v=u6arTXBDYhQ&t=247s&ab_channel=AlexanderMiller>
+- Superelipse <https://en.wikipedia.org/wiki/Superellipse>
