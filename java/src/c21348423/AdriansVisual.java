@@ -3,40 +3,39 @@ package c21348423;
 import ie.tudublin.Visual.Reactive;
 import ie.tudublin.Visual.Scene;
 import ie.tudublin.Visual.Visual;
+import ie.tudublin.Visual.VisualConstants.ChannelEnum;
 import processing.core.PApplet;
+import processing.core.PVector;
 
 public class AdriansVisual extends Scene {
-    private Cube cube;
-
-    public AdriansVisual(Visual visual) {
-        super(visual);
-        cube = new Cube(v);
+    Visual v;
+    Reactive circle;
+    public AdriansVisual(Visual v) {
+        super(v);
+        this.v = v;
+        circle = new Circle(v, new PVector(0, 0, 0), new PVector(0, 0, 0), ChannelEnum.MIX, true);
     }
 
     public void render() {
-        v.background(0);
+        applyTransforms();
 
-        v.stroke(0, 0, 100, Math.abs(transition - 100) + 100);
-        v.noFill();
-        v.circle(v.width / 2, v.height / 2, v.getSmoothedAmplitude() * v.height);
-        cube.render();
-    }
 
-}
-
-class Cube extends Reactive {
-
-    public Cube(Visual visual) {
-        super(visual);
-    }
-
-    public void render() {
-        v.pushMatrix();
-        v.translate(v.width / 2, v.height / 2);
-        v.rotateX(PApplet.radians(v.getSmoothedAmplitude() * 360));
-        v.rotateY(PApplet.radians(v.getSmoothedAmplitude() * 360));
-        v.rotateZ(PApplet.radians(v.getSmoothedAmplitude() * 360));
-        v.box(100);
         v.popMatrix();
+    }
+
+    class Circle extends Reactive {
+
+        Circle(Visual v, PVector pos, PVector vel, ChannelEnum channel, boolean lerped) {
+            super(v, pos, vel, channel, lerped);
+        }
+
+        @Override
+        public void render() {
+            applyTransforms();
+            v.colorMode(PApplet.RGB);
+            v.fill(255, 0, 255);
+            v.circle(v.width / 2, v.height / 2, v.lerpedAmplitude() * 100);
+            v.popMatrix();
+        }
     }
 }
