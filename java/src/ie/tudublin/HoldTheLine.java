@@ -12,10 +12,11 @@ import c21348423.AdriansVisual;
     3:33 - 3:54 - Outro
 */
 public class HoldTheLine extends Visual {
-    AdriansVisual av;
+    Scene av;
 
-    HoldTheLine() throws VisualException {
+    HoldTheLine() {
         super(1024, 44100);
+        av = new AdriansVisual(this);
     }
 
     public void settings() {
@@ -26,5 +27,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void draw() {
+        background(0);
+        av.render();
     }
 }
