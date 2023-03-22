@@ -14,28 +14,37 @@ import processing.core.PVector;
  */
 public abstract class Reactive extends Object {
     AudioBuffer waveform;
+    float amplitude;
     float[] bands;
     private Visual v;
     ChannelEnum channel;
+    boolean lerped;
 
-    Reactive(Visual v) {
-        this(v, new PVector(0,0,0), new PVector(0,0,0), ChannelEnum.MIX);
+    protected Reactive(Visual v) {
+        this(v, new PVector(0,0,0), new PVector(0,0,0), ChannelEnum.MIX, true);
         this.v = v;
     }
     Reactive(Visual v, PVector pos) {
-        this(v, pos, new PVector(0,0,0), ChannelEnum.MIX);
+        this(v, pos, new PVector(0,0,0), ChannelEnum.MIX, true);
     }
     Reactive(Visual v, PVector pos, PVector vel) {
-        this(v, pos, vel, ChannelEnum.MIX);
+        this(v, pos, vel, ChannelEnum.MIX, true);
     }
-    Reactive(Visual v, PVector pos, PVector vel, ChannelEnum channel) {
+    protected Reactive(Visual v, PVector pos, PVector vel, ChannelEnum channel, boolean lerped) {
         super(v, pos, vel);
         this.channel = channel;
+        this. lerped = lerped;
     }
 
     public void update() {
         waveform = v.audioBuffer(channel);
-        bands = v.bands();
+        if (lerped) {
+            bands = v.lerpedBands();
+            amplitude = v.lerpedAmplitude();
+        } else {
+            bands = v.bands();
+            amplitude = v.amplitude();
+        }
     }
 
     public abstract void render();
