@@ -6,7 +6,7 @@ import processing.core.PVector;
 public abstract class Scene extends Object {
     private Visual v;
 
-    Scene(Visual v) {
+    protected Scene(Visual v) {
         this(v, new PVector(0,0,0), new PVector(0,0,0));
     }
     Scene(Visual v, PVector position) {
