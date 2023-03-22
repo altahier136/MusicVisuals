@@ -2,10 +2,25 @@ package ie.tudublin.Visual;
 
 import processing.core.PApplet;
 
-import java.lang.reflect.Method;
-
 import ddf.minim.*;
 import ddf.minim.analysis.*;
+
+/* The type of the super class can be used for storing the sub class
+ * E.g. SuperClass sub = new SubClass();
+ * However you cannot access the sub class methods and variables
+*/
+
+/*
+ * Visual class diagram
+ * processing.core.PApplet
+ *   Visual <- VisualConstants
+ *     - ddf.minim.*
+ *
+ * Object
+ *   - Visual
+ *   Scene
+ *   Reactive
+ */
 
 /**
  * <p>
@@ -50,7 +65,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @return {@link #bufferSize}
      */
-    public int getBufferSize() {
+    public int bufferSize() {
         return bufferSize;
     }
 
@@ -59,7 +74,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @return {@link #sampleRate}
      */
-    public int getSampleRate() {
+    public int sampleRate() {
         return sampleRate;
     }
 
@@ -68,7 +83,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @return {@link #bands}
      */
-    public float[] getBands() {
+    public float[] bands() {
         return bands;
     }
 
@@ -77,7 +92,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @return {@link #lerpedBands}
      */
-    public float[] getLerpedBands() {
+    public float[] lerpedBands() {
         return lerpedBands;
     }
 
@@ -86,7 +101,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @return {@link #minim}
      */
-    public Minim getMinim() {
+    public Minim minim() {
         return minim;
     }
 
@@ -95,7 +110,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @return {@link #ap}
      */
-    public AudioInput getAudioInput() {
+    public AudioInput audioInput() {
         return ai;
     }
 
@@ -106,21 +121,21 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *                {@link #abRight}
      * @return abMono
      */
-    public AudioBuffer getAudioBuffer(int channel) {
+    public AudioBuffer audioBuffer(ChannelEnum channel) {
         switch (channel) {
-            case VisualConstants.MIX:
+            case MIX:
                 return abMix;
-            case VisualConstants.LEFT:
+            case LEFT:
                 return abLeft;
-            case VisualConstants.RIGHT:
+            case RIGHT:
                 return abRight;
             default:
-                return abMix;
+                throw new IllegalArgumentException("Invalid channel" + channel);
         }
     }
 
     /** Gets the amplitude. */
-    public float getAmplitude() {
+    public float amplitude() {
         return amplitude;
     }
 
@@ -129,20 +144,17 @@ public abstract class Visual extends PApplet implements VisualConstants {
      *
      * @param mode 0 for {@link #amplitude} and 1 for {@link #lerpedAmplitude}
      */
-    public float getAmplitude(int mode) {
-        if (mode == 0)
-            return amplitude;
-        else
-            return lerpedAmplitude;
+    public float lerpedAmplitude() {
+        return lerpedAmplitude;
     }
 
     /** Gets the AudioPlayer object. */
-    public AudioPlayer getAudioPlayer() {
+    public AudioPlayer audioPlayer() {
         return ap;
     }
 
     /** Gets the FFT object. */
-    public FFT getFFT() {
+    public FFT fft() {
         return fft;
     }
 
@@ -151,10 +163,10 @@ public abstract class Visual extends PApplet implements VisualConstants {
         this(1024, 44100);
     }
 
-    public Visual(int bufferSize, int sampleRate) throws VisualException {
-
+    public Visual(int bufferSize, int sampleRate) {
         if (log2(bufferSize) % 1 != 0)
-            throw new VisualException("Buffer size must be a power of 2 for FFT analysis");
+            throw new IllegalArgumentException("Buffer size must be a power of 2");
+
         this.bufferSize = bufferSize;
         this.sampleRate = sampleRate;
 
@@ -172,7 +184,9 @@ public abstract class Visual extends PApplet implements VisualConstants {
     }
 
     abstract public void settings();
+
     abstract public void setup();
+
     abstract public void draw();
 
     // ======== Audio Analysis ========
@@ -227,7 +241,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
         // Lerp the amplitude
         // lerpedAmplitude = PApplet.lerp(lerpedAmplitude, amplitude, amt);
-        lerpedAmplitude = mlerp(lerpedAmplitude, amplitude, amt, 1 / frameRate);
+        lerpedAmplitude = lerp(lerpedAmplitude, amplitude, amt, 1 / frameRate);
     }
 
     // ======== Fast Fourier Analysis ========
@@ -303,21 +317,21 @@ public abstract class Visual extends PApplet implements VisualConstants {
      * @param frameTime
      * @return
      */
-    public float mlerp(float start, float stop, float amt, float frameTime) {
+    public static float lerp(float start, float stop, float amt, float frameTime) {
         float K = amt - (amt * frameTime);
         return start + (stop - start) * K;
     }
 
-    interface EaseInterface {
+    interface EaseFunction {
         float ease(float t);
     }
 
-    EaseInterface easelinear = (t) -> t;
-    EaseInterface easeSmooth = (t) -> t * t * (3 - 2 * t);
-    EaseInterface easeInQuad = (t) -> t * t;
-    EaseInterface easeOutQuad = (t) -> t * (2 - t);
-    EaseInterface easeInOutQuad = (t) -> t < 0.5 ? 2 * t * t : 1 - pow(-2 * t + 2, 2) / 2;
-    EaseInterface easeOutBounce = (t) -> {
+    EaseFunction easelinear = (t) -> t;
+    EaseFunction easeSmooth = (t) -> t * t * (3 - 2 * t);
+    EaseFunction easeInQuad = (t) -> t * t;
+    EaseFunction easeOutQuad = (t) -> t * (2 - t);
+    EaseFunction easeInOutQuad = (t) -> t < 0.5 ? 2 * t * t : 1 - pow(-2 * t + 2, 2) / 2;
+    EaseFunction easeOutBounce = (t) -> {
         final float n1 = 7.5625f;
         final float d1 = 2.75f;
 
@@ -332,5 +346,13 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
         return n1 * (t -= 2.625f / d1) * t + 0.984375f;
     };
+
+    public float interpolate(float start, float stop, float amt, EaseFunction ease) {
+        return lerp(start, stop, ease.ease(amt));
+    }
+
+    public float interpolate(float start, float stop, float amt, EaseFunction ease, float frameTime) {
+        return lerp(start, stop, ease.ease(amt), frameTime);
+    }
 
 }
