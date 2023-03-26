@@ -49,6 +49,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
     private int sampleRate;
     private int start;
     private int seek;
+    private int pausedAt;
     public int elapsed;
 
     private float[] bands, lerpedBands;
@@ -237,8 +238,15 @@ public abstract class Visual extends PApplet implements VisualConstants {
         seek += t;
     }
 
-    public void pause() {
+    public void pausePlay() {
         ap.pause();
+        if (ap.isPlaying()) {
+            ap.pause();
+            pausedAt = millis();
+        } else {
+            ap.play();
+            seek -= millis() - pausedAt;
+        }
     }
 
     public void update() {
