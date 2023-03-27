@@ -2,9 +2,6 @@ package ie.tudublin.Visual;
 
 import processing.core.PApplet;
 
-import java.util.ArrayList;
-import java.util.Vector;
-
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
