@@ -2,6 +2,9 @@ package ie.tudublin.Visual;
 
 import processing.core.PApplet;
 
+import java.util.ArrayList;
+import java.util.Vector;
+
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
@@ -47,10 +50,6 @@ import ddf.minim.analysis.*;
 public abstract class Visual extends PApplet implements VisualConstants {
     private int bufferSize;
     private int sampleRate;
-    private int start;
-    private int seek;
-    private int pausedAt;
-    public int elapsed;
 
     private float[] bands, lerpedBands;
     private float amplitude, lerpedAmplitude;
@@ -207,7 +206,6 @@ public abstract class Visual extends PApplet implements VisualConstants {
         abLeft = ai.left;
         abRight = ai.right;
         abMix = ai.mix;
-        start = millis();
         System.out.println("Using default audio input");
     }
 
@@ -231,38 +229,28 @@ public abstract class Visual extends PApplet implements VisualConstants {
         abRight = ap.right;
         abMix = ap.mix;
 
-        start = millis();
         System.out.println("Playing " + filename);
     }
 
     public void seek(int ms) {
         ap.cue(ms);
-        seek += ms;
     }
     public void seek(int m, int s) {
         int ms = toMs(m, s, 0);
         ap.cue(ms);
-        seek += ms;
     }
     public void seek(int m, int s, int ms) {
         int msNew = toMs(m, s, ms);
         ap.cue(msNew);
-        seek += msNew;
     }
 
     public void pausePlay() {
         ap.pause();
         if (ap.isPlaying()) {
             ap.pause();
-            pausedAt = millis();
         } else {
             ap.play();
-            seek -= millis() - pausedAt;
         }
-    }
-
-    public void update() {
-        elapsed = seek + millis() - start;
     }
 
     public int toMs(int m, int s, int ms) {
