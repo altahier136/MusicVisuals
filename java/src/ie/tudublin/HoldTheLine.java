@@ -68,7 +68,7 @@ public class HoldTheLine extends Visual {
     public void setup() {
         beginAudio("Toto - Hold The Line.wav");
 
-        seek(106000); // Temporary, do not add to final submission
+        seek(1, 48, 0);
     }
 
     public void draw() {

@@ -225,17 +225,29 @@ public abstract class Visual extends PApplet implements VisualConstants {
             beginAudio();
         }
         ap = minim.loadFile(filename, bufferSize);
+        ap.play();
+
         abLeft = ap.left;
         abRight = ap.right;
         abMix = ap.mix;
-        ap.play();
+
         start = millis();
         System.out.println("Playing " + filename);
     }
 
-    public void seek(int t) {
-        ap.cue(t);
-        seek += t;
+    public void seek(int ms) {
+        ap.cue(ms);
+        seek += ms;
+    }
+    public void seek(int m, int s) {
+        int ms = toMs(m, s, 0);
+        ap.cue(ms);
+        seek += ms;
+    }
+    public void seek(int m, int s, int ms) {
+        int msNew = toMs(m, s, ms);
+        ap.cue(msNew);
+        seek += msNew;
     }
 
     public void pausePlay() {
@@ -285,7 +297,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
         if (abMix != null) {
             fft.forward(abMix);
         } else {
-            throw new IllegalStateException("You must call startListening or loadAudio before calling fft");
+            throw new IllegalStateException("You must call beginAudio before calling calculateFFT");
         }
     }
 
@@ -314,6 +326,14 @@ public abstract class Visual extends PApplet implements VisualConstants {
     }
 
     // ======== Beat Detection ========
+    protected void detectbeat() {
+        if (abMix != null) {
+            beat.detect(abMix);
+        } else {
+            throw new IllegalStateException("You must call beginAudio before calling beatDetect");
+        }
+
+    }
 
     // ======== Helpers ========
 
