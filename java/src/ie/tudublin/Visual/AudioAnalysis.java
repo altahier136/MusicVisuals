@@ -10,7 +10,7 @@ import processing.core.PApplet;
  * The AudioAnalysis class is used to analyse each new sample and store the
  * results in the class variables to be retrieved.
  */
-class AudioAnalysis implements AudioListener {
+public class AudioAnalysis implements AudioListener {
     private float[] samp;
     private FFT fft;
     private BeatDetect beat;
@@ -125,6 +125,10 @@ class AudioAnalysis implements AudioListener {
      */
     private synchronized void beat() {
         beat.detect(samp);
+    }
+
+    public void setLerpAmount(float lerpAmount) {
+        this.lerpAmount = lerpAmount;
     }
 
 }

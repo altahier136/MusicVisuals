@@ -134,11 +134,11 @@ public abstract class Visual extends PApplet implements VisualConstants {
     public Visual() {
 
         // Default buffer size and sample rate
-        this(1024, 44100);
+        this(1024, 44100, 0.1f);
 
     }
 
-    public Visual(int bufferSize, int sampleRate) {
+    public Visual(int bufferSize, int sampleRate, float lerpAmount) {
 
         if (log2(bufferSize) % 1 != 0)
             throw new IllegalArgumentException("Buffer size must be a power of 2");
@@ -151,11 +151,11 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
         fft = new FFT(bufferSize, sampleRate);
         beat = new BeatDetect(bufferSize, sampleRate);
-        beat.setSensitivity(100);
+        beat.setSensitivity(50);
 
-        analysisMix = new AudioAnalysis(fft, beat, ChannelEnum.MIX, 0.1f);
-        analysisLeft = new AudioAnalysis(fft, beat, ChannelEnum.LEFT, 0.1f);
-        analysisRight = new AudioAnalysis(fft, beat, ChannelEnum.RIGHT, 0.1f);
+        analysisMix = new AudioAnalysis(fft, beat, ChannelEnum.MIX, lerpAmount);
+        analysisLeft = new AudioAnalysis(fft, beat, ChannelEnum.LEFT, lerpAmount);
+        analysisRight = new AudioAnalysis(fft, beat, ChannelEnum.RIGHT, lerpAmount);
 
     }
 
@@ -166,6 +166,11 @@ public abstract class Visual extends PApplet implements VisualConstants {
     abstract public void draw();
 
     // ======== Audio Analysis ========
+    public void setLerpAmount(float lerpAmount) {
+        analysisMix.setLerpAmount(lerpAmount);
+        analysisLeft.setLerpAmount(lerpAmount);
+        analysisRight.setLerpAmount(lerpAmount);
+    }
 
     /** Begins audio input from the default audio input device.  */
     public void beginAudio() {

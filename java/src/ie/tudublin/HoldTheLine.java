@@ -1,8 +1,10 @@
 package ie.tudublin;
 
-import ie.tudublin.Visual.*;
 import c21348423.AdriansVisual;
 import ddf.minim.AudioPlayer;
+import global.Demo;
+import global.GlobalVisual;
+import ie.tudublin.Visual.*;
 
 /*
     Song lyrics:
@@ -56,10 +58,11 @@ import ddf.minim.AudioPlayer;
 */
 public class HoldTheLine extends Visual {
     Scene av;
+    Scene gv;
+    Scene demo;
 
     HoldTheLine() {
-        super(1024, 44100);
-        av = new AdriansVisual(this);
+        super(1024, 44100, 0.1f);
     }
 
     public void settings() {
@@ -68,16 +71,19 @@ public class HoldTheLine extends Visual {
 
     public void setup() {
         beginAudio("Toto - Hold The Line.wav");
-
+        gv = new GlobalVisual(this);
+        av = new AdriansVisual(this);
+        demo = new Demo(this);
     }
 
     public void draw() {
         int elapsed = audioPlayer().position();
         background(0);
         text(elapsed, 10, 10);
-        lerpAmplitude(0.9f);
 
-        av.render(elapsed);
+        // gv.render(elapsed);
+        // av.render(elapsed);
+        demo.render();
     }
 
     public void keyPressed() {
@@ -86,13 +92,13 @@ public class HoldTheLine extends Visual {
                 seek(0);
                 break;
             case '2':
-                seek(1,3);
+                seek(1, 3);
                 break;
             case '3':
-                seek(1,48);
+                seek(1, 48);
                 break;
             case '4':
-                seek(2,31);
+                seek(2, 31);
                 break;
             case ' ':
             default:
