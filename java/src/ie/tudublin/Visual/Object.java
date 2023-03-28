@@ -5,7 +5,7 @@ import processing.core.PVector;
 
 public abstract class Object {
 
-    private Visual v;
+    public Visual v;
     public PVector position;
     public PVector rotation;
     public PVector scale;

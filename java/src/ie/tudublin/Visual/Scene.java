@@ -4,8 +4,6 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 public abstract class Scene extends Object {
-    private Visual v;
-
     protected Scene(Visual v) {
         this(v, new PVector(0,0,0), new PVector(0,0,0));
     }
