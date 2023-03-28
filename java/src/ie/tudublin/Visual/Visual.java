@@ -45,18 +45,16 @@ import ddf.minim.analysis.*;
  *
  */
 public abstract class Visual extends PApplet implements VisualConstants {
+
     private int bufferSize;
     private int sampleRate;
-
-    private float[] bands, lerpedBands;
-    private float amplitude, lerpedAmplitude;
 
     private Minim minim;
     private AudioInput ai;
     private AudioPlayer ap;
-    private AudioBuffer abMix;
-    private AudioBuffer abLeft;
-    private AudioBuffer abRight;
+    private AudioAnalysis analysisMix;
+    private AudioAnalysis analysisLeft;
+    private AudioAnalysis analysisRight;
     private FFT fft;
     private BeatDetect beat;
 
@@ -79,24 +77,6 @@ public abstract class Visual extends PApplet implements VisualConstants {
     }
 
     /**
-     * Gets the bands.
-     *
-     * @return {@link #bands}
-     */
-    public float[] bands() {
-        return bands;
-    }
-
-    /**
-     * Gets the smoothed bands.
-     *
-     * @return {@link #lerpedBands}
-     */
-    public float[] lerpedBands() {
-        return lerpedBands;
-    }
-
-    /**
      * Gets the Minim object.
      *
      * @return {@link #minim}
@@ -114,40 +94,6 @@ public abstract class Visual extends PApplet implements VisualConstants {
         return ai;
     }
 
-    /**
-     * Gets the AudioPlayer object.
-     *
-     * @param channel 0 for {@link #abMix}, 1 for {@link #abLeft}, 2 for
-     *                {@link #abRight}
-     * @return abMono
-     */
-    public AudioBuffer audioBuffer(ChannelEnum channel) {
-        switch (channel) {
-            case MIX:
-                return abMix;
-            case LEFT:
-                return abLeft;
-            case RIGHT:
-                return abRight;
-            default:
-                throw new IllegalArgumentException("Invalid channel" + channel);
-        }
-    }
-
-    /** Gets the amplitude. */
-    public float amplitude() {
-        return amplitude;
-    }
-
-    /**
-     * Gets the amplitude.
-     *
-     * @param mode 0 for {@link #amplitude} and 1 for {@link #lerpedAmplitude}
-     */
-    public float lerpedAmplitude() {
-        return lerpedAmplitude;
-    }
-
     /** Gets the AudioPlayer object. */
     public AudioPlayer audioPlayer() {
         return ap;
@@ -158,12 +104,42 @@ public abstract class Visual extends PApplet implements VisualConstants {
         return fft;
     }
 
-    public Visual() throws VisualException {
+    /** Gets the BeatDetect object. */
+    public BeatDetect beat() {
+        return beat;
+    }
+
+    /**
+     * Gets the AudioAnalysis object for the mix.
+     * @return
+     */
+    public AudioAnalysis analysisMix() {
+        return analysisMix;
+    }
+    /**
+     * Gets the AudioAnalysis object for the left channel.
+     * @return
+     */
+    public AudioAnalysis analysisLeft() {
+        return analysisLeft;
+    }
+    /**
+     * Gets the AudioAnalysis object for the right channel.
+     * @return
+     */
+    public AudioAnalysis analysisRight() {
+        return analysisRight;
+    }
+
+    public Visual() {
+
         // Default buffer size and sample rate
         this(1024, 44100);
+
     }
 
     public Visual(int bufferSize, int sampleRate) {
+
         if (log2(bufferSize) % 1 != 0)
             throw new IllegalArgumentException("Buffer size must be a power of 2");
 
@@ -172,15 +148,15 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
         // Audio analysis
         minim = new Minim(this);
+
         fft = new FFT(bufferSize, sampleRate);
         beat = new BeatDetect(bufferSize, sampleRate);
         beat.setSensitivity(100);
 
-        bands = new float[(int) log2(bufferSize)];
-        lerpedBands = new float[bands.length];
+        analysisMix = new AudioAnalysis(fft, beat, ChannelEnum.MIX, 0.1f);
+        analysisLeft = new AudioAnalysis(fft, beat, ChannelEnum.LEFT, 0.1f);
+        analysisRight = new AudioAnalysis(fft, beat, ChannelEnum.RIGHT, 0.1f);
 
-        amplitude = 0;
-        lerpedAmplitude = 0;
     }
 
     abstract public void settings();
@@ -191,28 +167,27 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
     // ======== Audio Analysis ========
 
-    /**
-     * Begins audio input from the default audio input device.
-     *
-     * @throws VisualException
-     */
+    /** Begins audio input from the default audio input device.  */
     public void beginAudio() {
+
         if (ap != null)
             ap.close();
         ai = minim.getLineIn(Minim.MONO, bufferSize, 44100, 16);
-        abLeft = ai.left;
-        abRight = ai.right;
-        abMix = ai.mix;
+        ai.addListener(analysisMix);
+        ai.addListener(analysisLeft);
+        ai.addListener(analysisRight);
+
         System.out.println("Using default audio input");
+
     }
 
     /**
      * Begins audio input from the specified audio file.
      *
      * @param filename
-     * @throws VisualException
      */
     public void beginAudio(String filename) {
+
         if (ap != null)
             ap.close();
         if (filename == null || filename.isEmpty()) {
@@ -220,110 +195,50 @@ public abstract class Visual extends PApplet implements VisualConstants {
             beginAudio();
         }
         ap = minim.loadFile(filename, bufferSize);
+        ap.addListener(analysisMix);
+        ap.addListener(analysisLeft);
+        ap.addListener(analysisRight);
         ap.play();
 
-        abLeft = ap.left;
-        abRight = ap.right;
-        abMix = ap.mix;
-
         System.out.println("Playing " + filename);
+
     }
 
     public void seek(int ms) {
         ap.cue(ms);
     }
+
     public void seek(int m, int s) {
         int ms = toMs(m, s, 0);
         ap.cue(ms);
     }
+
     public void seek(int m, int s, int ms) {
         int msNew = toMs(m, s, ms);
         ap.cue(msNew);
     }
 
     public void pausePlay() {
+
         ap.pause();
         if (ap.isPlaying()) {
             ap.pause();
         } else {
             ap.play();
         }
+
     }
 
+
+    // ======== Helpers ========
+
+    /** Converts minutes, seconds, and milliseconds to milliseconds. */
     public int toMs(int m, int s, int ms) {
         return m * 60000 + s * 1000 + ms;
     }
 
-    // ======== Waveform Analysis ========
-
-    /**
-     * Calculates the average amplitude of the audio buffer
-     *
-     * @param amt The amount to lerp the amplitude by (0.0 - 1.0) recommended 0.1
-     */
-    public void lerpAmplitude(float amt) {
-        // Get the average amplitude of the audio buffer
-        float sum = 0;
-        for (float sample : abMix.toArray()) {
-            sum += abs(sample);
-        }
-        amplitude = sum / abMix.size();
-
-        // Lerp the amplitude
-        // lerpedAmplitude = PApplet.lerp(lerpedAmplitude, amplitude, amt);
-        lerpedAmplitude = lerp(lerpedAmplitude, amplitude, amt, 1 / frameRate);
-    }
-
-    // ======== Fast Fourier Analysis ========
-
-    /** Calculates the FFT of the audio buffer */
-    protected void calculateFFT() {
-        fft.window(FFT.HAMMING);
-        if (abMix != null) {
-            fft.forward(abMix);
-        } else {
-            throw new IllegalStateException("You must call beginAudio before calling calculateFFT");
-        }
-    }
-
-    /**
-     * Calculates the frequency bands of the audio buffer
-     *
-     * @param amt The amount to lerp the bands by (0.0 - 1.0) recommended 0.05
-     */
-    protected void calculateFrequencyBands(float amt) {
-        for (int i = 0; i < bands.length; i++) {
-            int start = (int) pow(2, i) - 1; // start at 0
-            int w = (int) pow(2, i); // width of each band
-            int end = start + w; // end at the last index
-            end = min(end, fft.specSize() - 1); // make sure it doesn't go out of bounds
-
-            float average = 0;
-            // For each band, add the value of each bin
-
-            for (int j = start; j < end; j++) {
-                average += fft.getBand(j) * (j + 1);
-            }
-            average /= (float) w;
-            bands[i] = average * 5.0f;
-            lerpedBands[i] = lerp(lerpedBands[i], bands[i], 0.05f);
-        }
-    }
-
-    // ======== Beat Detection ========
-    protected void detectbeat() {
-        if (abMix != null) {
-            beat.detect(abMix);
-        } else {
-            throw new IllegalStateException("You must call beginAudio before calling beatDetect");
-        }
-
-    }
-
-    // ======== Helpers ========
-
     /** Log_2(x) = log_e(x) / log_e(2) */
-    float log2(float f) {
+    static float log2(float f) {
         return log(f) / log(2.0f);
     }
 
