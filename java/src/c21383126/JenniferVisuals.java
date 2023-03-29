@@ -22,7 +22,7 @@ public class JenniferVisuals extends VScene {
             v.background(0);
             v.stroke(255);
             int radius = 150;
-            int border = radius + 20;
+            int border = radius + 10;
 
             // (x1,y1) (x3,y3)
             // (x2,y2) (x4,y4)
@@ -36,7 +36,11 @@ public class JenniferVisuals extends VScene {
             int x4 = v.width/4 * 3;
             int y4 = v.height/4 * 3;
 
-            v.rect(x1 - border, y1 - border, 2*border, 5*border);
+            int length = ((y2 + border) - (y1 - border));
+            v.fill(100);
+            v.rect(x1 - border, y1 - border, 2*border, length);
+
+            v.rect(x3 - border, y3 - border, 2*border, length);
 
             v.noStroke();
             v.frameRate(1);

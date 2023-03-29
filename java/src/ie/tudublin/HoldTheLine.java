@@ -67,7 +67,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-        size(1024, 800);
+        size(1024, 750);
         //fullScreen(P3D);
     }
 
