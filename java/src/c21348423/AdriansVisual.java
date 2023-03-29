@@ -1,20 +1,19 @@
 package c21348423;
 
-import ie.tudublin.Visual.Reactive;
-import ie.tudublin.Visual.Scene;
-import ie.tudublin.Visual.Visual;
-import ie.tudublin.Visual.VisualConstants.ChannelEnum;
+import ie.tudublin.visual.VObject;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class AdriansVisual extends Scene {
+public class AdriansVisual extends VScene {
     Visual v;
-    Reactive circle;
+    VObject circle;
 
     public AdriansVisual(Visual v) {
         super(v);
         this.v = v;
-        circle = new Circle(v, new PVector(0, 0, 0), new PVector(0, 0, 0), ChannelEnum.MIX, true);
+        circle = new Circle(v, new PVector(0, 0, 0));
     }
 
     public void render(int elapsed) {
@@ -25,10 +24,10 @@ public class AdriansVisual extends Scene {
         System.out.println(elapsed);
     }
 
-    class Circle extends Reactive {
+    class Circle extends VObject {
 
-        Circle(Visual v, PVector pos, PVector vel, ChannelEnum channel, boolean lerped) {
-            super(v, pos, vel, channel, lerped);
+        Circle(Visual v, PVector pos) {
+            super(v, pos);
         }
 
         @Override

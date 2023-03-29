@@ -3,7 +3,7 @@ package ie.tudublin;
 import c21348423.AdriansVisual;
 import global.Demo;
 import global.GlobalVisual;
-import ie.tudublin.Visual.*;
+import ie.tudublin.visual.*;
 
 /*
     Song lyrics:
@@ -56,9 +56,9 @@ import ie.tudublin.Visual.*;
     END - 03:58
 */
 public class HoldTheLine extends Visual {
-    Scene av;
-    Scene gv;
-    Scene demo;
+    VScene av;
+    VScene gv;
+    VScene demo;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
@@ -100,6 +100,8 @@ public class HoldTheLine extends Visual {
                 seek(2, 31);
                 break;
             case ' ':
+                pausePlay();
+                break;
             default:
                 break;
         }

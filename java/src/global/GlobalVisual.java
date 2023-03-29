@@ -1,9 +1,9 @@
 package global;
 
-import ie.tudublin.Visual.Scene;
-import ie.tudublin.Visual.Visual;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 
-public class GlobalVisual extends Scene {
+public class GlobalVisual extends VScene {
 
     public GlobalVisual(Visual v) {
         super(v);

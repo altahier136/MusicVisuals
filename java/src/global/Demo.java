@@ -2,11 +2,11 @@ package global;
 
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
-import ie.tudublin.Visual.Scene;
-import ie.tudublin.Visual.Visual;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
 
-public class Demo extends Scene {
+public class Demo extends VScene {
     float height4 = v.height / 4;
     float height8 = v.height / 8;
     float width4 = v.width / 4;
@@ -93,8 +93,8 @@ public class Demo extends Scene {
             // we calculate the lowest and highest frequencies
             // contained in this average using the center frequency
             // and bandwidth of this average.
-            float lowFreq = centerFrequency - averageWidth / 2;
-            float highFreq = centerFrequency + averageWidth / 2;
+            float lowFreq = centerFrequency - averageWidth / 4;
+            float highFreq = centerFrequency + averageWidth / 4;
 
             // freqToIndex converts a frequency in Hz to a spectrum band index
             // that can be passed to getBand. in this case, we simply use the

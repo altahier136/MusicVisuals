@@ -1,13 +1,13 @@
 # TODO
 
 - [ ] Implement ie.tudublin.Visual package, below are the classes that need to be implemented:
-  - [ ] Visual
-    - [ ] Audio Handling
+  - [x] Visual
+    - [x] Audio Handling
       - [x] Input: Audio Input, Audio Player
-      - [ ] Analysis: FFT, Waveform, Beat Detection
-  - [ ] Object
-    - [ ] Scene
-    - [ ] Reactive
+      - [x] Analysis: FFT, Waveform, Beat Detection
+  - [x] Object
+    - [x] Scene
+    - [ ] Reactive (is it needed?)
 
 ## Ideas
 
