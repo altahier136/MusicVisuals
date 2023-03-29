@@ -1,7 +1,6 @@
 package ie.tudublin;
 
 import c21348423.AdriansVisual;
-import ddf.minim.AudioPlayer;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.Visual.*;
@@ -62,7 +61,7 @@ public class HoldTheLine extends Visual {
     Scene demo;
 
     HoldTheLine() {
-        super(1024, 44100, 0.1f);
+        super(1024, 44100, 0.5f);
     }
 
     public void settings() {
