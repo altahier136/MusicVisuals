@@ -36,7 +36,7 @@ public class AdriansVisual extends Scene {
             applyTransforms();
             v.colorMode(PApplet.RGB);
             v.fill(255, 0, 255);
-            v.circle(v.width / 2, v.height / 2, v.lerpedAmplitude() * 1000);
+            v.circle(v.width / 2, v.height / 2, v.analysisMix().lerpedAmplitude * 1000);
             v.popMatrix();
         }
     }

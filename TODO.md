@@ -3,12 +3,11 @@
 - [ ] Implement ie.tudublin.Visual package, below are the classes that need to be implemented:
   - [ ] Visual
     - [ ] Audio Handling
-      - Input: Audio Input, Audio Player
-      - Analysis: FFT, Waveform, Beat Detection
-      -
-  - [x] VisualException
-  - [ ] AudioReactive
-  - [ ] Scene
+      - [x] Input: Audio Input, Audio Player
+      - [ ] Analysis: FFT, Waveform, Beat Detection
+  - [ ] Object
+    - [ ] Scene
+    - [ ] Reactive
 
 ## Ideas
 

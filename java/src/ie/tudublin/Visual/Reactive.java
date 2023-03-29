@@ -7,6 +7,7 @@ import processing.core.PVector;
 /**
  * AudioReactive is an abstract class which will be used to create
  * objects within the Music Visualiser which are audio reactive
+ * ??? Is reactive even needed, other devs will just use AudioAnalysis along with Object
  *
  * @version 1.0
  * @since 06-03-2023
@@ -16,7 +17,6 @@ public abstract class Reactive extends Object {
     AudioBuffer waveform;
     float amplitude;
     float[] bands;
-    private Visual v;
     ChannelEnum channel;
     boolean lerped;
 
@@ -37,14 +37,14 @@ public abstract class Reactive extends Object {
     }
 
     public void update() {
-        waveform = v.audioBuffer(channel);
-        if (lerped) {
-            bands = v.lerpedBands();
-            amplitude = v.lerpedAmplitude();
-        } else {
-            bands = v.bands();
-            amplitude = v.amplitude();
-        }
+        // waveform = v.audioBuffer(channel);
+        // if (lerped) {
+        //     bands = v.lerpedBands();
+        //     amplitude = v.lerpedAmplitude();
+        // } else {
+        //     bands = v.bands();
+        //     amplitude = v.amplitude();
+        // }
     }
 
     public abstract void render();
