@@ -150,7 +150,28 @@ public abstract class Visual extends PApplet implements VisualConstants {
         minim = new Minim(this);
 
         fft = new FFT(bufferSize, sampleRate);
-        beat = new BeatDetect(bufferSize, sampleRate);
+        fft.logAverages(60,3);
+        beat = new BeatDetect(bufferSize, sampleRate) {
+            // We can assume that BeatDetect is in FREQ_ENERGY mode
+            @Override
+            public boolean isHat() {
+                int lower = super.detectSize() - 7 < 0 ? 0 : super.detectSize() - 7;
+                int upper = super.detectSize() - 1;
+                return isRange(lower, upper, 1);
+            }
+            @Override
+            public boolean isKick() {
+                int upper = 6 >= super.detectSize() ? super.detectSize() : 6;
+                return isRange(1, upper, 2);
+            }
+            @Override
+            public boolean isSnare() {
+                int lower = 8 >= super.detectSize() ? super.detectSize() : 8;
+                int upper = super.detectSize() - 1;
+                int thresh = (upper - lower) / 3 + 1;
+                return isRange(lower, upper, thresh);
+            }
+        };
         beat.setSensitivity(50);
 
         analysisMix = new AudioAnalysis(fft, beat, ChannelEnum.MIX, lerpAmount);
