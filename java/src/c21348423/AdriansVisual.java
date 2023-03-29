@@ -1,12 +1,12 @@
 package c21348423;
 
-import ie.tudublin.Visual.VObject;
-import ie.tudublin.Visual.Scene;
-import ie.tudublin.Visual.Visual;
+import ie.tudublin.visual.VObject;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public class AdriansVisual extends Scene {
+public class AdriansVisual extends VScene {
     Visual v;
     VObject circle;
 

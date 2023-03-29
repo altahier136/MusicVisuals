@@ -1,4 +1,4 @@
-package ie.tudublin.Visual;
+package ie.tudublin.visual;
 
 import processing.core.PApplet;
 import processing.core.PVector;
@@ -18,14 +18,14 @@ import processing.core.PVector;
  * <pre><code>
  * @see {@link VObject}
  */
-public abstract class Scene extends VObject {
-    protected Scene(Visual v) {
+public abstract class VScene extends VObject {
+    protected VScene(Visual v) {
         this(v, new PVector(0,0,0), new PVector(0,0,0));
     }
-    Scene(Visual v, PVector position) {
+    VScene(Visual v, PVector position) {
         this(v, position, new PVector(0,0,0));
     }
-    Scene(Visual v, PVector position, PVector rotation) {
+    VScene(Visual v, PVector position, PVector rotation) {
         super(v, position, rotation);
     }
 
