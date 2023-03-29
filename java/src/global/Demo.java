@@ -1,13 +1,9 @@
 package global;
 
-import com.jogamp.opengl.util.packrect.Rect;
-
-import ddf.minim.AudioBuffer;
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
 import ie.tudublin.Visual.Scene;
 import ie.tudublin.Visual.Visual;
-import ie.tudublin.Visual.VisualConstants.ChannelEnum;
 import processing.core.PApplet;
 
 public class Demo extends Scene {
@@ -17,7 +13,6 @@ public class Demo extends Scene {
 
     public Demo(Visual v) {
         super(v);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
@@ -32,30 +27,35 @@ public class Demo extends Scene {
             v.rect(0, 0, v.width, v.height / 4);
             v.popMatrix();
         }
+        v.rectMode(PApplet.CORNER);
         waveform();
         spectrum();
         spectrumLog();
+        bands();
         beat();
     }
 
     public void waveform() {
         float[] ab = v.analysisMix().waveform;
+        v.pushMatrix();
+        v.translate(0, height4 * 4 - height8);
+        v.beginShape();
         for (int i = 0; i < ab.length; i++) {
             float x = PApplet.map(i, 0, ab.length, 0, v.width);
             float y = PApplet.map(ab[i], -1, 1, height8, -height8);
             v.stroke(255);
-            v.pushMatrix();
-            v.translate(0, height4 * 4 - height8);
-            v.line(x, 0, x, y);
-            v.popMatrix();
+            v.vertex(x, y);
         }
+        v.endShape();
+        v.popMatrix();
     }
 
     public void spectrum() {
-        FFT fft = v.fft();
-        for (int i = 0; i < fft.specSize(); i++) {
-            float x = PApplet.map(i, 0, fft.specSize(), 0, v.width);
-            float h = PApplet.map(fft.getBand(i), 0, 100, 0, -height4);
+        float[] spec = v.analysisMix().lerpedSpectrum;
+        for (int i = 0; i < spec.length; i++) {
+            // float x = PApplet.map(i, 0, fft.specSize(), 0, v.width);
+            float x = PApplet.map(i, 0, spec.length, 0, v.width);
+            float h = PApplet.map(spec[i], 0, 100, 0, -height4);
 
             v.stroke(255);
             v.pushMatrix();
@@ -63,14 +63,14 @@ public class Demo extends Scene {
             v.line(x, 0, x, h);
             v.popMatrix();
         }
-
     }
 
     public void spectrumLog() {
-        FFT fft = v.fft();
-        for (int i = 0; i < fft.specSize(); i++) {
-            float x = PApplet.map(i, 0, fft.specSize(), 0, v.width);
-            float h = PApplet.map(fft.getBand(i), 0, 100, 0, -height4);
+        float[] spec = v.analysisMix().lerpedSpectrum;
+        for (int i = 0; i < spec.length; i++) {
+            // float x = PApplet.map(i, 0, fft.specSize(), 0, v.width);
+            float x = PApplet.map(PApplet.log(i), 0, PApplet.log(spec.length), 0, v.width);
+            float h = PApplet.map(spec[i], 0, 100, 0, height4);
 
             v.stroke(255);
             v.pushMatrix();
@@ -78,6 +78,38 @@ public class Demo extends Scene {
             v.line(x, 0, x, h);
             v.popMatrix();
         }
+    }
+
+    public void bands() {
+        FFT fft = v.fft();
+        // v.fill(255);
+        v.pushMatrix();
+        v.translate(0, height4 * 2);
+        for (int i = 0; i < fft.avgSize(); i++) {
+            float centerFrequency = fft.getAverageCenterFrequency(i);
+            // how wide is this average in Hz?
+            float averageWidth = fft.getAverageBandWidth(i);
+
+            // we calculate the lowest and highest frequencies
+            // contained in this average using the center frequency
+            // and bandwidth of this average.
+            float lowFreq = centerFrequency - averageWidth / 2;
+            float highFreq = centerFrequency + averageWidth / 2;
+
+            // freqToIndex converts a frequency in Hz to a spectrum band index
+            // that can be passed to getBand. in this case, we simply use the
+            // index as coordinates for the rectangle we draw to represent
+            // the average.
+            int xl = (int) fft.freqToIndex(lowFreq) * 1;
+            int xr = (int) fft.freqToIndex(highFreq) * 1;
+            v.rect(xl, 0, xr, -fft.getAvg(i) * 4);
+
+        }
+        v.popMatrix();
+    }
+
+    public void bandsLog() {
+
     }
 
     public void beat() {
@@ -91,27 +123,30 @@ public class Demo extends Scene {
             kick = 255;
         if (beat.isSnare())
             snare = 255;
+        if (beat.isRange(0, 0, 0))
 
-        // hat = Visual.lerp(hat, 0, .9f);
-        // kick = Visual.lerp(kick, 0, .9f);
-        // snare = Visual.lerp(snare, 0, .9f);
+            // hat = Visual.lerp(hat, 0, .9f);
+            // kick = Visual.lerp(kick, 0, .9f);
+            // snare = Visual.lerp(snare, 0, .9f);
 
-        v.pushMatrix();
-        v.noStroke();
-        v.fill(255);
-        v.text("Hat", 0, 0);
-        v.text("Kick", width4, 0);
-        v.text("Snare", width4 * 2, 0);
+            v.pushMatrix();
+        {
+            v.noStroke();
+            v.fill(255);
+            v.text("Hat", 0, 0);
+            v.text("Kick", width4, 0);
+            v.text("Snare", width4 * 2, 0);
 
-        v.fill(255, 0);
-        v.translate(0, 0);
-        v.textAlign(PApplet.LEFT, PApplet.TOP);
-        v.fill(255, hat);
-        v.rect(0, 0, width4, height4);
-        v.fill(255, kick);
-        v.rect(width4, 0, width4, height4);
-        v.fill(255, snare);
-        v.rect(width4 * 2, 0, width4, height4);
+            v.fill(255, 0);
+            v.translate(0, 0);
+            v.textAlign(PApplet.LEFT, PApplet.TOP);
+            v.fill(255, hat);
+            v.rect(0, 0, width4, height4);
+            v.fill(255, kick);
+            v.rect(width4, 0, width4, height4);
+            v.fill(255, snare);
+            v.rect(width4 * 2, 0, width4, height4);
+        }
         v.popMatrix();
 
     }
