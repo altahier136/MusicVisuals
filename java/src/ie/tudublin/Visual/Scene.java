@@ -3,7 +3,22 @@ package ie.tudublin.Visual;
 import processing.core.PApplet;
 import processing.core.PVector;
 
-public abstract class Scene extends Object {
+/**
+ * Base class for all objects in the scene which will control rendering of your
+ * objects within the scene, this class is then called by the subclass of
+ * the Visual class<br><br>
+ * Example:<br>
+ * <pre><code>
+ * public class MyScene extends Scene {
+ *    BeatCircle circle;
+ *    public void MyScene(Visual v) {
+ *        super(v);
+ *        circle = new BeatCircle(v);
+ * }
+ * <pre><code>
+ * @see {@link VObject}
+ */
+public abstract class Scene extends VObject {
     protected Scene(Visual v) {
         this(v, new PVector(0,0,0), new PVector(0,0,0));
     }

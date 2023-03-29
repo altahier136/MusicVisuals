@@ -3,12 +3,32 @@ package ie.tudublin.Visual;
 import ddf.minim.AudioListener;
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
-import ie.tudublin.Visual.VisualConstants.ChannelEnum;
+import ie.tudublin.Visual.VConstants.ChannelEnum;
 import processing.core.PApplet;
 
 /**
  * The AudioAnalysis class is used to analyse each new sample and store the
- * results in the class variables to be retrieved.
+ * results in the class variables to be retrieved.<br><br>
+ * <br><br>
+ * Fields:<br><br>
+ * {@value}
+ * <ul>
+ * <li>{@link #amplitude} - The amplitude of the sample</li>
+ * <li>{@link #lerpedAmplitude} - The lerped amplitude of the sample</li>
+ * <li>{@link #waveform} - The waveform of the sample</li>
+ * <li>{@link #lerpedWaveform} - The lerped waveform of the sample</li>
+ * <li>{@link #bands} - The bands of the sample</li>
+ * <li>{@link #lerpedBands} - The lerped bands of the sample</li>
+ * <li>{@link #spectrum} - The spectrum of the sample</li>
+ * <li>{@link #lerpedSpectrum} - The lerped spectrum of the sample</li>
+ * <li>{@link #channel} - The channel to use for the sample</li>
+ * <li>{@link #lerpAmount} - The amount to lerp the values by</li>
+ * </ul>
+ * @see {@link ddf.minim.AudioListener}
+ * @see {@link ddf.minim.AudioInput}
+ * @see {@link ddf.minim.AudioPlayer}
+ * @see {@link ddf.minim.analysis.BeatDetect}
+ * @see {@link ddf.minim.analysis.FFT}
  */
 public class AudioAnalysis implements AudioListener {
     private float[] samp;
@@ -37,6 +57,7 @@ public class AudioAnalysis implements AudioListener {
     }
 
     @Override
+    /** Called by Recordable class (AudioPlayer or AudioInput) */
     public synchronized void samples(float[] samp) {
         this.samp = samp;
         amplitude();
@@ -47,6 +68,7 @@ public class AudioAnalysis implements AudioListener {
     }
 
     @Override
+    /** Called by Recordable class (AudioPlayer or AudioInput) */
     public synchronized void samples(float[] sampL, float[] sampR) {
         switch (channel) {
             case MIX:
@@ -129,7 +151,6 @@ public class AudioAnalysis implements AudioListener {
      * isRange() can be used
      *
      * Example:
-     *
      * <pre>
      * <code>
      * if (beat.isKick()) {

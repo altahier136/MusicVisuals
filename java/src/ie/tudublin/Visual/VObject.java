@@ -8,6 +8,13 @@ import processing.core.PVector;
  * If you are creating a new object, extend this class
  * and override the render method <br>
  * <br>
+ * Fields, getters and setters:
+ * <ul>
+ * <li>{@link #visual()}</li>
+ * <li>{@link #position()}</li>
+ * <li>{@link #rotation()}</li>
+ * <li>{@link #scale()}</li>
+ * </ul>
  *
  * Example:
  * <pre><code>

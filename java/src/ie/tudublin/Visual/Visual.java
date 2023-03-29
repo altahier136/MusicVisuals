@@ -5,23 +5,6 @@ import processing.core.PApplet;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
-/* The type of the super class can be used for storing the sub class
- * E.g. SuperClass sub = new SubClass();
- * However you cannot access the sub class methods and variables
-*/
-
-/*
- * Visual class diagram
- * processing.core.PApplet
- *   Visual <- VisualConstants
- *     - ddf.minim.*
- *
- * Object
- *   - Visual
- *   Scene
- *   Reactive
- */
-
 /**
  * <p>
  * Visual is the main class which will be used to create the Music Visualiser
@@ -30,21 +13,21 @@ import ddf.minim.analysis.*;
  * </p>
  *
  * <p>
- * Getters and setters:
+ * Fields, Getters and setters:
  * <ul>
- * <li>{@link #getFrameSize}</li>
- * <li>{@link #setFrameSize}</li>
- * <li>{@link #getSampleRate}</li>
- * <li>{@link #setSampleRate}</li>
- * <li>{@link #getBands}</li>
- * <li>{@link #getSmoothedBands}</li>
- * <li>{@link #getMinim}</li>
- * <li>{@link #getAudioInput}</li>
- * <li>{@link #getAudioPlayer}</li>
- * <li>{@link #getAudioBuffer}</li>
- *
+ * <li>{@link #bufferSize()}</li>
+ * <li>{@link #sampleRate()}</li>
+ * <li>{@link #minim()}</li>
+ * <li>{@link #audioInput()}</li>
+ * <li>{@link #audioPlayer()}</li>
+ * <li>{@link #fft()}</li>
+ * <li>{@link #beat()}</li>
+ * <li>{@link #analysisMix()}</li>
+ * <li>{@link #analysisLeft()}</li>
+ * <li>{@link #analysisRight()}</li>
+ * </ul>
  */
-public abstract class Visual extends PApplet implements VisualConstants {
+public abstract class Visual extends PApplet implements VConstants {
 
     private int bufferSize;
     private int sampleRate;
@@ -60,7 +43,6 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
     /**
      * Gets the frame size.
-     *
      * @return {@link #bufferSize}
      */
     public int bufferSize() {
@@ -69,7 +51,6 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
     /**
      * Gets the sample rate.
-     *
      * @return {@link #sampleRate}
      */
     public int sampleRate() {
@@ -77,8 +58,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
     }
 
     /**
-     * Gets the Minim object.
-     *
+     * Gets the {@link Minim} object.
      * @return {@link #minim}
      */
     public Minim minim() {
@@ -86,56 +66,61 @@ public abstract class Visual extends PApplet implements VisualConstants {
     }
 
     /**
-     * Gets the AudioPlayer object.
-     *
+     * Gets the {@link AudioPlayer} object.
      * @return {@link #ap}
      */
     public AudioInput audioInput() {
         return ai;
     }
 
-    /** Gets the AudioPlayer object. */
+    /**
+     * Gets the {@link AudioPlayer} object.
+     * @return {@link #ap}
+     */
     public AudioPlayer audioPlayer() {
         return ap;
     }
 
-    /** Gets the FFT object. */
+    /**
+     * Gets the {@link FFT} object.
+     * @return {@link #fft}
+     */
     public FFT fft() {
         return fft;
     }
 
-    /** Gets the BeatDetect object. */
+    /**
+     * Gets the {@link BeatDetect} object.
+     * @return {@link #beat}
+     */
     public BeatDetect beat() {
         return beat;
     }
 
     /**
-     * Gets the AudioAnalysis object for the mix.
-     * @return
+     * Gets mixed {@link AudioAnalysis} object.
+     * @return {@link #analysisMix}
      */
     public AudioAnalysis analysisMix() {
         return analysisMix;
     }
     /**
-     * Gets the AudioAnalysis object for the left channel.
-     * @return
+     * Gets left {@link AudioAnalysis} object.
+     * @return {@link #analysisLeft}
      */
     public AudioAnalysis analysisLeft() {
         return analysisLeft;
     }
     /**
-     * Gets the AudioAnalysis object for the right channel.
-     * @return
+     * Gets right {@link AudioAnalysis} object.
+     * @return {@link #analysisRight}
      */
     public AudioAnalysis analysisRight() {
         return analysisRight;
     }
 
     public Visual() {
-
-        // Default buffer size and sample rate
         this(1024, 44100, 0.1f);
-
     }
 
     public Visual(int bufferSize, int sampleRate, float lerpAmount) {
@@ -186,7 +171,7 @@ public abstract class Visual extends PApplet implements VisualConstants {
 
     abstract public void draw();
 
-    // ======== Audio Analysis ========
+    // ======== Audio ========
     public void setLerpAmount(float lerpAmount) {
         analysisMix.setLerpAmount(lerpAmount);
         analysisLeft.setLerpAmount(lerpAmount);
