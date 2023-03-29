@@ -217,25 +217,27 @@ public abstract class Visual extends PApplet implements VConstants {
 
     public void seek(int ms) {
         ap.cue(ms);
+        System.out.println("Seeking to " + ms + " ms");
     }
 
     public void seek(int m, int s) {
         int ms = toMs(m, s, 0);
-        ap.cue(ms);
+        seek(ms);
     }
 
     public void seek(int m, int s, int ms) {
         int msNew = toMs(m, s, ms);
-        ap.cue(msNew);
+        seek(msNew);
     }
 
     public void pausePlay() {
 
-        ap.pause();
         if (ap.isPlaying()) {
             ap.pause();
+            System.out.println("Paused");
         } else {
             ap.play();
+            System.out.println("Playing");
         }
 
     }

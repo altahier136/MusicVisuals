@@ -100,6 +100,8 @@ public class HoldTheLine extends Visual {
                 seek(2, 31);
                 break;
             case ' ':
+                pausePlay();
+                break;
             default:
                 break;
         }
