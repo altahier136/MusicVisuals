@@ -1,4 +1,4 @@
-package ie.tudublin.visual;
+package ie.tudublin.aavisual;
 
 import processing.core.PApplet;
 
@@ -8,7 +8,7 @@ import ddf.minim.analysis.*;
 /**
  * <p>
  * Visual is the main class which will be used to create the Music Visualiser
- * The {@link Visual} class is an abstract class that will be used to create
+ * The {@link aVisual} class is an abstract class that will be used to create
  * the Music Visualiser.
  * </p>
  *

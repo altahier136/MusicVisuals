@@ -1,8 +1,8 @@
 package c21348423;
 
-import ie.tudublin.visual.VObject;
-import ie.tudublin.visual.VScene;
-import ie.tudublin.visual.Visual;
+import ie.tudublin.aavisual.VObject;
+import ie.tudublin.aavisual.VScene;
+import ie.tudublin.aavisual.Visual;
 import processing.core.PApplet;
 import processing.core.PVector;
 

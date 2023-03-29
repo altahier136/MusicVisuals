@@ -1,9 +1,9 @@
-package ie.tudublin.visual;
+package ie.tudublin.aavisual;
 
 import ddf.minim.AudioListener;
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
-import ie.tudublin.visual.VConstants.ChannelEnum;
+import ie.tudublin.aavisual.VConstants.ChannelEnum;
 import processing.core.PApplet;
 
 /**

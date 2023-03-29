@@ -2,8 +2,8 @@ package global;
 
 import ddf.minim.analysis.BeatDetect;
 import ddf.minim.analysis.FFT;
-import ie.tudublin.visual.VScene;
-import ie.tudublin.visual.Visual;
+import ie.tudublin.aavisual.VScene;
+import ie.tudublin.aavisual.Visual;
 import processing.core.PApplet;
 
 public class Demo extends VScene {

@@ -1,7 +1,7 @@
 package global;
 
-import ie.tudublin.visual.VScene;
-import ie.tudublin.visual.Visual;
+import ie.tudublin.aavisual.VScene;
+import ie.tudublin.aavisual.Visual;
 
 public class GlobalVisual extends VScene {
 
