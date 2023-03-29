@@ -1,4 +1,4 @@
-package ie.tudublin.aavisual;
+package ie.tudublin.visual;
 
 import processing.core.PApplet;
 import processing.core.PVector;

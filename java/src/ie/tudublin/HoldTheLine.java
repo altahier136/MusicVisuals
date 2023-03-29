@@ -3,7 +3,7 @@ package ie.tudublin;
 import c21348423.AdriansVisual;
 import global.Demo;
 import global.GlobalVisual;
-import ie.tudublin.aavisual.*;
+import ie.tudublin.visual.*;
 
 /*
     Song lyrics:
