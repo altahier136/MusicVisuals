@@ -1,6 +1,7 @@
 package ie.tudublin;
 
 import c21348423.AdriansVisual;
+import c21383126.JenniferVisuals;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.visual.*;
@@ -59,13 +60,15 @@ public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
     VScene demo;
+    VScene jv;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
     }
 
     public void settings() {
-        fullScreen(P3D);
+        size(1024, 800);
+        //fullScreen(P3D);
     }
 
     public void setup() {
@@ -73,6 +76,7 @@ public class HoldTheLine extends Visual {
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
         demo = new Demo(this);
+        jv = new JenniferVisuals(this);
     }
 
     public void draw() {
@@ -82,7 +86,8 @@ public class HoldTheLine extends Visual {
 
         // gv.render(elapsed);
         // av.render(elapsed);
-        demo.render();
+        //demo.render();
+        jv.render(elapsed);
     }
 
     public void keyPressed() {
