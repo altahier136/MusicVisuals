@@ -16,10 +16,12 @@ public class AudioAnalysis implements AudioListener {
     private BeatDetect beat;
     public float amplitude;
     public float lerpedAmplitude;
-    public float[] bands;
-    public float[] lerpedBands;
     public float[] waveform;
     public float[] lerpedWaveform;
+    public float[] bands;
+    public float[] lerpedBands;
+    public float[] spectrum;
+    public float[] lerpedSpectrum;
     public ChannelEnum channel;
     public float lerpAmount;
 
@@ -30,14 +32,17 @@ public class AudioAnalysis implements AudioListener {
         this.channel = channel;
         bands = new float[(int) Visual.log2(fft.specSize())];
         lerpedBands = new float[(int) Visual.log2(fft.specSize())];
+        spectrum = new float[fft.specSize()];
+        lerpedSpectrum = new float[fft.specSize()];
     }
 
     @Override
     public synchronized void samples(float[] samp) {
         this.samp = samp;
         amplitude();
-        bands();
         waveform();
+        bands();
+        spectrum();
         beat();
     }
 
@@ -61,8 +66,9 @@ public class AudioAnalysis implements AudioListener {
         }
 
         amplitude();
-        bands();
         waveform();
+        bands();
+        spectrum();
         beat();
     }
 
@@ -86,9 +92,18 @@ public class AudioAnalysis implements AudioListener {
      * along with the lerped bands
      */
     private synchronized void bands() {
+        fft.forward(samp);
         for (int i = 0; i < bands.length; i++) {
             bands[i] = fft.getBand(i);
             lerpedBands[i] = PApplet.lerp(lerpedBands[i], bands[i], lerpAmount);
+        }
+    }
+
+    private synchronized void spectrum() {
+        fft.forward(samp);
+        for (int i = 0; i < spectrum.length; i++) {
+            spectrum[i] = fft.getBand(i);
+            lerpedSpectrum[i] = PApplet.lerp(lerpedSpectrum[i], spectrum[i], lerpAmount);
         }
     }
 
