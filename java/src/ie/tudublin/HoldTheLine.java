@@ -1,6 +1,7 @@
 package ie.tudublin;
 
 import c21348423.AdriansVisual;
+import c21415904.SarahVisual;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.visual.*;
@@ -58,6 +59,7 @@ import ie.tudublin.visual.*;
 public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
+    VScene sv;
     VScene demo;
 
     HoldTheLine() {
@@ -72,6 +74,7 @@ public class HoldTheLine extends Visual {
         beginAudio("Toto - Hold The Line.wav");
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
+        sv = new SarahVisual(this);
         demo = new Demo(this);
     }
 
@@ -81,8 +84,8 @@ public class HoldTheLine extends Visual {
         text(elapsed, 10, 10);
 
         // gv.render(elapsed);
-        // av.render(elapsed);
-        demo.render();
+        av.render(elapsed);
+        sv.render(elapsed);
     }
 
     public void keyPressed() {
