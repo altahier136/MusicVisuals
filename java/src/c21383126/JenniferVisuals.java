@@ -3,7 +3,7 @@ package c21383126;
 import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
-import ie.tudublin.visual.VConstants.ChannelEnum;
+//import ie.tudublin.visual.VConstants.ChannelEnum;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -73,6 +73,7 @@ public class JenniferVisuals extends VScene {
                 h = (h + 1) % 360;
             }    
         }
+        
     }
 
 }
