@@ -8,7 +8,7 @@ import ddf.minim.analysis.*;
 /**
  * <p>
  * Visual is the main class which will be used to create the Music Visualiser
- * The {@link aVisual} class is an abstract class that will be used to create
+ * The {@link Visual} class is an abstract class that will be used to create
  * the Music Visualiser.
  * </p>
  *
@@ -22,7 +22,7 @@ import ddf.minim.analysis.*;
  * <li>{@link #audioPlayer()}</li>
  * <li>{@link #fft()}</li>
  * <li>{@link #beat()}</li>
- * <li>{@link #analysisMix()}</li>
+ * <li>{@link #audioAnalysis()}</li>
  * <li>{@link #analysisLeft()}</li>
  * <li>{@link #analysisRight()}</li>
  * </ul>
@@ -35,14 +35,13 @@ public abstract class Visual extends PApplet implements VConstants {
     private Minim minim;
     private AudioInput ai;
     private AudioPlayer ap;
-    private AudioAnalysis analysisMix;
-    private AudioAnalysis analysisLeft;
-    private AudioAnalysis analysisRight;
+    private AudioAnalysis aa;
     private FFT fft;
     private BeatDetect beat;
 
     /**
      * Gets the frame size.
+     *
      * @return {@link #bufferSize}
      */
     public int bufferSize() {
@@ -51,6 +50,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets the sample rate.
+     *
      * @return {@link #sampleRate}
      */
     public int sampleRate() {
@@ -59,6 +59,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets the {@link Minim} object.
+     *
      * @return {@link #minim}
      */
     public Minim minim() {
@@ -67,6 +68,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets the {@link AudioPlayer} object.
+     *
      * @return {@link #ap}
      */
     public AudioInput audioInput() {
@@ -75,6 +77,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets the {@link AudioPlayer} object.
+     *
      * @return {@link #ap}
      */
     public AudioPlayer audioPlayer() {
@@ -83,6 +86,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets the {@link FFT} object.
+     *
      * @return {@link #fft}
      */
     public FFT fft() {
@@ -91,6 +95,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets the {@link BeatDetect} object.
+     *
      * @return {@link #beat}
      */
     public BeatDetect beat() {
@@ -99,25 +104,18 @@ public abstract class Visual extends PApplet implements VConstants {
 
     /**
      * Gets mixed {@link AudioAnalysis} object.
-     * @return {@link #analysisMix}
+     *
+     * @return {@link #aa}
      */
-    public AudioAnalysis analysisMix() {
-        return analysisMix;
+    public AudioAnalysis audioAnalysis() {
+        return aa;
     }
+
     /**
      * Gets left {@link AudioAnalysis} object.
+     *
      * @return {@link #analysisLeft}
      */
-    public AudioAnalysis analysisLeft() {
-        return analysisLeft;
-    }
-    /**
-     * Gets right {@link AudioAnalysis} object.
-     * @return {@link #analysisRight}
-     */
-    public AudioAnalysis analysisRight() {
-        return analysisRight;
-    }
 
     public Visual() {
         this(1024, 44100, 0.1f);
@@ -135,7 +133,7 @@ public abstract class Visual extends PApplet implements VConstants {
         minim = new Minim(this);
 
         fft = new FFT(bufferSize, sampleRate);
-        fft.logAverages(60,3);
+        fft.logAverages(60, 3);
         beat = new BeatDetect(bufferSize, sampleRate) {
             // We can assume that BeatDetect is in FREQ_ENERGY mode
             @Override
@@ -144,11 +142,13 @@ public abstract class Visual extends PApplet implements VConstants {
                 int upper = super.detectSize() - 1;
                 return isRange(lower, upper, 1);
             }
+
             @Override
             public boolean isKick() {
                 int upper = 6 >= super.detectSize() ? super.detectSize() : 6;
                 return isRange(1, upper, 2);
             }
+
             @Override
             public boolean isSnare() {
                 int lower = 8 >= super.detectSize() ? super.detectSize() : 8;
@@ -159,9 +159,7 @@ public abstract class Visual extends PApplet implements VConstants {
         };
         beat.setSensitivity(50);
 
-        analysisMix = new AudioAnalysis(fft, beat, ChannelEnum.MIX, lerpAmount);
-        analysisLeft = new AudioAnalysis(fft, beat, ChannelEnum.LEFT, lerpAmount);
-        analysisRight = new AudioAnalysis(fft, beat, ChannelEnum.RIGHT, lerpAmount);
+        this.aa = new AudioAnalysis(fft, beat, lerpAmount);
 
     }
 
@@ -173,20 +171,16 @@ public abstract class Visual extends PApplet implements VConstants {
 
     // ======== Audio ========
     public void setLerpAmount(float lerpAmount) {
-        analysisMix.setLerpAmount(lerpAmount);
-        analysisLeft.setLerpAmount(lerpAmount);
-        analysisRight.setLerpAmount(lerpAmount);
+        aa.setLerpAmount(lerpAmount);
     }
 
-    /** Begins audio input from the default audio input device.  */
+    /** Begins audio input from the default audio input device. */
     public void beginAudio() {
 
         if (ap != null)
             ap.close();
         ai = minim.getLineIn(Minim.MONO, bufferSize, 44100, 16);
-        ai.addListener(analysisMix);
-        ai.addListener(analysisLeft);
-        ai.addListener(analysisRight);
+        ai.addListener(aa);
 
         System.out.println("Using default audio input");
 
@@ -206,9 +200,7 @@ public abstract class Visual extends PApplet implements VConstants {
             beginAudio();
         }
         ap = minim.loadFile(filename, bufferSize);
-        ap.addListener(analysisMix);
-        ap.addListener(analysisLeft);
-        ap.addListener(analysisRight);
+        ap.addListener(aa);
         ap.play();
 
         System.out.println("Playing " + filename);
@@ -241,7 +233,6 @@ public abstract class Visual extends PApplet implements VConstants {
         }
 
     }
-
 
     // ======== Helpers ========
 
