@@ -134,6 +134,8 @@ public abstract class Visual extends PApplet implements VConstants {
 
         fft = new FFT(bufferSize, sampleRate);
         fft.logAverages(60, 3);
+        // Making an annonymous inner class to override the default BeatDetect
+        // to use our own thresholds
         beat = new BeatDetect(bufferSize, sampleRate) {
             // We can assume that BeatDetect is in FREQ_ENERGY mode
             @Override
@@ -311,5 +313,24 @@ public abstract class Visual extends PApplet implements VConstants {
     public float interpolate(float start, float stop, float amt, EaseFunction ease, float frameTime) {
         return lerp(start, stop, ease.ease(amt), frameTime);
     }
+
+    // Matrix helpers
+
+    /**
+     * Translates the origin to the center of the screen.
+     */
+    public void translateCenter() {
+        translate(width / 2, height / 2);
+    }
+
+    /**
+     * Translates the origin to the center of the screen and then to the specified point.
+     * @param x
+     * @param y
+     */
+    public void translateCenter(float x, float y) {
+        translate(width / 2 + x, height / 2 + y);
+    }
+
 
 }
