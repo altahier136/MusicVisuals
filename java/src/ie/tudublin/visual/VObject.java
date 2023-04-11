@@ -46,6 +46,7 @@ public abstract class VObject {
     public PVector position;
     public PVector rotation;
     public PVector scale;
+    public float effect;
 
     public Visual visual() {
         return v;
@@ -81,6 +82,15 @@ public abstract class VObject {
      * object.render() is called in the render method of the scene
      */
     public void render() {
+        applyTransforms();
+        v.colorMode(PApplet.RGB);
+        v.fill(255, 0, 255);
+        v.circle(10, 10, 10);
+        v.popMatrix();
+        System.out.println(this.getClass().getName() + "Warning: Empty Render Method");
+    }
+
+    public void render(int elapsed) {
         applyTransforms();
         v.colorMode(PApplet.RGB);
         v.fill(255, 0, 255);
