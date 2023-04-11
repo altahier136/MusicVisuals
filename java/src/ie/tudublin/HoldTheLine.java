@@ -1,6 +1,7 @@
 package ie.tudublin;
 
 import c21348423.AdriansVisual;
+import global.AnimationDemo;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.visual.*;
@@ -59,6 +60,7 @@ public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
     VScene demo;
+    VScene aDemo;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
@@ -69,10 +71,12 @@ public class HoldTheLine extends Visual {
     }
 
     public void setup() {
+        colorMode(HSB);
         beginAudio("Toto - Hold The Line.wav");
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
         demo = new Demo(this);
+        aDemo = new AnimationDemo(this);
     }
 
     public void draw() {
@@ -82,7 +86,8 @@ public class HoldTheLine extends Visual {
 
         // gv.render(elapsed);
         // av.render(elapsed);
-        demo.render();
+        // demo.render();
+        aDemo.render(elapsed);
     }
 
     public void keyPressed() {
