@@ -2,8 +2,6 @@ package ie.tudublin.visual;
 
 import java.util.ArrayList;
 
-import javax.print.attribute.standard.RequestingUserName;
-
 import processing.core.PApplet;
 
 /**

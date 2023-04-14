@@ -40,7 +40,7 @@ public abstract class Visual extends PApplet implements VConstants {
     private AudioAnalysis aAnalysis;
     private FFT fft;
     private BeatDetect beat;
-    private String[] lyrics;
+    private String[][] lyrics; // [[00:00][lyrics], [00:00][lyrics], ...
 
     /**
      * Gets the frame size.
@@ -214,7 +214,7 @@ public abstract class Visual extends PApplet implements VConstants {
 
     public void beginAudio(String audioFilename, String lyricsFilename) {
         beginAudio(audioFilename);
-        lyrics = loadStrings(lyricsFilename);
+        loadLyrics(lyricsFilename);
     }
 
     public void seek(int ms) {
@@ -246,14 +246,48 @@ public abstract class Visual extends PApplet implements VConstants {
 
     // ======== Lyrics ========
 
-    // Splits 00:00|string
-    public String getLyrics() {
-        for (String line : lyrics) {
-            String[] split = line.split("\\|", 2);
-            String time = split[0].split(":", 2)[0];
-            String lyric = split[1];
+    public void loadLyrics(String fileName) {
+        String[] rawLyrics = loadStrings(fileName);
+        // Convert to 2D array
+        lyrics = new String[rawLyrics.length][2];
+        for (int i = 0; i < rawLyrics.length; i++) {
+            String[] split = rawLyrics[i].split("\\|"); // 00:00|String -> [00:00, String]
+            // Copy strings to 2D array
+            lyrics[i][0] = split[0];
+            lyrics[i][1] = split[1];
         }
-        return "[Blank]";
+    }
+
+    // Splits 00:00|string
+    /**
+     * Gets lyrics at current time
+     *
+     * @param offset Offset by line
+     * @return
+     */
+    public String getLyrics(int offset) {
+        if (lyrics == null) {
+            System.out.println("No lyrics loaded");
+            return "No lyrics loaded";
+        }
+
+        String result = "...";
+        for (int i = 0; i < lyrics.length - 1; i++) {
+            int current = timestampToMs(lyrics[i][0]);
+            int next = timestampToMs(lyrics[i + 1][0]);
+            if (aPlayer.position() >= current && aPlayer.position() < next) {
+                result = lyrics[i + offset][1];
+                break;
+            }
+        }
+        return result;
+    }
+
+    public int timestampToMs(String timestamp) {
+        String[] split = timestamp.split(":");
+        int m = Integer.parseInt(split[0]);
+        int s = Integer.parseInt(split[1]);
+        return toMs(m, s, 0);
     }
 
     // ======== Helpers ========
@@ -344,13 +378,14 @@ public abstract class Visual extends PApplet implements VConstants {
     }
 
     /**
-     * Translates the origin to the center of the screen and then to the specified point.
+     * Translates the origin to the center of the screen and then to the specified
+     * point.
+     *
      * @param x
      * @param y
      */
     public void translateCenter(float x, float y) {
         translate(width / 2 + x, height / 2 + y);
     }
-
 
 }

@@ -74,7 +74,7 @@ public class HoldTheLine extends Visual {
 
     public void setup() {
         colorMode(HSB);
-        beginAudio("Toto - Hold The Line.wav");
+        beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
         demo = new Demo(this);
