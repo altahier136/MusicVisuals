@@ -64,7 +64,7 @@ public class VAnimation {
         if (sections.size() == 0 && startMs != 0) {
             // If no sections, add linear transition from 0 to start value
             appendSection(startMs - 1, startValue, startValue, EaseFunction.easeLinear);
-        } else {
+        } else if (sections.size() > 0) {
             // If there are sections, add linear transition from end value of last section
             Section lastSection = sections.get(sections.size() - 1);
             if (startMs != lastSection.getEndTime() + 1) {

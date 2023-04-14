@@ -121,6 +121,7 @@ public abstract class Visual extends PApplet {
         beat.setSensitivity(50);
 
         // Could potentially encapsulate all of the above into AudioAnalysis class
+        // Not going to do it as it's not necessary, it works fine as is
         this.aAnalysis = new AudioAnalysis(fft, beat, lerpAmount);
 
     }
