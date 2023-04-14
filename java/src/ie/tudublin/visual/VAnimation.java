@@ -2,36 +2,34 @@ package ie.tudublin.visual;
 
 import java.util.ArrayList;
 
-import javax.print.attribute.standard.RequestingUserName;
-
 import processing.core.PApplet;
 
 /**
  * VAnimation is a class that is used to handle animating a value over time.
- * User creates an instance of VAnimation which adds it to the list of
- * animations in the Visual class. The user adds transition sections with a
- * selected ease function.
- * The class then fills in the gaps between the sections with linear
- * interpolation.
- *
- * Class details with millisecond time units and float values.
+ * Animations are made up of sections. Each section has a duration, start value,
+ * end value and an ease function.
  */
 public class VAnimation {
-    int lengthMs; // Duration of the animation in milliseconds
-    ArrayList<Section> sections;
+    private int lengthMs; // Duration of the animation in milliseconds
+    private ArrayList<Section> sections;
 
+    /**
+     * Constructor for VAnimation
+     *
+     * @param lengthMs Duration of the whole animation in milliseconds
+     */
     public VAnimation(int lengthMs) {
         this.lengthMs = lengthMs;
         sections = new ArrayList<Section>();
     }
 
     /**
-     * Appends a section to the animation
+     * Appends a section to the animation list
      *
-     * @param durationMs
-     * @param startValue
-     * @param endValue
-     * @param easeFunction
+     * @param durationMs   Duration of the section in milliseconds
+     * @param startValue   Start value of the section
+     * @param endValue     End value of the section
+     * @param easeFunction Ease function of the section
      */
     public void appendSection(int durationMs, float startValue, float endValue, EaseFunction easeFunction) {
         // If no sections, set start time to 0
@@ -46,6 +44,15 @@ public class VAnimation {
         sections.add(new Section(startTime, durationMs, startValue, endValue, easeFunction));
     }
 
+    /**
+     * Adds a transition to the animation
+     *
+     * @param startMs      Start time of the transition in milliseconds
+     * @param durationMs   Duration of the transition in milliseconds
+     * @param startValue   Start value of the transition
+     * @param endValue     End value of the transition
+     * @param easeFunction Ease function of the transition
+     */
     public void addTransition(int startMs, int durationMs, float startValue, float endValue,
             EaseFunction easeFunction) {
         // Check if it overlaps with any existing sections
@@ -54,35 +61,35 @@ public class VAnimation {
                 throw new RuntimeException("Transition overlaps with existing section");
         }
 
-        // If right after end of last section,
-        // fill gap with linear transition from end value of last section to start value
-        // of new section
-        // then add transition section
-        if (sections.size() != 0) {
+        if (sections.size() == 0 && startMs != 0) {
+            // If no sections, add linear transition from 0 to start value
+            appendSection(startMs - 1, startValue, startValue, EaseFunction.easeLinear);
+        } else {
+            // If there are sections, add linear transition from end value of last section
             Section lastSection = sections.get(sections.size() - 1);
             if (startMs != lastSection.getEndTime() + 1) {
                 int gapDuration = startMs - lastSection.getEndTime() - 1;
-                appendSection(gapDuration, lastSection.getValue(lastSection.getEndTime()), startValue, linearEase);
-            }
-        } else {
-            // If no sections, check if start time is 0
-            if (startMs != 0) {
-                appendSection(startMs - 1, startValue, startValue, linearEase);
+                appendSection(gapDuration, lastSection.getValue(lastSection.getEndTime()), startValue,
+                        EaseFunction.easeLinear);
             }
         }
+        // Add transition section
         appendSection(durationMs, startValue, endValue, easeFunction);
 
     }
 
-    // !BUG - It is always returning a 0 value
+    /**
+     * Returns the value of the animation at the given time
+     *
+     * @param time
+     * @return
+     */
     public float getValue(int time) {
-        // Check if time is within animation
         if (time < 0 || time > lengthMs) {
-            // throw new RuntimeException("Time is not within the animation");
             System.out.println("Time is not within the animation");
         }
 
-        // Find the section that the time is in
+        // Search through sections to find the one that contains the time
         for (Section section : sections) {
             if (time >= section.getStartTime() && time < section.getEndTime()) {
                 return section.getValue(time);
@@ -93,8 +100,9 @@ public class VAnimation {
         return 0;
     }
 
-    // Represents a section of the animation which as a start, duration and ease
-    // function
+    /**
+     * Represents a section of the animation
+     */
     class Section {
         private int startTime;
         private int duration;
@@ -102,6 +110,15 @@ public class VAnimation {
         private float endValue;
         private EaseFunction easeFunction;
 
+        /**
+         * Constructor for Section
+         *
+         * @param startTimeMs  Start time of the section in milliseconds
+         * @param durationMs   Duration of the section in milliseconds
+         * @param startValue   Start value of the section
+         * @param endValue     End value of the section
+         * @param easeFunction Ease function of the section
+         */
         public Section(int startTimeMs, int durationMs, float startValue, float endValue, EaseFunction easeFunction) {
             this.startTime = startTimeMs;
             this.duration = durationMs;
@@ -110,17 +127,18 @@ public class VAnimation {
             this.easeFunction = easeFunction;
         }
 
-        /** Returns the start time of the section */
+        /** @return The start time of the section. */
         public int getStartTime() {
             return startTime;
         }
 
+        /** @return The end time of the section. */
         public int getEndTime() {
             return startTime + duration;
         }
 
         /**
-         * Returns the value of the animation at the given time
+         * Returns the value of the animation at the given time.
          *
          * @param time
          * @return
@@ -136,56 +154,4 @@ public class VAnimation {
             return PApplet.lerp(startValue, endValue, easedTime);
         }
     }
-
-    public interface EaseFunction {
-        float ease(float t);
-    }
-
-    // Ease functions
-    // https://easings.net/
-    // https://web.dev/choosing-the-right-easing/
-    // - Ease in, ease out or both, 200ms - 500ms is recommended
-
-    /**
-     * y = x
-     * Oh you thought its more complicated than that?
-     * Here is the full equation:
-     * y = (2(x^2-12345)^2*100/2(x^2-12345)^2) - sqrt(10^4)
-     */
-    public static EaseFunction linearEase = (t) -> t;
-    /**
-     * Smoothstep is quad in and quad out lerped
-     * lerp(start, stop, value) = start + (stop - start) * value
-     * y = lerp(quadEaseIn(x), quadEaseOut(x), x)
-     * Simplifying the equation gives us
-     * y = x - x(x - 1)^2
-     */
-    public static EaseFunction smoothstepEase = (f) -> {
-        return f * f + f * ((1 - (1 - f) * (1 - f)) - f * f);
-    };
-
-    /** y = x * (2 - x) */
-    public static EaseFunction outQuadEase = (f) -> f * (2 - f);
-    /** y = 1 + (1 - x)^5 */
-    public static EaseFunction outQuintEase = (f) -> 1 + (--f) * f * f * f * f;
-
-    /**
-     * easeOutBounce is a combination of easeOutQuad and easeOutQuint
-     * Added as something a lil fun
-     */
-    public static EaseFunction outBounceEase = (f) -> {
-        final float n1 = 7.5625f;
-        final float d1 = 2.75f;
-
-        if (f < 1 / d1) {
-            return n1 * f * f;
-        } else if (f < 2 / d1) {
-            return n1 * (f -= 1.5f / d1) * f + 0.75f;
-        } else if (f < 2.5 / d1) {
-            return n1 * (f -= 2.25f / d1) * f + 0.9375f;
-        } else {
-            return n1 * (f -= 2.625f / d1) * f + 0.984375f;
-        }
-    };
-
 }

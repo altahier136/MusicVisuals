@@ -2,14 +2,9 @@ package ie.tudublin;
 
 public class Main
 {
-	public static void holdTheLine()
+	public static void main(String[] args)
 	{
 		String[] a = {"MAIN"};
         processing.core.PApplet.runSketch( a, new HoldTheLine());
-	}
-
-	public static void main(String[] args)
-	{
-		holdTheLine();
 	}
 }

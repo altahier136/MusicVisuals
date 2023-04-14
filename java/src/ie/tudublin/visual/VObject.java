@@ -7,14 +7,6 @@ import processing.core.PVector;
  * Base class for all objects in the scene
  * If you are creating a new object, extend this class
  * and override the render method <br>
- * <br>
- * Fields, getters and setters:
- * <ul>
- * <li>{@link #visual()}</li>
- * <li>{@link #position()}</li>
- * <li>{@link #rotation()}</li>
- * <li>{@link #scale()}</li>
- * </ul>
  *
  * Example:
  * <pre><code>
@@ -37,7 +29,7 @@ import processing.core.PVector;
  *              // Draw a circle
  *          }
  *      }
- * }
+ *  }
  * </code></pre>
  */
 public abstract class VObject {
@@ -48,29 +40,33 @@ public abstract class VObject {
     public PVector scale;
     public float effect;
 
+    /** @return {@link Visual} */
     public Visual visual() {
         return v;
     }
+    /** @return {@link #position} */
     public PVector position() {
         return position;
     }
+    /** @return {@link #rotation} */
     public PVector rotation() {
         return rotation;
     }
+    /** @return {@link #scale} */
     public PVector scale() {
         return scale;
     }
 
-    protected VObject(Visual v) {
+    public VObject(Visual v) {
         this(v, new PVector(0,0,0), new PVector(0,0,0), new PVector(1,1,1));
     }
-    protected VObject(Visual v, PVector position) {
+    public VObject(Visual v, PVector position) {
         this(v, position, new PVector(0,0,0), new PVector(1,1,1));
     }
-    protected VObject(Visual v, PVector position, PVector rotation) {
+    public VObject(Visual v, PVector position, PVector rotation) {
         this(v, position, rotation, new PVector(1,1,1));
     }
-    protected VObject(Visual v, PVector position, PVector rotation, PVector scale) {
+    public VObject(Visual v, PVector position, PVector rotation, PVector scale) {
         this.v = v;
         this.position = position;
         this.rotation = rotation;
@@ -87,20 +83,16 @@ public abstract class VObject {
         v.fill(255, 0, 255);
         v.circle(10, 10, 10);
         v.popMatrix();
-        System.out.println(this.getClass().getName() + "Warning: Empty Render Method");
+        System.out.println(this.getClass().getName() + " Warning: Empty Render Method");
     }
 
     public void render(int elapsed) {
-        applyTransforms();
-        v.colorMode(PApplet.RGB);
-        v.fill(255, 0, 255);
-        v.circle(10, 10, 10);
-        v.popMatrix();
-        System.out.println(this.getClass().getName() + "Warning: Empty Render Method");
+        render();
     }
 
     /**
      * Apply the transforms to the object. <br><br>
+     * v.popMatrix() must be called after this method to reset the matrix <br><br>
      * Example:
      * <pre><code>
      * public void render() {
@@ -121,5 +113,4 @@ public abstract class VObject {
         v.rotateZ(rotation.z);
         v.scale(scale.x, scale.y, scale.z);
     }
-
 }
