@@ -1,13 +1,14 @@
 package ie.tudublin.visual;
 
-import ddf.minim.AudioListener;
-import ddf.minim.analysis.BeatDetect;
-import ddf.minim.analysis.FFT;
-import processing.core.PApplet;
+import ddf.minim.AudioListener; // Used to listen to audio samples
+import ddf.minim.analysis.BeatDetect; // Used to detect beats
+import ddf.minim.analysis.FFT; // Used to perform FFT on audio samples
+import processing.core.PApplet; // Used to draw to the screen
 
 /**
- * The AudioAnalysis class is used to analyse the audio samples for each channel
- * and store the results in the relative channel class variables.<br>
+ * Audio Analysis class wraps the Minim FFT and BeatDetect classes to provide
+ * easy access to the audio samples. It implements the AudioListener interface
+ * which is used to listen to each new audio samples.
  * <br>
  * Fields for AudioAnalysis<br>
  * <ul>
@@ -37,16 +38,16 @@ import processing.core.PApplet;
 public class AudioAnalysis implements AudioListener {
     private FFT fft;
     private BeatDetect beat;
-    private AAChannel left;
-    private AAChannel right;
-    private AAChannel mix;
+    private Channel left;
+    private Channel right;
+    private Channel mix;
 
     public AudioAnalysis(FFT fft, BeatDetect beat, float lerpAmount) {
         this.fft = fft;
         this.beat = beat;
-        this.left = new AAChannel(lerpAmount);
-        this.right = new AAChannel(lerpAmount);
-        this.mix = new AAChannel(lerpAmount);
+        this.left = new Channel(lerpAmount);
+        this.right = new Channel(lerpAmount);
+        this.mix = new Channel(lerpAmount);
     }
 
     @Override
@@ -79,15 +80,15 @@ public class AudioAnalysis implements AudioListener {
         mix.update(sampL.length);
     }
 
-    public AAChannel mix() {
+    public Channel mix() {
         return mix;
     }
 
-    public AAChannel left() {
+    public Channel left() {
         return left;
     }
 
-    public AAChannel right() {
+    public Channel right() {
         return right;
     }
 
@@ -101,7 +102,7 @@ public class AudioAnalysis implements AudioListener {
     /**
      * This class is used to
      */
-    public class AAChannel {
+    public class Channel {
         private float[] samp;
         public float amplitude;
         public float lerpedAmplitude;
@@ -113,7 +114,7 @@ public class AudioAnalysis implements AudioListener {
         public float[] lerpedSpectrum;
         public float lerpAmount;
 
-        public AAChannel(float lerpAmount) {
+        public Channel(float lerpAmount) {
             this.lerpAmount = lerpAmount;
             bands = new float[(int) Visual.log2(fft.specSize())];
             lerpedBands = new float[(int) Visual.log2(fft.specSize())];
