@@ -1,5 +1,6 @@
 package global;
 
+import ie.tudublin.visual.EaseFunction;
 import ie.tudublin.visual.VAnimation;
 import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
@@ -34,19 +35,19 @@ public class AnimationDemo extends VScene {
             animX = new VAnimation(5000);
             animY = new VAnimation(5000);
 
-            animX.addTransition(0, 5000, -v.width / 2, v.width / 2, VAnimation.linearEase);
+            animX.addTransition(0, 5000, -v.width / 2, v.width / 2, EaseFunction.linearEase);
 
             // Static section automatically added from start to first transition
             // Go down linearly
-            animY.addTransition(1000, 1000, 0, 500, VAnimation.linearEase);
+            animY.addTransition(1000, 1000, 0, 500, EaseFunction.linearEase);
             // Straight up then bounce down
-            animY.addTransition(2000, 500, 0, 500, VAnimation.outBounceEase);
+            animY.addTransition(2000, 500, 0, 500, EaseFunction.outBounceEase);
             // Section added automatically between end of last transition and start of next
-            animY.addTransition(3000, 999, 540, 0, VAnimation.smoothstepEase);
+            animY.addTransition(3000, 999, 540, 0, EaseFunction.smoothstepEase);
             // Go up
-            animY.addTransition(4000, 500, 0, -500, VAnimation.outQuadEase);
+            animY.addTransition(4000, 500, 0, -500, EaseFunction.outQuadEase);
             // Back to middle
-            animY.addTransition(4500, 1000, -500, 0, VAnimation.linearEase);
+            animY.addTransition(4500, 1000, -500, 0, EaseFunction.linearEase);
 
         }
 
