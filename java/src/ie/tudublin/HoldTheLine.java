@@ -4,7 +4,8 @@ import c21348423.AdriansVisual;
 import global.AnimationDemo;
 import global.Demo;
 import global.GlobalVisual;
-import ie.tudublin.visual.*;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 
 /*
     Song lyrics:
@@ -74,13 +75,17 @@ public class HoldTheLine extends Visual {
 
     public void setup() {
         colorMode(HSB);
+
+        // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
+
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
         demo = new Demo(this);
         aDemo = new AnimationDemo(this);
     }
 
+    /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
         background(0);
@@ -100,6 +105,13 @@ public class HoldTheLine extends Visual {
         }
     }
 
+    /**
+     * 1-4: Seek to different parts of the song
+     * q: Main Music Visualisation
+     * w: Demo
+     * e: Animation Demo
+     * Space: Pause/Play
+     */
     public void keyPressed() {
         switch (key) {
             case '1':
