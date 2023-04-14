@@ -1,7 +1,9 @@
 package ie.tudublin.visual;
 
+// Graphics
 import processing.core.PApplet;
 
+// Audio
 import ddf.minim.*;
 import ddf.minim.analysis.*;
 
@@ -33,11 +35,12 @@ public abstract class Visual extends PApplet implements VConstants {
     private int sampleRate;
 
     private Minim minim;
-    private AudioInput ai;
-    private AudioPlayer ap;
-    private AudioAnalysis aa;
+    private AudioInput aIn;
+    private AudioPlayer aPlayer;
+    private AudioAnalysis aAnalysis;
     private FFT fft;
     private BeatDetect beat;
+    private String[] lyrics;
 
     /**
      * Gets the frame size.
@@ -69,19 +72,19 @@ public abstract class Visual extends PApplet implements VConstants {
     /**
      * Gets the {@link AudioPlayer} object.
      *
-     * @return {@link #ap}
+     * @return {@link #aPlayer}
      */
     public AudioInput audioInput() {
-        return ai;
+        return aIn;
     }
 
     /**
      * Gets the {@link AudioPlayer} object.
      *
-     * @return {@link #ap}
+     * @return {@link #aPlayer}
      */
     public AudioPlayer audioPlayer() {
-        return ap;
+        return aPlayer;
     }
 
     /**
@@ -105,10 +108,10 @@ public abstract class Visual extends PApplet implements VConstants {
     /**
      * Gets mixed {@link AudioAnalysis} object.
      *
-     * @return {@link #aa}
+     * @return {@link #aAnalysis}
      */
     public AudioAnalysis audioAnalysis() {
-        return aa;
+        return aAnalysis;
     }
 
     /**
@@ -161,7 +164,7 @@ public abstract class Visual extends PApplet implements VConstants {
         };
         beat.setSensitivity(50);
 
-        this.aa = new AudioAnalysis(fft, beat, lerpAmount);
+        this.aAnalysis = new AudioAnalysis(fft, beat, lerpAmount);
 
     }
 
@@ -173,16 +176,16 @@ public abstract class Visual extends PApplet implements VConstants {
 
     // ======== Audio ========
     public void setLerpAmount(float lerpAmount) {
-        aa.setLerpAmount(lerpAmount);
+        aAnalysis.setLerpAmount(lerpAmount);
     }
 
     /** Begins audio input from the default audio input device. */
     public void beginAudio() {
 
-        if (ap != null)
-            ap.close();
-        ai = minim.getLineIn(Minim.MONO, bufferSize, 44100, 16);
-        ai.addListener(aa);
+        if (aPlayer != null)
+            aPlayer.close();
+        aIn = minim.getLineIn(Minim.MONO, bufferSize, 44100, 16);
+        aIn.addListener(aAnalysis);
 
         System.out.println("Using default audio input");
 
@@ -195,22 +198,27 @@ public abstract class Visual extends PApplet implements VConstants {
      */
     public void beginAudio(String filename) {
 
-        if (ap != null)
-            ap.close();
+        if (aPlayer != null)
+            aPlayer.close();
         if (filename == null || filename.isEmpty()) {
             System.out.println("No filename specified, using default audio input");
             beginAudio();
         }
-        ap = minim.loadFile(filename, bufferSize);
-        ap.addListener(aa);
-        ap.play();
+        aPlayer = minim.loadFile(filename, bufferSize);
+        aPlayer.addListener(aAnalysis);
+        aPlayer.play();
 
         System.out.println("Playing " + filename);
 
     }
 
+    public void beginAudio(String audioFilename, String lyricsFilename) {
+        beginAudio(audioFilename);
+        lyrics = loadStrings(lyricsFilename);
+    }
+
     public void seek(int ms) {
-        ap.cue(ms);
+        aPlayer.cue(ms);
         System.out.println("Seeking to " + ms + " ms");
     }
 
@@ -226,14 +234,26 @@ public abstract class Visual extends PApplet implements VConstants {
 
     public void pausePlay() {
 
-        if (ap.isPlaying()) {
-            ap.pause();
+        if (aPlayer.isPlaying()) {
+            aPlayer.pause();
             System.out.println("Paused");
         } else {
-            ap.play();
+            aPlayer.play();
             System.out.println("Playing");
         }
 
+    }
+
+    // ======== Lyrics ========
+
+    // Splits 00:00|string
+    public String getLyrics() {
+        for (String line : lyrics) {
+            String[] split = line.split("\\|", 2);
+            String time = split[0].split(":", 2)[0];
+            String lyric = split[1];
+        }
+        return "[Blank]";
     }
 
     // ======== Helpers ========

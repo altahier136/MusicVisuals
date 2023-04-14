@@ -61,9 +61,11 @@ public class HoldTheLine extends Visual {
     VScene gv;
     VScene demo;
     VScene aDemo;
+    int debugMode;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
+        debugMode = 0;
     }
 
     public void settings() {
@@ -84,10 +86,18 @@ public class HoldTheLine extends Visual {
         background(0);
         text(elapsed, 10, 10);
 
-        // gv.render(elapsed);
-        // av.render(elapsed);
-        // demo.render();
-        aDemo.render(elapsed);
+        switch (debugMode) {
+            case 0:
+                gv.render(elapsed);
+                av.render(elapsed);
+                break;
+            case 1:
+                demo.render();
+                break;
+            case 2:
+                aDemo.render(elapsed);
+                break;
+        }
     }
 
     public void keyPressed() {
@@ -103,6 +113,18 @@ public class HoldTheLine extends Visual {
                 break;
             case '4':
                 seek(2, 31);
+                break;
+            case 'q':
+                debugMode = 0;
+                System.out.println("Debug mode 0");
+                break;
+            case 'w':
+                debugMode = 1;
+                System.out.println("Debug mode 1");
+                break;
+            case 'e':
+                debugMode = 2;
+                System.out.println("Debug mode 2");
                 break;
             case ' ':
                 pausePlay();
