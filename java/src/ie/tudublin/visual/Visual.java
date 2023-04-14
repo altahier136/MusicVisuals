@@ -25,8 +25,6 @@ import ddf.minim.analysis.*;
  * <li>{@link #fft()}</li>
  * <li>{@link #beat()}</li>
  * <li>{@link #audioAnalysis()}</li>
- * <li>{@link #analysisLeft()}</li>
- * <li>{@link #analysisRight()}</li>
  * </ul>
  */
 public abstract class Visual extends PApplet implements VConstants {
@@ -334,40 +332,6 @@ public abstract class Visual extends PApplet implements VConstants {
         float K = amt - (amt * frameTime);
         return start + (stop - start) * K;
     }
-
-    interface EaseFunction {
-        float ease(float t);
-    }
-
-    EaseFunction easelinear = (t) -> t;
-    EaseFunction easeSmooth = (t) -> t * t * (3 - 2 * t);
-    EaseFunction easeInQuad = (t) -> t * t;
-    EaseFunction easeOutQuad = (t) -> t * (2 - t);
-    EaseFunction easeInOutQuad = (t) -> t < 0.5 ? 2 * t * t : 1 - pow(-2 * t + 2, 2) / 2;
-    EaseFunction easeOutBounce = (t) -> {
-        final float n1 = 7.5625f;
-        final float d1 = 2.75f;
-
-        if (t < 1 / d1)
-            return n1 * t * t;
-
-        if (t < 2 / d1)
-            return n1 * (t -= 1.5f / d1) * t + 0.75f;
-
-        if (t < 2.5 / d1)
-            return n1 * (t -= 2.25f / d1) * t + 0.9375f;
-
-        return n1 * (t -= 2.625f / d1) * t + 0.984375f;
-    };
-
-    public float interpolate(float start, float stop, float amt, EaseFunction ease) {
-        return lerp(start, stop, ease.ease(amt));
-    }
-
-    public float interpolate(float start, float stop, float amt, EaseFunction ease, float frameTime) {
-        return lerp(start, stop, ease.ease(amt), frameTime);
-    }
-
     // Matrix helpers
 
     /**
