@@ -38,18 +38,26 @@ public interface EaseFunction {
         return f * f + f * ((1 - (1 - f) * (1 - f)) - f * f);
     };
 
-    /** easeOutQuad: <code>y = x * (2 - x) </code><br><br> */
+    /**
+     * easeOutQuad: <code>y = x * (2 - x) </code><br><br>
+     * @see <a href="https://easings.net/#easeOutQuad">https://easings.net/#easeOutQuad</a>
+     */
     public static EaseFunction easeOutQuad = (f) -> f * (2 - f);
-    /** easeInQuad: <code>y = x^2 </code><br><br> */
+    /**
+     * easeInQuad: <code>y = x^2 </code><br><br>
+     * @see <a href="https://easings.net/#easeInQuad">https://easings.net/#easeInQuad</a>
+     */
     public static EaseFunction easeOutQuint = (f) -> 1 + (--f) * f * f * f * f;
 
     /**
      * easeOutBounce is a function that is used to create a bounce effect.
-     * Added as something a lil fun
+     * Added as something a lil fun.
+     * @see <a href="https://easings.net/#easeOutBounce">https://easings.net/#easeOutBounce</a>
      */
     public static EaseFunction easeOutBounce = (f) -> {
-        final float n1 = 7.5625f; // Amplitude of bounce
-        final float d1 = 2.75f; // Duration of bounce
+        // Constants for the bounce function, don't change these
+        final float n1 = 7.5625f;
+        final float d1 = 2.75f;
 
         if (f < 1 / d1) {
             return n1 * f * f; // First arc
