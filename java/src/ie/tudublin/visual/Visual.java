@@ -8,29 +8,19 @@ import ddf.minim.*;
 import ddf.minim.analysis.*;
 
 /**
- * <p>
- * Visual is the main class which will be used to create the Music Visualiser
- * The {@link Visual} class is an abstract class that will be used to create
- * the Music Visualiser.
- * </p>
+ * Visual is an abstract class that will be used to create the Music Visualiser.<br>
+ * <br>
+ * Visual extends {@link PApplet} and encapsulates {@link Minim},
+ * {@link AudioInput}, {@link AudioPlayer}, {@link FFT}, {@link BeatDetect} and {@link AudioAnalysis}.
  *
- * <p>
- * Fields, Getters and setters:
- * <ul>
- * <li>{@link #bufferSize()}</li>
- * <li>{@link #sampleRate()}</li>
- * <li>{@link #minim()}</li>
- * <li>{@link #audioInput()}</li>
- * <li>{@link #audioPlayer()}</li>
- * <li>{@link #fft()}</li>
- * <li>{@link #beat()}</li>
- * <li>{@link #audioAnalysis()}</li>
- * </ul>
+ * @see <a href="https://processing.org/reference/">Processing Reference</a>
+ * @see <a href="https://code.compartmental.net/minim/index.html">Minim Reference</a>
  */
 public abstract class Visual extends PApplet {
 
     private int bufferSize;
     private int sampleRate;
+    private String[][] lyrics; // [[00:00][lyrics], [00:00][lyrics], ...
 
     private Minim minim;
     private AudioInput aIn;
@@ -38,90 +28,58 @@ public abstract class Visual extends PApplet {
     private AudioAnalysis aAnalysis;
     private FFT fft;
     private BeatDetect beat;
-    private String[][] lyrics; // [[00:00][lyrics], [00:00][lyrics], ...
 
-    /**
-     * Gets the frame size.
-     *
-     * @return {@link #bufferSize}
-     */
+    /** @return {@link #bufferSize} */
     public int bufferSize() {
         return bufferSize;
     }
 
-    /**
-     * Gets the sample rate.
-     *
-     * @return {@link #sampleRate}
-     */
+    /** @return {@link #sampleRate} */
     public int sampleRate() {
         return sampleRate;
     }
 
-    /**
-     * Gets the {@link Minim} object.
-     *
-     * @return {@link #minim}
-     */
+    /** @return {@link #minim} */
     public Minim minim() {
         return minim;
     }
 
-    /**
-     * Gets the {@link AudioPlayer} object.
-     *
-     * @return {@link #aPlayer}
-     */
+    /** @return {@link #aPlayer} */
     public AudioInput audioInput() {
         return aIn;
     }
 
     /**
-     * Gets the {@link AudioPlayer} object.
-     *
      * @return {@link #aPlayer}
      */
     public AudioPlayer audioPlayer() {
         return aPlayer;
     }
 
-    /**
-     * Gets the {@link FFT} object.
-     *
-     * @return {@link #fft}
-     */
+    /** @return {@link #fft} */
     public FFT fft() {
         return fft;
     }
 
-    /**
-     * Gets the {@link BeatDetect} object.
-     *
-     * @return {@link #beat}
-     */
+    /** @return {@link #beat} */
     public BeatDetect beat() {
         return beat;
     }
 
-    /**
-     * Gets mixed {@link AudioAnalysis} object.
-     *
-     * @return {@link #aAnalysis}
-     */
+    /** @return {@link #aAnalysis} */
     public AudioAnalysis audioAnalysis() {
         return aAnalysis;
     }
-
-    /**
-     * Gets left {@link AudioAnalysis} object.
-     *
-     * @return {@link #analysisLeft}
-     */
 
     public Visual() {
         this(1024, 44100, 0.1f);
     }
 
+    /**
+     * @param bufferSize    Must be a power of 2
+     * @param sampleRate    The sample rate of the audio input
+     * @param lerpAmount    The lerp amount for the {@link AudioAnalysis}
+     */
     public Visual(int bufferSize, int sampleRate, float lerpAmount) {
 
         if (log2(bufferSize) % 1 != 0)
@@ -132,9 +90,9 @@ public abstract class Visual extends PApplet {
 
         // Audio analysis
         minim = new Minim(this);
-
         fft = new FFT(bufferSize, sampleRate);
         fft.logAverages(60, 3);
+
         // Making an annonymous inner class to override the default BeatDetect
         // to use our own thresholds
         beat = new BeatDetect(bufferSize, sampleRate) {
@@ -162,6 +120,7 @@ public abstract class Visual extends PApplet {
         };
         beat.setSensitivity(50);
 
+        // Could potentially encapsulate all of the above into AudioAnalysis class
         this.aAnalysis = new AudioAnalysis(fft, beat, lerpAmount);
 
     }
@@ -173,8 +132,9 @@ public abstract class Visual extends PApplet {
     abstract public void draw();
 
     // ======== Audio ========
-    public void setLerpAmount(float lerpAmount) {
-        aAnalysis.setLerpAmount(lerpAmount);
+
+    public void setAudioLerpAmount(float audioLerpAmount) {
+        aAnalysis.setLerpAmount(audioLerpAmount);
     }
 
     /** Begins audio input from the default audio input device. */
@@ -191,7 +151,6 @@ public abstract class Visual extends PApplet {
 
     /**
      * Begins audio input from the specified audio file.
-     *
      * @param filename
      */
     public void beginAudio(String filename) {
@@ -244,6 +203,16 @@ public abstract class Visual extends PApplet {
 
     // ======== Lyrics ========
 
+    /**
+     * Loads lyrics from file into 2D array of [time, string]<br><br>
+     * File format:<br><br>
+     * <pre>
+     * 00:00|String
+      *00:00|String
+     * ...
+     * </pre>
+     * @param fileName
+     */
     public void loadLyrics(String fileName) {
         String[] rawLyrics = loadStrings(fileName);
         // Convert to 2D array
@@ -256,12 +225,10 @@ public abstract class Visual extends PApplet {
         }
     }
 
-    // Splits 00:00|string
     /**
      * Gets lyrics at current time
-     *
-     * @param offset Offset by line
-     * @return
+     * @param offset    Offset by line
+     * @return          Lyrics at current time
      */
     public String getLyrics(int offset) {
         if (lyrics == null) {
@@ -281,14 +248,19 @@ public abstract class Visual extends PApplet {
         return result;
     }
 
+    // ======== Helpers ========
+
+    /**
+     * Converts timestamp to milliseconds: 01:05 -> 65000
+     * @param timestamp
+     * @return
+     */
     public int timestampToMs(String timestamp) {
         String[] split = timestamp.split(":");
         int m = Integer.parseInt(split[0]);
         int s = Integer.parseInt(split[1]);
         return toMs(m, s, 0);
     }
-
-    // ======== Helpers ========
 
     /** Converts minutes, seconds, and milliseconds to milliseconds. */
     public int toMs(int m, int s, int ms) {
@@ -332,7 +304,8 @@ public abstract class Visual extends PApplet {
         float K = amt - (amt * frameTime);
         return start + (stop - start) * K;
     }
-    // Matrix helpers
+
+    // Position helpers
 
     /**
      * Translates the origin to the center of the screen.
@@ -344,7 +317,6 @@ public abstract class Visual extends PApplet {
     /**
      * Translates the origin to the center of the screen and then to the specified
      * point.
-     *
      * @param x
      * @param y
      */
