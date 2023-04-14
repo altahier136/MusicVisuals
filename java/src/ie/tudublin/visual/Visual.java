@@ -27,7 +27,7 @@ import ddf.minim.analysis.*;
  * <li>{@link #audioAnalysis()}</li>
  * </ul>
  */
-public abstract class Visual extends PApplet implements VConstants {
+public abstract class Visual extends PApplet {
 
     private int bufferSize;
     private int sampleRate;
