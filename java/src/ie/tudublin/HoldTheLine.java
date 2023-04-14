@@ -62,6 +62,7 @@ public class HoldTheLine extends Visual {
     VScene gv;
     VScene demo;
     VScene aDemo;
+
     int debugMode;
 
     HoldTheLine() {
