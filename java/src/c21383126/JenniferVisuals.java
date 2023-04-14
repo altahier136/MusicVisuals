@@ -20,7 +20,6 @@ public class JenniferVisuals extends VScene {
     AudioBuffer ab;
 
    
-   
     public JenniferVisuals(Visual v) {
         super(v);
         this.v = v;
@@ -35,7 +34,7 @@ public class JenniferVisuals extends VScene {
     public void render(int elapsed) {
       
         // 1:03 - 1:48 - Second verse & chorus
-        if (elapsed > v.toMs(1, 3, 25) && elapsed < v.toMs(1, 48, 0)) //start at 1:03:something so the beats match up
+        if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
         {
             //speaker.render();
             circle.render();                  
@@ -59,6 +58,10 @@ public class JenniferVisuals extends VScene {
                 double x2 = v.width/2 + (Math.cos(i)*(Math.PI/180) * 100 * f);
                 double y2 = v.height/2 + (Math.sin(i)*(Math.PI/180) * 100 * f);
                 v.line(v.width/2, v.height/2, (float)x2, (float)y2);
+
+                double x3 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
+                double y3 = v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
+                v.line(v.width/4, v.height/4, (float)x3, (float)y3);
                 
             }
         }
