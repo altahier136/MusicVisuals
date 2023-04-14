@@ -35,19 +35,19 @@ public class AnimationDemo extends VScene {
             animX = new VAnimation(5000);
             animY = new VAnimation(5000);
 
-            animX.addTransition(0, 5000, -v.width / 2, v.width / 2, EaseFunction.linearEase);
+            animX.addTransition(0, 5000, -v.width / 2, v.width / 2, EaseFunction.easeLinear);
 
             // Static section automatically added from start to first transition
             // Go down linearly
-            animY.addTransition(1000, 1000, 0, 500, EaseFunction.linearEase);
+            animY.addTransition(1000, 1000, 0, 500, EaseFunction.easeLinear);
             // Straight up then bounce down
-            animY.addTransition(2000, 500, 0, 500, EaseFunction.outBounceEase);
+            animY.addTransition(2000, 500, 0, 500, EaseFunction.easeOutBounce);
             // Section added automatically between end of last transition and start of next
-            animY.addTransition(3000, 999, 540, 0, EaseFunction.smoothstepEase);
+            animY.addTransition(3000, 999, 540, 0, EaseFunction.easeSmoothstep);
             // Go up
-            animY.addTransition(4000, 500, 0, -500, EaseFunction.outQuadEase);
+            animY.addTransition(4000, 500, 0, -500, EaseFunction.easeOutQuad);
             // Back to middle
-            animY.addTransition(4500, 1000, -500, 0, EaseFunction.linearEase);
+            animY.addTransition(4500, 1000, -500, 0, EaseFunction.easeLinear);
 
         }
 
