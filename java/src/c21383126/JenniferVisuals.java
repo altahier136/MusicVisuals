@@ -36,8 +36,8 @@ public class JenniferVisuals extends VScene {
         // 1:03 - 1:48 - Second verse & chorus
         if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
         {
-            //speaker.render();
-            circle.render();                  
+            speaker.render();
+            //circle.render();                  
         }
         System.out.println(elapsed);
     }
@@ -52,16 +52,33 @@ public class JenniferVisuals extends VScene {
             v.background(0);
             for (int i=0; i<360; i++)
             {
-                float c = v.map(ab.get(i), -1, 1, 0, 255);
-                v.stroke(c, 255, 255);
+                //(x2, y2) (x3, y3)
+                //    (x1, x2)
+                //(x4, y4) (x5, y5)
+                //float c = v.map(ab.get(i), -1, 1, 0, 255);
+                //v.stroke(c, 255, 255);
+                v.stroke(109, 247, 240);
                 float f = ab.get(i) * v.height/2;
-                double x2 = v.width/2 + (Math.cos(i)*(Math.PI/180) * 100 * f);
-                double y2 = v.height/2 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(v.width/2, v.height/2, (float)x2, (float)y2);
+                double x1 = v.width/2 + (Math.cos(i)*(Math.PI/180) * 100 * f);
+                double y1 = v.height/2 + (Math.sin(i)*(Math.PI/180) * 100 * f);
+                v.line(v.width/2, v.height/2, (float)x1, (float)y1);
 
-                double x3 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
+                v.stroke(176, 65, 240);
+                double x2 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
+                double y2 = v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
+                v.line(v.width/4, v.height/4, (float)x2, (float)y2);
+
+                double x3 = 3*v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
                 double y3 = v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(v.width/4, v.height/4, (float)x3, (float)y3);
+                v.line(3*v.width/4, v.height/4, (float)x3, (float)y3);
+
+                double x4 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
+                double y4 = 3*v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
+                v.line(v.width/4, 3*v.height/4, (float)x4, (float)y4);
+
+                double x5 = 3*v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
+                double y5 = 3*v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
+                v.line(3*v.width/4, 3*v.height/4, (float)x5, (float)y5);
                 
             }
         }
@@ -76,7 +93,7 @@ public class JenniferVisuals extends VScene {
         @Override
         public void render(){
             v.colorMode(PApplet.HSB, 360, 100, 100);
-            v.background(360);
+            v.background(0);
             v.stroke(255);
 
             // (x1,y1) (x3,y3)
