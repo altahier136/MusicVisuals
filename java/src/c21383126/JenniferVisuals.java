@@ -36,8 +36,8 @@ public class JenniferVisuals extends VScene {
         // 1:03 - 1:48 - Second verse & chorus
         if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
         {
-            speaker.render();
-            //circle.render();                  
+            //speaker.render();
+            circle.render();                  
         }
         System.out.println(elapsed);
     }
@@ -99,16 +99,16 @@ public class JenniferVisuals extends VScene {
             // (x1,y1) (x3,y3)
             // (x2,y2) (x4,y4)
             
-            int x1 = v.width/4;
-            int y1 = v.height/4;
-            int x2 = v.width/4;
-            int y2 = v.height/4 * 3;
-            int x3 = v.width/4 * 3;
-            int y3 = v.height/4;
-            int x4 = v.width/4 * 3;
-            int y4 = v.height/4 * 3;
+            int x1 = v.width/3;
+            int y1 = v.height/3;
+            int x2 = v.width/3;
+            int y2 = v.height/3 * 2;
+            int x3 = v.width/3 * 2;
+            int y3 = v.height/3;
+            int x4 = v.width/3 * 2;
+            int y4 = v.height/3 * 2;
 
-            int radius = 200;
+            int radius = 100;
             int border = radius + 5;            
 
             int length = ((y2 + border) - (y1 - border));
