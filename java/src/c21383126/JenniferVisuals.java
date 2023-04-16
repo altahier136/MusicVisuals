@@ -3,7 +3,6 @@ package c21383126;
 import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
-//import ie.tudublin.visual.VConstants.ChannelEnum;
 import processing.core.PApplet;
 import processing.core.PVector;
 import ddf.minim.AudioBuffer;
@@ -52,11 +51,10 @@ public class JenniferVisuals extends VScene {
             v.background(0);
             for (int i=0; i<360; i++)
             {
-                //(x2, y2) (x3, y3)
-                //    (x1, x2)
-                //(x4, y4) (x5, y5)
-                //float c = v.map(ab.get(i), -1, 1, 0, 255);
-                //v.stroke(c, 255, 255);
+                // (x2, y2) (x3, y3)
+                //     (x1, x2)
+                // (x4, y4) (x5, y5)
+
                 v.stroke(109, 247, 240);
                 float f = ab.get(i) * v.height/2;
                 double x1 = v.width/2 + (Math.cos(i)*(Math.PI/180) * 100 * f);
@@ -119,9 +117,8 @@ public class JenniferVisuals extends VScene {
             v.rect(x3 - border, y3 - border, width, length);
 
             v.noStroke();
-            v.frameRate(1); //1/96 of a second bc 96bpm
-           
-            //float h = v.random(0, 360);
+            v.frameRate(1); 
+
             float h = v.random(ab.get(radius), 360);
             for (int r = radius; r > 0; --r) {
                 v.fill(h, 90, 90);
