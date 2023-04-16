@@ -8,7 +8,7 @@ import processing.core.PVector;
 import ddf.minim.AudioBuffer;
 import ddf.minim.Minim;
 
-
+// https://processing.org/examples/rotatepushpop.html <- try later 
 
 public class JenniferVisuals extends VScene {
     Visual v;
