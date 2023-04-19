@@ -84,8 +84,9 @@ public class HoldTheLine extends Visual {
         text(elapsed, 10, 10);
 
         // gv.render(elapsed);
-        av.render(elapsed);
+        //av.render(elapsed);
         sv.render(elapsed);
+        //demo.render();
     }
 
     public void keyPressed() {

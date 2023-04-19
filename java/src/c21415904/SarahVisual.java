@@ -21,8 +21,8 @@ public class SarahVisual extends VScene {
     public void render(int elapsed) {
         // 1:48 - 2:30 - Instrumental
         if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(1, 0, 2)) {
-            //clock.render(elapsed);
-            so1.render();
+            clock.render(elapsed);
+            //so1.render();
         }
         System.out.println(elapsed);
     }
