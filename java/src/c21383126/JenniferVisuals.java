@@ -8,8 +8,6 @@ import processing.core.PVector;
 import ddf.minim.AudioBuffer;
 import ddf.minim.Minim;
 
-// https://processing.org/examples/rotatepushpop.html <- try later 
-
 public class JenniferVisuals extends VScene {
     Visual v;
     VObject speaker;
@@ -35,8 +33,8 @@ public class JenniferVisuals extends VScene {
         // 1:03 - 1:48 - Second verse & chorus
         if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
         {
-            //speaker.render();
-            circle.render();                  
+            speaker.render();
+            //circle.render();                  
         }
         System.out.println(elapsed);
     }
