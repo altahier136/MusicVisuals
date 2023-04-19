@@ -75,10 +75,12 @@ public class HoldTheLine extends Visual {
     }
 
     public void setup() {
-        colorMode(HSB);
+        colorMode(HSB, 360, 100, 100);
 
         // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
+
+        background(0);
 
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
@@ -89,8 +91,11 @@ public class HoldTheLine extends Visual {
     /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
-        background(0);
         text(elapsed, 10, 10);
+
+        // Resets
+        blendMode(BLEND);
+        colorMode(HSB, 360, 100, 100);
 
         switch (debugMode) {
             case 0:

@@ -18,7 +18,8 @@ public class Demo extends VScene {
     @Override
     public void render() {
         // 4 sections
-        v.colorMode(PApplet.HSB);
+        v.colorMode(PApplet.HSB, 255);
+        v.background(0);
         for (int i = 0; i < 4; i++) {
             v.noStroke();
             v.fill(i * 50, 100, 50);
