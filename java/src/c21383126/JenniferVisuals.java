@@ -17,7 +17,7 @@ public class JenniferVisuals extends VScene {
     Minim minim;
     AudioBuffer ab;
 
-   
+
     public JenniferVisuals(Visual v) {
         super(v);
         this.v = v;
@@ -31,15 +31,16 @@ public class JenniferVisuals extends VScene {
     }
 
     public void render(int elapsed) {
-      
+
         // 1:03 - 1:48 - Second verse & chorus
-        if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
+        if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0))
         {
+            v.fill(0);
+            v.rect(0, 0, v.width, v.height);
             //speaker.render();
-            //circle.render();   
-            cw.render();               
+            //circle.render();
+            cw.render();
         }
-        System.out.println(elapsed);
     }
 
     class CircleWave extends VObject{
@@ -47,7 +48,7 @@ public class JenniferVisuals extends VScene {
             super(v, pos);
         }
 
-        @Override 
+        @Override
         public void render(){
             v.noFill();
             v.translateCenter();
@@ -104,7 +105,7 @@ public class JenniferVisuals extends VScene {
                 double x5 = 3*v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
                 double y5 = 3*v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
                 v.line(3*v.width/4, 3*v.height/4, (float)x5, (float)y5);
-                
+
             }
         }
     }
@@ -121,7 +122,7 @@ public class JenniferVisuals extends VScene {
 
             // (x1,y1) (x3,y3)
             // (x2,y2) (x4,y4)
-            
+
             int x1 = v.width/3;
             int y1 = v.height/3;
             int x2 = v.width/3;
@@ -132,7 +133,7 @@ public class JenniferVisuals extends VScene {
             int y4 = v.height/3 * 2;
 
             //int radius = 100;
-            int border = 105;            
+            int border = 105;
 
             int length = ((y2 + border) - (y1 - border));
             int width = ((x2 + border) - (x1 - border));
@@ -142,7 +143,7 @@ public class JenniferVisuals extends VScene {
             v.rect(x3 - border, y3 - border, width, length);
 
             v.noStroke();
-            v.frameRate(1); 
+            v.frameRate(1);
             v.noFill();
 
             for(int i=0; i< ab.size(); i++)
@@ -165,10 +166,10 @@ public class JenniferVisuals extends VScene {
                 v.ellipse(x3, y3, r, r);
                 v.ellipse(x4, y4, r, r);
                 h = (h + 1) % 360;
-            }    
+            }
             */
         }
-        
+
     }
 
 }

@@ -86,12 +86,12 @@ public class HoldTheLine extends Visual {
 
         background(0);
 
-        gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
         sv = new SarahVisual(this);
+        jv = new JenniferVisuals(this);
         demo = new Demo(this);
         aDemo = new AnimationDemo(this);
-        jv = new JenniferVisuals(this);
+        gv = new GlobalVisual(this);
     }
 
     /** Draw the visuals */
@@ -105,10 +105,10 @@ public class HoldTheLine extends Visual {
 
         switch (debugMode) {
             case 0:
-                gv.render(elapsed);
                 av.render(elapsed);
                 jv.render(elapsed);
                 sv.render(elapsed);
+                gv.render(elapsed);
                 break;
             case 1:
                 demo.render();
