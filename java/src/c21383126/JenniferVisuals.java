@@ -12,6 +12,7 @@ public class JenniferVisuals extends VScene {
     Visual v;
     VObject speaker;
     VObject circle;
+    VObject cw;
 
     Minim minim;
     AudioBuffer ab;
@@ -22,6 +23,7 @@ public class JenniferVisuals extends VScene {
         this.v = v;
         speaker = new Speaker(v, new PVector(v.width/4, v.height/4));
         circle = new Circles(v, new PVector(v.width/4, v.height/4));
+        cw = new CircleWave(v, new PVector(v.width/4, v.height/4));
 
         minim = new Minim(this);
         ab = v.audioPlayer().mix;
@@ -33,10 +35,38 @@ public class JenniferVisuals extends VScene {
         // 1:03 - 1:48 - Second verse & chorus
         if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
         {
-            speaker.render();
-            //circle.render();                  
+            //speaker.render();
+            //circle.render();   
+            cw.render();               
         }
         System.out.println(elapsed);
+    }
+
+    class CircleWave extends VObject{
+        CircleWave(Visual v, PVector pos){
+            super(v, pos);
+        }
+
+        @Override 
+        public void render(){
+            v.noFill();
+            v.translateCenter();
+            v.beginShape();
+            for (int i = 0; i< ab.size(); i++)
+            {
+                float c = PApplet.map(ab.get(i), -1, 1, 0, 360);
+                v.stroke(c, 100, 100);
+                float angle = PApplet.map(i, 0, ab.size(), 0, PApplet.TWO_PI);
+                float radius = ab.get(i) * 1000 + 100;
+                float x1 = PApplet.sin(angle) * radius;
+                float y1 = -PApplet.cos(angle) * radius;
+                v.vertex(x1, y1);
+                v.fill(0);
+                v.circle(0, 0, radius-1);
+            }
+            v.endShape();
+
+        }
     }
 
     class Circles extends VObject {
@@ -46,7 +76,6 @@ public class JenniferVisuals extends VScene {
 
         @Override
         public void render(){
-            v.background(0);
             for (int i=0; i<360; i++)
             {
                 // (x2, y2) (x3, y3)
@@ -88,8 +117,6 @@ public class JenniferVisuals extends VScene {
 
         @Override
         public void render(){
-            v.colorMode(PApplet.HSB, 360, 100, 100);
-            v.background(0);
             v.stroke(255);
 
             // (x1,y1) (x3,y3)
@@ -104,8 +131,8 @@ public class JenniferVisuals extends VScene {
             int x4 = v.width/3 * 2;
             int y4 = v.height/3 * 2;
 
-            int radius = 100;
-            int border = radius + 5;            
+            //int radius = 100;
+            int border = 105;            
 
             int length = ((y2 + border) - (y1 - border));
             int width = ((x2 + border) - (x1 - border));
@@ -116,7 +143,20 @@ public class JenniferVisuals extends VScene {
 
             v.noStroke();
             v.frameRate(1); 
+            v.noFill();
 
+            for(int i=0; i< ab.size(); i++)
+            {
+                float c = PApplet.map(ab.get(i), -1, 1, 0, 360);
+                v.stroke(c, 100, 100);
+                float radius = ab.get(i) * 1000 + 100;
+                v.circle(x1, y1, radius-1);
+                v.circle(x2, y2, radius-1);
+                v.circle(x3, y3, radius-1);
+                v.circle(x4, y4, radius-1);
+            }
+
+            /*
             float h = v.random(ab.get(radius), 360);
             for (int r = radius; r > 0; --r) {
                 v.fill(h, 90, 90);
@@ -126,6 +166,7 @@ public class JenniferVisuals extends VScene {
                 v.ellipse(x4, y4, r, r);
                 h = (h + 1) % 360;
             }    
+            */
         }
         
     }
