@@ -19,16 +19,21 @@ import processing.core.PVector;
  * @see {@link VObject}
  */
 public abstract class VScene extends VObject {
-    protected VScene(Visual v) {
+
+    public VScene(Visual v) {
         this(v, new PVector(0,0,0), new PVector(0,0,0));
     }
-    VScene(Visual v, PVector position) {
+    public VScene(Visual v, PVector position) {
         this(v, position, new PVector(0,0,0));
     }
-    VScene(Visual v, PVector position, PVector rotation) {
+    public VScene(Visual v, PVector position, PVector rotation) {
         super(v, position, rotation);
     }
 
+    /**
+     * Render method for the scene, this method is called by the Visual class
+     * and should be overridden by the subclass of the Visual class
+     */
     public void render(int elapsed) {
         applyTransforms();
         v.colorMode(PApplet.RGB);
@@ -37,5 +42,4 @@ public abstract class VScene extends VObject {
         v.popMatrix();
         System.out.println(this.getClass().getName() + "Warning: Empty Render Method");
     }
-
 }

@@ -1,10 +1,12 @@
 package ie.tudublin;
 
 import c21348423.AdriansVisual;
+import global.AnimationDemo;
 import c21415904.SarahVisual;
 import global.Demo;
 import global.GlobalVisual;
-import ie.tudublin.visual.*;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 
 /*
     Song lyrics:
@@ -61,34 +63,60 @@ public class HoldTheLine extends Visual {
     VScene gv;
     VScene sv;
     VScene demo;
+    VScene aDemo;
+
+    int debugMode;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
+        debugMode = 0;
     }
 
     public void settings() {
-        fullScreen(P3D);
+        size(1024,750);
     }
 
     public void setup() {
-        beginAudio("Toto - Hold The Line.wav");
-        gv = new GlobalVisual(this);
-        av = new AdriansVisual(this);
+        colorMode(HSB, 360, 100, 100);
+
+        // Load song and lyrics
+        beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
+
+        //gv = new GlobalVisual(this);
+        //av = new AdriansVisual(this);
         sv = new SarahVisual(this);
-        demo = new Demo(this);
+        //demo = new Demo(this);
+        //aDemo = new AnimationDemo(this);
     }
 
+    /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
         background(0);
         text(elapsed, 10, 10);
 
-        // gv.render(elapsed);
-        //av.render(elapsed);
-        sv.render(elapsed);
-        //demo.render();
+        switch (debugMode) {
+            case 0:
+                //gv.render(elapsed);
+                //av.render(elapsed);
+                sv.render(elapsed);
+                break;
+            case 1:
+                demo.render();
+                break;
+            case 2:
+                aDemo.render(elapsed);
+                break;
+        }
     }
 
+    /**
+     * 1-4: Seek to different parts of the song
+     * q: Main Music Visualisation
+     * w: Demo
+     * e: Animation Demo
+     * Space: Pause/Play
+     */
     public void keyPressed() {
         switch (key) {
             case '1':
@@ -102,6 +130,18 @@ public class HoldTheLine extends Visual {
                 break;
             case '4':
                 seek(2, 31);
+                break;
+            case 'q':
+                debugMode = 0;
+                System.out.println("Debug mode 0");
+                break;
+            case 'w':
+                debugMode = 1;
+                System.out.println("Debug mode 1");
+                break;
+            case 'e':
+                debugMode = 2;
+                System.out.println("Debug mode 2");
                 break;
             case ' ':
                 pausePlay();
