@@ -73,7 +73,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-        size(1024,750);
+      fullscreen(P3D);
     }
 
     public void setup() {
@@ -82,23 +82,28 @@ public class HoldTheLine extends Visual {
         // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
 
-        //gv = new GlobalVisual(this);
-        //av = new AdriansVisual(this);
+        background(0);
+
+        gv = new GlobalVisual(this);
+        av = new AdriansVisual(this);
         sv = new SarahVisual(this);
-        //demo = new Demo(this);
-        //aDemo = new AnimationDemo(this);
+        demo = new Demo(this);
+        aDemo = new AnimationDemo(this);
     }
 
     /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
-        background(0);
         text(elapsed, 10, 10);
+
+        // Resets
+        blendMode(BLEND);
+        colorMode(HSB, 360, 100, 100);
 
         switch (debugMode) {
             case 0:
-                //gv.render(elapsed);
-                //av.render(elapsed);
+                gv.render(elapsed);
+                av.render(elapsed);
                 sv.render(elapsed);
                 break;
             case 1:
