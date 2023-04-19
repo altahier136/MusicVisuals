@@ -2,6 +2,7 @@ package ie.tudublin;
 
 import c21348423.AdriansVisual;
 import global.AnimationDemo;
+import c21415904.SarahVisual;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.visual.VScene;
@@ -60,6 +61,7 @@ import ie.tudublin.visual.Visual;
 public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
+    VScene sv;
     VScene demo;
     VScene aDemo;
 
@@ -71,7 +73,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-        fullScreen(P3D);
+      fullscreen(P3D);
     }
 
     public void setup() {
@@ -84,6 +86,7 @@ public class HoldTheLine extends Visual {
 
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
+        sv = new SarahVisual(this);
         demo = new Demo(this);
         aDemo = new AnimationDemo(this);
     }
@@ -101,6 +104,7 @@ public class HoldTheLine extends Visual {
             case 0:
                 gv.render(elapsed);
                 av.render(elapsed);
+                sv.render(elapsed);
                 break;
             case 1:
                 demo.render();
