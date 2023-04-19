@@ -12,6 +12,11 @@ public class SarahVisual extends VScene {
     Clock clock;
     VObject so1;
     VObject wf;
+    VObject cwf;
+    VObject hwf;
+    VObject ecwf;
+    VObject sp;
+    VObject td;
 
     AudioBuffer ab;
     
@@ -24,16 +29,30 @@ public class SarahVisual extends VScene {
 
         clock = new Clock(v, new PVector(0, 0, 0));
         so1 = new SphereOrbit(v, new PVector(0, 0, 0));
-        wf = new WaveForm(v, new PVector(0, 0, 0));       
+        wf = new WaveForm(v, new PVector(0, 0, 0));  
+        cwf = new CircleWF(v, new PVector(v.width/2, v.height/2, 0));      
+        hwf = new Hex(v, new PVector(v.width/2, v.height/2, 0));  
+        td = new twoDist(v, new PVector(0, 0, 0));     
     }
 
     public void render(int elapsed) {
         // 1:48 - 2:30 - Instrumental
-        if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(1, 0, 2)) {
+        if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(1, 2, 0)) {
             //clock.render(elapsed);
             //so1.render();
-            wf.render();
+            td.render();
+            clock.render(elapsed);
+            //sp.render();
         }
+        /* 
+        if (elapsed > v.toMs(0, 15, 0) && elapsed < v.toMs(0, 30, 0)) {
+            hwf.render();
+        }
+        if (elapsed > v.toMs(0, 30, 0) && elapsed < v.toMs(0, 45, 0)) {
+            clock.render(elapsed);
+        }
+        */
+
         System.out.println(elapsed);
     }
 
@@ -50,8 +69,7 @@ public class SarahVisual extends VScene {
             float hoursRadius;
             float clockDiameter;
 
-            v.background(0);
-            v.noFill();   
+            v.fill(0);
             v.stroke(255);
             
             int radius = PApplet.min(v.width, v.height) / 2;
@@ -63,8 +81,7 @@ public class SarahVisual extends VScene {
             cx = v.width / 2;
             cy = v.height / 2;
             
-
-            v.circle(cx, cy, clockDiameter + v.analysisMix().lerpedAmplitude*1000);
+            v.circle(cx, cy, clockDiameter + v.audioAnalysis().mix().lerpedAmplitude * 1000);
             
             // Angles for sin() and cos() start at 3 o'clock;
             // subtract HALF_PI to make them start at the top
@@ -138,11 +155,95 @@ public class SarahVisual extends VScene {
                 float c = PApplet.map(ab.get(i), -1, 1, 0, 255);
                 v.stroke(c, 255, 255);
                 float f = ab.get(i) * v.height/2;
-                v.line(i,v.height/2 + f, i , v.height/2 - f);
+                float x = PApplet.map(i, 0, ab.size(), 0, v.width);
+                v.line(x,v.height/2 + f, x, v.height/2 - f);
             }
         }
         
     }
+
+    class CircleWF extends VObject{
+
+        CircleWF(Visual v, PVector pos) {
+            super(v, pos);
+        }
+
+        @Override
+        public void render()
+        {
+            v.noFill();
+            v.translateCenter();
+            v.beginShape();
+            for(int i = 0; i < ab.size(); i++)
+            {
+                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                v.stroke(c, 100, 100);
+                float angle = PApplet.map(i, 0, ab.size(), 0, PApplet.TWO_PI);    
+                float radius = ab.get(i) * 1000 + 50;
+
+                float x1 = PApplet.sin(angle) * radius;
+                float y1 = PApplet.cos(angle) * radius;
+                v.vertex((float)x1, (float)y1);
+
+            }
+            v.endShape();
+        }
+        
+    }
+
+    class Hex extends VObject{
+
+        Hex(Visual v, PVector pos) {
+            super(v, pos);
+        }
+
+        @Override
+        public void render()
+        {
+            v.noFill();
+            v.translateCenter();
+            v.beginShape();
+            for(int i = 0; i < ab.size(); i++)
+            {
+                float c = PApplet.map(ab.get(i), -1, 1, 0, 360);
+                v.stroke(c, 100, 100);
+                //float angle = PApplet.map(ab.get(i), 0, ab.size(), 0, PApplet.TWO_PI);    
+                float radius = ab.get(i) * v.height/2;
+                double x1 = (PApplet.cos(i)*(PApplet.PI/180)  * 100 * radius);
+                double y1 =  (PApplet.sin(i)*(PApplet.PI/180) * 100 * radius);
+                v.vertex((float)x1, (float)y1);
+            }
+            v.endShape();
+        }
+        
+    }
+
+    class twoDist extends VObject {
+        twoDist(Visual v, PVector pos){
+            super(v, pos);
+        }
+        
+        @Override
+        public void render(){
+
+            float max_distance;
+            v.background(0);
+            v.noStroke();
+            max_distance = PApplet.dist(0, 0, v.width, v.height);
+
+            for(int i = 0; i <= v.width; i += 20) {
+                for(int j = 0; j <= v.height; j += 20) {
+                    float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                    v.fill(c, 100, 100);
+                    float size = PApplet.dist(v.random(0, v.width), v.random(0, v.height), i, j);
+                    size = size/max_distance * 66;
+                    v.ellipse(i, j, size, size);
+                }
+            }
+        }
+
+
+
+    }
     
 }
-
