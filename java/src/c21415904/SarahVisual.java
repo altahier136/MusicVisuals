@@ -5,24 +5,34 @@ import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
 import processing.core.PVector;
+import ddf.minim.AudioBuffer;
 
 public class SarahVisual extends VScene {
     Visual v;
     Clock clock;
     VObject so1;
+    VObject wf;
+
+    AudioBuffer ab;
+    
 
     public SarahVisual(Visual v) {
         super(v);
         this.v = v;
+
+        ab = v.audioPlayer().mix;
+
         clock = new Clock(v, new PVector(0, 0, 0));
         so1 = new SphereOrbit(v, new PVector(0, 0, 0));
+        wf = new WaveForm(v, new PVector(0, 0, 0));       
     }
 
     public void render(int elapsed) {
         // 1:48 - 2:30 - Instrumental
         if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(1, 0, 2)) {
-            clock.render(elapsed);
+            //clock.render(elapsed);
             //so1.render();
+            wf.render();
         }
         System.out.println(elapsed);
     }
@@ -112,6 +122,26 @@ public class SarahVisual extends VScene {
             v.popMatrix();
             
         }
+    }
+
+    class WaveForm extends VObject{
+
+        WaveForm(Visual v, PVector pos) {
+            super(v, pos);
+        }
+
+        @Override
+        public void render()
+        {
+            for(int i = 0; i < ab.size(); i++)
+            {
+                float c = PApplet.map(ab.get(i), -1, 1, 0, 255);
+                v.stroke(c, 255, 255);
+                float f = ab.get(i) * v.height/2;
+                v.line(i,v.height/2 + f, i , v.height/2 - f);
+            }
+        }
+        
     }
     
 }
