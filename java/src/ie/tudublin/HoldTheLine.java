@@ -1,10 +1,12 @@
 package ie.tudublin;
 
 import c21348423.AdriansVisual;
+import global.AnimationDemo;
 import c21383126.JenniferVisuals;
 import global.Demo;
 import global.GlobalVisual;
-import ie.tudublin.visual.*;
+import ie.tudublin.visual.VScene;
+import ie.tudublin.visual.Visual;
 
 /*
     Song lyrics:
@@ -60,10 +62,14 @@ public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
     VScene demo;
+    VScene aDemo;
+
+    int debugMode;
     VScene jv;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
+        debugMode = 0;
     }
 
     public void settings() {
@@ -72,24 +78,46 @@ public class HoldTheLine extends Visual {
     }
 
     public void setup() {
-        beginAudio("Toto - Hold The Line.wav");
+        colorMode(HSB);
+
+        // Load song and lyrics
+        beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
+
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
         demo = new Demo(this);
+        aDemo = new AnimationDemo(this);
         jv = new JenniferVisuals(this);
     }
 
+    /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
         background(0);
         text(elapsed, 10, 10);
 
-        // gv.render(elapsed);
-        // av.render(elapsed);
-        // demo.render();
-        jv.render(elapsed);
+        switch (debugMode) {
+            case 0:
+                gv.render(elapsed);
+                av.render(elapsed);
+                jv.render(elapsed);
+                break;
+            case 1:
+                demo.render();
+                break;
+            case 2:
+                aDemo.render(elapsed);
+                break;
+        }
     }
 
+    /**
+     * 1-4: Seek to different parts of the song
+     * q: Main Music Visualisation
+     * w: Demo
+     * e: Animation Demo
+     * Space: Pause/Play
+     */
     public void keyPressed() {
         switch (key) {
             case '1':
@@ -103,6 +131,18 @@ public class HoldTheLine extends Visual {
                 break;
             case '4':
                 seek(2, 31);
+                break;
+            case 'q':
+                debugMode = 0;
+                System.out.println("Debug mode 0");
+                break;
+            case 'w':
+                debugMode = 1;
+                System.out.println("Debug mode 1");
+                break;
+            case 'e':
+                debugMode = 2;
+                System.out.println("Debug mode 2");
                 break;
             case ' ':
                 pausePlay();

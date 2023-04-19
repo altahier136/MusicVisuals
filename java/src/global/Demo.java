@@ -36,7 +36,7 @@ public class Demo extends VScene {
     }
 
     public void waveform() {
-        float[] ab = v.analysisMix().waveform;
+        float[] ab = v.audioAnalysis().mix().waveform;
         v.pushMatrix();
         v.translate(0, height4 * 4 - height8);
         v.beginShape();
@@ -51,7 +51,7 @@ public class Demo extends VScene {
     }
 
     public void spectrum() {
-        float[] spec = v.analysisMix().lerpedSpectrum;
+        float[] spec = v.audioAnalysis().mix().lerpedSpectrum;
         for (int i = 0; i < spec.length; i++) {
             // float x = PApplet.map(i, 0, fft.specSize(), 0, v.width);
             float x = PApplet.map(i, 0, spec.length, 0, v.width);
@@ -66,7 +66,7 @@ public class Demo extends VScene {
     }
 
     public void spectrumLog() {
-        float[] spec = v.analysisMix().lerpedSpectrum;
+        float[] spec = v.audioAnalysis().mix().lerpedSpectrum;
         for (int i = 0; i < spec.length; i++) {
             // float x = PApplet.map(i, 0, fft.specSize(), 0, v.width);
             float x = PApplet.map(PApplet.log(i), 0, PApplet.log(spec.length), 0, v.width);

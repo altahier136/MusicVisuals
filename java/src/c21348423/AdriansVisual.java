@@ -35,7 +35,7 @@ public class AdriansVisual extends VScene {
             applyTransforms();
             v.colorMode(PApplet.RGB);
             v.fill(255, 0, 255);
-            v.circle(v.width / 2, v.height / 2, v.analysisMix().lerpedAmplitude * 1000);
+            v.circle(v.width / 2, v.height / 2, v.audioAnalysis().mix().amplitude* 1000);
             v.popMatrix();
         }
     }
