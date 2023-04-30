@@ -13,7 +13,6 @@ public class JenniferVisuals extends VScene {
     VObject speaker;
     VObject circle;
     VObject cw;
-    VObject guitar;
 
     Minim minim;
     AudioBuffer ab;
@@ -25,8 +24,6 @@ public class JenniferVisuals extends VScene {
         speaker = new Speaker(v, new PVector(v.width/4, v.height/4));
         circle = new Circles(v, new PVector(v.width/4, v.height/4));
         cw = new CircleWave(v, new PVector(v.width/4, v.height/4));
-        guitar = new Guitar(v, new PVector(v.width/4, v.height/4));
-
 
         minim = new Minim(this);
         ab = v.audioPlayer().mix;
@@ -40,64 +37,9 @@ public class JenniferVisuals extends VScene {
         {
             //speaker.render();
             //circle.render();   
-            //cw.render();   
-            guitar.render();            
+            cw.render();               
         }
         System.out.println(elapsed);
-    }
-
-    class Guitar extends VObject{
-        Guitar(Visual v, PVector pos){
-            super(v, pos);
-        }
-
-        @Override
-        public void render(){
-            v.fill(100, 100, 100);
-            v.stroke(100, 100, 100);
-            v.triangle(50, 100, 50, 700, 700, 400 );
-            v.noStroke();
-            v.fill(0);
-            v.triangle(50, 100, 50, 700, 200, 400);
-
-            float[] ab = v.audioAnalysis().mix().waveform;
-            v.pushMatrix();
-            v.beginShape();
-            for (int i = 0; i < ab.length; i++) {
-                float x1 = PApplet.map(i, 0, ab.length, 200, v.width);
-                float y1 = PApplet.map(ab[i], -1, 1, 370, 390);
-                v.stroke(255);
-                v.noFill();
-                v.vertex(x1, y1);
-            }
-            v.endShape();
-            v.popMatrix();
-
-            v.pushMatrix();
-            v.beginShape();
-            for (int i = 0; i < ab.length; i++) {
-                float x1 = PApplet.map(i, 0, ab.length, 200, v.width);
-                float y1 = PApplet.map(ab[i], -1, 1, 390, 410);
-                v.stroke(255);
-                v.noFill();
-                v.vertex(x1, y1);
-            }
-            v.endShape();
-            v.popMatrix();
-
-            v.pushMatrix();
-            v.beginShape();
-            for (int i = 0; i < ab.length; i++) {
-                float x1 = PApplet.map(i, 0, ab.length, 200, v.width);
-                float y1 = PApplet.map(ab[i], -1, 1, 410, 430);
-                v.stroke(255);
-                v.noFill();
-                v.vertex(x1, y1);
-            }
-            v.endShape();
-            v.popMatrix();
-
-        }
     }
 
     class CircleWave extends VObject{
