@@ -149,8 +149,13 @@ public class VAnimation {
             }
 
             int relativeTime = time - startTime;
+
+            if (duration == 0)
+                return endValue; // Avoid divide by 0 error
+
             float timePercent = relativeTime / (float) duration;
             float easedTime = easeFunction.ease(timePercent);
+
             return PApplet.lerp(startValue, endValue, easedTime);
         }
     }

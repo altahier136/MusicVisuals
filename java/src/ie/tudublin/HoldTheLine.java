@@ -3,6 +3,7 @@ package ie.tudublin;
 import c21348423.AdriansVisual;
 import global.AnimationDemo;
 import c21383126.JenniferVisuals;
+import c21415904.SarahVisual;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.visual.VScene;
@@ -61,6 +62,7 @@ import ie.tudublin.visual.Visual;
 public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
+    VScene sv;
     VScene demo;
     VScene aDemo;
 
@@ -73,8 +75,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-        size(1024, 750);
-        //fullScreen(P3D);
+      fullscreen(P3D);
     }
 
     public void setup() {
@@ -83,8 +84,11 @@ public class HoldTheLine extends Visual {
         // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
 
+        background(0);
+
         gv = new GlobalVisual(this);
         av = new AdriansVisual(this);
+        sv = new SarahVisual(this);
         demo = new Demo(this);
         aDemo = new AnimationDemo(this);
         jv = new JenniferVisuals(this);
@@ -93,14 +97,18 @@ public class HoldTheLine extends Visual {
     /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
-        background(0);
         text(elapsed, 10, 10);
+
+        // Resets
+        blendMode(BLEND);
+        colorMode(HSB, 360, 100, 100);
 
         switch (debugMode) {
             case 0:
-                //gv.render(elapsed);
-                //av.render(elapsed);
+                gv.render(elapsed);
+                av.render(elapsed);
                 jv.render(elapsed);
+                sv.render(elapsed);
                 break;
             case 1:
                 demo.render();
