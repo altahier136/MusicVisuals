@@ -73,7 +73,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-        size(1024,750);
+        size(800,800, P3D);
     }
 
     public void setup() {
@@ -82,7 +82,7 @@ public class HoldTheLine extends Visual {
         // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
 
-        //gv = new GlobalVisual(this);
+        gv = new GlobalVisual(this);
         //av = new AdriansVisual(this);
         sv = new SarahVisual(this);
         //demo = new Demo(this);
@@ -92,7 +92,6 @@ public class HoldTheLine extends Visual {
     /** Draw the visuals */
     public void draw() {
         int elapsed = audioPlayer().position();
-        background(0);
         text(elapsed, 10, 10);
 
         switch (debugMode) {
