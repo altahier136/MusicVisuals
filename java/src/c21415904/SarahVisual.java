@@ -400,7 +400,7 @@ public class SarahVisual extends VScene {
         Cube(Visual v){
             super(v);
         }
-
+        
         float x, y;
         float size;
         float c;
