@@ -14,6 +14,7 @@ public class JenniferVisuals extends VScene {
     VObject circle;
     VObject cw;
     VObject guitar;
+    VObject sw;
 
     Minim minim;
     AudioBuffer ab;
@@ -26,6 +27,7 @@ public class JenniferVisuals extends VScene {
         circle = new Circles(v, new PVector(v.width/4, v.height/4));
         cw = new CircleWave(v, new PVector(v.width/4, v.height/4));
         guitar = new Guitar(v, new PVector(v.width/4, v.height/4));
+        sw = new SinWave(v, new PVector(v.width/4, v.height/4));
 
 
         minim = new Minim(this);
@@ -41,9 +43,54 @@ public class JenniferVisuals extends VScene {
             //speaker.render();
             //circle.render();   
             //cw.render();   
-            guitar.render();            
+            //guitar.render();      
+            sw.render();      
         }
         System.out.println(elapsed);
+    }
+
+    class SinWave extends VObject{
+        SinWave(Visual v, PVector pos){
+            super(v, pos);
+        }
+
+        int xspacing = 16;   // How far apart should each horizontal location be spaced
+        int w = v.width + 16;              // Width of entire wave
+
+        float theta = 0;  // Start angle at 0
+        float amplitude = 75;  // Height of wave
+        float period = 500;  // How many pixels before the wave repeats
+        float dx = (PApplet.TWO_PI / period) * xspacing;  // Value for incrementing X, a function of period and xspacing
+        float[] yvalues = new float[w/xspacing];  // Using an array to store height values for the wave
+        
+        void calcWave() {
+            // Increment theta (try different values for 'angular velocity' here
+            theta += 0.02;
+          
+            // For every x value, calculate a y value with sine function
+            float x = theta;
+            for (int i = 0; i < yvalues.length; i++) {
+              yvalues[i] = PApplet.sin(x)*amplitude;
+              x+=dx;
+            }
+          }
+
+          void renderWave() {
+            v.noStroke();
+            //v.fill(255);
+            // A simple way to draw the wave with an ellipse at each location
+            for (int x = 0; x < yvalues.length; x++) {
+                float c = PApplet.map(ab.get(x), -1, 1, 0, 360);
+                v.fill(c, 100, 100);
+              v.ellipse(x*xspacing, v.height/2+yvalues[x], 16, 16);
+            }
+          }
+
+        @Override
+        public void render(){
+            calcWave();
+            renderWave();
+        }
     }
 
     class Guitar extends VObject{
