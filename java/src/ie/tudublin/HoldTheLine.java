@@ -96,6 +96,7 @@ public class HoldTheLine extends Visual {
 
     /** Draw the visuals */
     public void draw() {
+        noLights();
         int elapsed = audioPlayer().position();
         text(elapsed, 10, 10);
 
