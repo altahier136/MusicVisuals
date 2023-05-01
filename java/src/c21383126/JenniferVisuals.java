@@ -79,10 +79,11 @@ public class JenniferVisuals extends VScene {
             v.noStroke();
             //v.fill(255);
             // A simple way to draw the wave with an ellipse at each location
-            for (int x = 0; x < yvalues.length; x++) {
+            for (int x = 0; x < yvalues.length; x++) 
+            {
                 float c = PApplet.map(ab.get(x), -1, 1, 0, 360);
                 v.fill(c, 100, 100);
-              v.ellipse(x*xspacing, v.height/2+yvalues[x], 16, 16);
+                v.ellipse(x*xspacing, v.height/2+yvalues[x], 16, 16);
             }
           }
 
