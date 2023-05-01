@@ -22,6 +22,7 @@ public class AdriansVisual extends VScene {
     VObject circle;
     SquigglyArcs squigglyArcs;
     HappyHorse horse;
+    SuperStars superStars;
 
     // Colour pallet
 
@@ -43,6 +44,7 @@ public class AdriansVisual extends VScene {
         circle = new Circle(v, new PVector(0, 0, 0));
         horse = new HappyHorse(v, new PVector(0, 0, 0));
         squigglyArcs = new SquigglyArcs(v, new PVector(0, 0, 0));
+        superStars = new SuperStars(v, new PVector(0, 0, 0));
 
         v.seek(1, 48);
         setSceneAnimation();
@@ -76,16 +78,18 @@ public class AdriansVisual extends VScene {
         v.popMatrix();
 
         // 1:48 - 2:30 - Instrumental
+        superStars.render(elapsed);
 
+        //
         v.translateCenter();
+
         v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 2 - Visual.HALF_PI / 2);
-        v.blendMode(PApplet.SUBTRACT);
         rotation.y = Visual.sin(elapsed * BEATMS * Visual.TWO_PI) * 0.3f;
         rotation.y = elapsed * BEATMS * 0.3f;
         v.ambientLight(300, 100, 100);
         v.pointLight(0, 100, 100, 100, -v.height, 1000);
         applyTransforms();
-        circle.render();
+        // circle.render();
         // v.lights();
         v.blendMode(PApplet.BLEND);
         squigglyArcs.render(elapsed);
@@ -196,6 +200,58 @@ public class AdriansVisual extends VScene {
 
             }
             v.popMatrix();
+        }
+
+    }
+
+    /**
+     * Constillation of superellipses
+     */
+    private class SuperStars extends VObject {
+
+        public SuperStars(Visual v, PVector position) {
+            super(v, position);
+        }
+
+        @Override
+        public void render(int elapsed) {
+            v.blendMode(PApplet.SUBTRACT);
+            // Super elipse
+            v.pushMatrix();
+            float lerpedAmplitude = v.audioAnalysis().mix().lerpedAmplitude * 10;
+            v.noFill();
+            float hue = PApplet.map(v.audioAnalysis().mix().amplitude * 10, 0, 1, 0, 360);
+            v.stroke(hue, 100, 100);
+            v.translate((-elapsed / 10) % 200, 0);
+            for (int x = -200; x < v.width + 200; x += 200) {
+                for (int y = -200; y < v.height + 200; y += 200) {
+                    superellipse(x, y, 0.5f * lerpedAmplitude, 1.0f * lerpedAmplitude, 100 * lerpedAmplitude,
+                            100 * lerpedAmplitude);
+                }
+            }
+            v.popMatrix();
+        }
+
+        /**
+         * Superellipse
+         *
+         * @param x
+         * @param y
+         * @param a
+         * @param b
+         * @param n
+         * @param x
+         * @return
+         */
+        public void superellipse(float posX, float posY, float m, float n, float a, float b) {
+            v.beginShape();
+            for (int i = 0; i < 360; i++) {
+                float t = i * Visual.TWO_PI / 360;
+                float x = PApplet.pow(PApplet.abs(PApplet.cos(t)), 2 / m) * a * Math.signum(PApplet.cos(t));
+                float y = PApplet.pow(PApplet.abs(PApplet.sin(t)), 2 / n) * b * Math.signum(PApplet.sin(t));
+                v.vertex(posX + x, posY + y);
+            }
+            v.endShape();
         }
 
     }
