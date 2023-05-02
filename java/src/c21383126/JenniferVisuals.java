@@ -5,6 +5,7 @@ import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
+import processing.core.PShape;
 import processing.core.PVector;
 import ddf.minim.AudioBuffer;
 import ddf.minim.Minim;
@@ -13,11 +14,10 @@ public class JenniferVisuals extends VScene {
     Visual v;
     VObject speaker;
     VObject circle;
-    VObject cw;
     VObject sw;
     Clock clock;
     VObject dots;
-    VObject boxes;
+    VObject stars;
     VObject wf;
 
     Minim minim;
@@ -30,11 +30,10 @@ public class JenniferVisuals extends VScene {
         this.v = v;
         speaker = new Speaker(v, new PVector(v.width/4, v.height/4));
         circle = new Circles(v, new PVector(v.width/4, v.height/4));
-        cw = new CircleWave(v, new PVector(v.width/4, v.height/4));
         sw = new SinWave(v, new PVector(v.width/4, v.height/4));
         clock = new Clock(v, new PVector(v.width/4, v.height/4));
         dots = new Dots(v, new PVector(v.width/4, v.height/4));
-        boxes = new Boxes(v, new PVector(v.width/4, v.height/4));
+        stars = new Stars(v, new PVector(v.width/4, v.height/4));
         wf = new WaveForm(v, new PVector(v.width/4, v.height/4));
 
 
@@ -51,30 +50,38 @@ public class JenniferVisuals extends VScene {
         {
             //wf.render();
             //speaker.render();
+
             //circle.render();   
-            //cw.render();   
-            //guitar.render();      
-            //sw.render();    
+                  
+            //sw.render(); 
+
             //dots.render(elapsed);  
             //clock.render(elapsed);
-            boxes.render(elapsed);
+
+            stars.render(elapsed);
         }
         System.out.println(elapsed);
     }
 
 
-    class Boxes extends VObject {
-        Boxes(Visual v, PVector pos){
-            super(v, pos);
-        }
 
+
+    class Stars extends VObject {
+
+        PShape star;
+        Stars(Visual v, PVector pos){
+            super(v, pos);
+            star = v.loadShape("estrellica.obj");
+        }
+        
         int OFF_MAX = 150;
         float rot = 0;
         @Override
         public void render(int elapsed)
         {
+            v.lights();
             float avg = aa.mix().lerpedAmplitude;            
-            v.background(0);
+            //v.background(0);
             v.translate(v.width/2, v.height/2, 0);        
             v.rotateX(rot * .01f);
             v.rotateY(rot * .01f);
@@ -87,7 +94,7 @@ public class JenniferVisuals extends VScene {
                     {
                         v.pushMatrix();
                         v.translate(x, y, z);
-                        v.rotateX(rot * 0.2f);
+                        v.rotateX(rot * 0.02f);
                         v.rotateY(rot * .02f);
                         v.rotateZ(rot * .02f);
                         
@@ -95,7 +102,11 @@ public class JenniferVisuals extends VScene {
                         float c = v.noise(elapsed / (100f), x + y + z) * 360;
                         v.fill(c, 100, 100);
                         //v.box(avg * 500 + 10);
-                        v.sphere(avg * 500 + 10);
+                        //v.sphere(avg * 500 + 10);
+                        //v.ambientLight(c, 100, 100);
+                        star.setFill(v.color(c, 100, 100));
+                        v.scale(avg * 50 + 2);
+                        v.shape(star);
                         v.popMatrix();
                     }
                 }
@@ -239,33 +250,6 @@ public class JenniferVisuals extends VScene {
         public void render(){
             calcWave();
             renderWave();
-        }
-    }
-
-    class CircleWave extends VObject{
-        CircleWave(Visual v, PVector pos){
-            super(v, pos);
-        }
-
-        @Override 
-        public void render(){
-            v.noFill();
-            v.translateCenter();
-            v.beginShape();
-            for (int i = 0; i< ab.size(); i++)
-            {
-                float c = PApplet.map(ab.get(i), -1, 1, 0, 360);
-                v.stroke(c, 100, 100);
-                float angle = PApplet.map(i, 0, ab.size(), 0, PApplet.TWO_PI);
-                float radius = ab.get(i) * 1000 + 100;
-                float x1 = PApplet.sin(angle) * radius;
-                float y1 = -PApplet.cos(angle) * radius;
-                v.vertex(x1, y1);
-                v.fill(0);
-                v.circle(0, 0, radius-1);
-            }
-            v.endShape();
-
         }
     }
 
