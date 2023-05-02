@@ -55,7 +55,6 @@ public class SarahVisual extends VScene {
         }
         */
 
-        System.out.println(elapsed);
     }
 
     class Clock extends VObject {

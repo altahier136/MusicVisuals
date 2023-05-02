@@ -55,7 +55,6 @@ public class AdriansVisual extends VScene {
     }
 
     public void render(int elapsed) {
-        System.out.println(v.frameRate);
         if (Math.round(sceneVisibility.getValue(elapsed)) == 0) {
             return;
         }
