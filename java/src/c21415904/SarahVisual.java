@@ -365,25 +365,21 @@ public class SarahVisual extends VScene {
                 }
             }
 
-            public void show()
-            {
-                v.noFill();
-                v.stroke(0); 
-                v.strokeWeight(4);
-                v.ellipse(pos.x, pos.y, r*2, r*2);
-            }
         }
 
-        Blob b;
+        Blob[] blobs = new Blob[20];
 
         metaBalls(Visual v, PVector pos) {
             super(v, pos);
-            b = new Blob(100,100);
+            for(int i = 0;  i < blobs.length; i++)
+            {
+                blobs[i] = new Blob(v.random(v.width), v.random(v.height));
+            }
         }
 
 
         @Override 
-        public void render(){
+        public synchronized void render(){
             v.background(51);
 
             v.loadPixels();
@@ -392,16 +388,24 @@ public class SarahVisual extends VScene {
                 for(int y = 0; y < v.height; y++)
                 {
                     int index = x + y * v.width;
-                    float d = PApplet.dist(x, y, b.pos.x, b.pos.y);
-                    float c = 1000 * (b.r / d);
-                    v.pixels[index] = v.color(c);
+                    float sum = 0;
+                    for(Blob b: blobs)
+                    {
+                        float d = PApplet.dist(x, y, b.pos.x, b.pos.y);
+                        sum += 50 * b.r / d * (aa.mix().lerpedAmplitude*50);
+                    }
+                    v.pixels[index] = v.color(sum, 100, 100);
+                    
                 }
             }
-
             v.updatePixels();
 
-            b.update();
-            b.show(); 
+            for(Blob b: blobs)
+            {
+                b.update();
+                //b.show(); 
+            }
+            
         }
     }
 
