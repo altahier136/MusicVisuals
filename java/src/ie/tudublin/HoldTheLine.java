@@ -4,6 +4,7 @@ import c21348423.AdriansVisual;
 import global.AnimationDemo;
 import c21383126.JenniferVisuals;
 import c21415904.SarahVisual;
+import c21415952.AjVisual;
 import global.Demo;
 import global.GlobalVisual;
 import ie.tudublin.visual.VScene;
@@ -63,6 +64,7 @@ public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
     VScene sv;
+    VScene aj;
     VScene demo;
     VScene aDemo;
 
@@ -89,6 +91,7 @@ public class HoldTheLine extends Visual {
         av = new AdriansVisual(this);
         sv = new SarahVisual(this);
         jv = new JenniferVisuals(this);
+        aj = new AjVisual(this);
         demo = new Demo(this);
         aDemo = new AnimationDemo(this);
         gv = new GlobalVisual(this);
@@ -109,6 +112,7 @@ public class HoldTheLine extends Visual {
                 av.render(elapsed);
                 jv.render(elapsed);
                 sv.render(elapsed);
+                aj.render(elapsed);
                 gv.render(elapsed);
                 break;
             case 1:
