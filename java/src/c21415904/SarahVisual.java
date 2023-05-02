@@ -380,21 +380,21 @@ public class SarahVisual extends VScene {
 
         @Override 
         public synchronized void render(){
-            v.background(51);
+            v.background(0,0,50);
 
             v.loadPixels();
-            for(int x = 0; x < v.width; x++)
+            for(int x = 0; x < v.width; x+=4)
             {
-                for(int y = 0; y < v.height; y++)
+                for(int y = 0; y < v.height; y+=4)
                 {
                     int index = x + y * v.width;
                     float sum = 0;
                     for(Blob b: blobs)
                     {
                         float d = PApplet.dist(x, y, b.pos.x, b.pos.y);
-                        sum += 50 * b.r / d * (aa.mix().lerpedAmplitude*50);
+                        sum += 100 * b.r / d * (aa.mix().lerpedAmplitude*50);
                     }
-                    v.pixels[index] = v.color(sum, 100, 100);
+                    v.pixels[index] = v.color(sum % 360, 100, 100);
                     
                 }
             }
@@ -403,7 +403,6 @@ public class SarahVisual extends VScene {
             for(Blob b: blobs)
             {
                 b.update();
-                //b.show(); 
             }
             
         }
