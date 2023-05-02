@@ -80,8 +80,7 @@ public class JenniferVisuals extends VScene {
         public void render(int elapsed)
         {
             v.lights();
-            float avg = aa.mix().lerpedAmplitude;            
-            //v.background(0);
+            float avg = aa.mix().lerpedAmplitude; 
             v.translate(v.width/2, v.height/2, 0);        
             v.rotateX(rot * .01f);
             v.rotateY(rot * .01f);
@@ -98,14 +97,9 @@ public class JenniferVisuals extends VScene {
                         v.rotateY(rot * .02f);
                         v.rotateZ(rot * .02f);
                         
-                        // float c = v.random(0, 360);
                         float c = v.noise(elapsed / (100f), x + y + z) * 360;
-                        v.fill(c, 100, 100);
-                        //v.box(avg * 500 + 10);
-                        //v.sphere(avg * 500 + 10);
-                        //v.ambientLight(c, 100, 100);
                         star.setFill(v.color(c, 100, 100));
-                        v.scale(avg * 50 + 2);
+                        v.scale(avg * 50);
                         v.shape(star);
                         v.popMatrix();
                     }
