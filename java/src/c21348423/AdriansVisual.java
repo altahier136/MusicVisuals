@@ -58,10 +58,6 @@ public class AdriansVisual extends VScene {
     }
 
     public void render(int elapsed) {
-        System.out.println(sceneVisibility.getValue(elapsed));
-        if (Float.isNaN(sceneVisibility.getValue(elapsed)))
-            System.out.println("Breakpoint");
-        ;
 
         if (Math.round(sceneVisibility.getValue(elapsed)) == 0) {
             return;
@@ -78,10 +74,13 @@ public class AdriansVisual extends VScene {
         v.popMatrix();
 
         // 1:48 - 2:30 - Instrumental
-        superStars.render(elapsed);
 
         //
         v.translateCenter();
+        v.pushMatrix();
+        v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 4 - Visual.HALF_PI / 4);
+        superStars.render(elapsed);
+        v.popMatrix();
 
         v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 2 - Visual.HALF_PI / 2);
         rotation.y = Visual.sin(elapsed * BEATMS * Visual.TWO_PI) * 0.3f;
@@ -215,20 +214,26 @@ public class AdriansVisual extends VScene {
 
         @Override
         public void render(int elapsed) {
-            v.blendMode(PApplet.SUBTRACT);
-            // Super elipse
             v.pushMatrix();
             float lerpedAmplitude = v.audioAnalysis().mix().lerpedAmplitude * 10;
+
+            v.blendMode(PApplet.SUBTRACT);
             v.noFill();
-            float hue = PApplet.map(v.audioAnalysis().mix().amplitude * 10, 0, 1, 0, 360);
-            v.stroke(hue, 100, 100);
-            v.translate((-elapsed / 10) % 200, 0);
-            for (int x = -200; x < v.width + 200; x += 200) {
-                for (int y = -200; y < v.height + 200; y += 200) {
-                    superellipse(x, y, 0.5f * lerpedAmplitude, 1.0f * lerpedAmplitude, 100 * lerpedAmplitude,
-                            100 * lerpedAmplitude);
+
+            float hue = (-120 + PApplet.round(3.5f - (lerpedAmplitude) * 8) * 120 + 360) % 360;
+            float sat = 100;
+            float val = 100;
+            v.stroke(hue, sat, val);
+
+            // Render grid of superellipses
+            v.translate((-elapsed / 10) % 200, 0, -100);
+            for (int x = -200 - v.width; x < v.width + 200; x += 200) {
+                for (int y = -200 - v.height; y < v.height + 200; y += 200) {
+                    superellipse(x, y, 0.5f * lerpedAmplitude, 1.0f * lerpedAmplitude, 200 * lerpedAmplitude,
+                            200 * lerpedAmplitude);
                 }
             }
+
             v.popMatrix();
         }
 
