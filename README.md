@@ -2,7 +2,7 @@
 
 Name - Student Number:
 
-- Sarah Baron - C21415904
+- Sarah Barron - C21415904
 - Adrian Thomas Capacite - C21348423
 - Jennifer Kearns - C21383126
 - Altahier Saleh - C21415952
@@ -32,7 +32,7 @@ Explain the inner workings of the program
 
 ## What I am most proud of in the assignment
 
-Sarah Baron
+Sarah Barron
 Adrian Thomas Capacite
 Jennifer Kearns
 Altahier Saleh
