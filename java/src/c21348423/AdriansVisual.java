@@ -10,14 +10,18 @@ import processing.core.PApplet;
 import processing.core.PShape;
 import processing.core.PVector;
 
+/**
+ * AdriansVisual
+ * 1:48 - 2:30 - Instrumental
+ */
 public class AdriansVisual extends VScene {
 
     public final int BPM = 96;
     public final float BEATMS = 1 / (1000 / (BPM / 60.0f)); // Multiply with elapsed to get beat
+    PVector rotationOff;
 
     VAnimation sceneVisibility;
     Visual v;
-    VObject circle;
     SquigglyArcs squigglyArcs;
     HappyHorse horse;
     SuperStars superStars;
@@ -25,29 +29,24 @@ public class AdriansVisual extends VScene {
     // Colour pallet
 
     private int background;
-    private int foreground;
-    private int magenta;
-    private int cyan;
-    private int yellow;
 
     public AdriansVisual(Visual v) {
         super(v);
         this.v = v;
         background = v.color(0, 0, 100);
-        foreground = v.color(0, 0, 0);
-        magenta = v.color(300, 100, 100);
-        cyan = v.color(180, 100, 100);
-        yellow = v.color(60, 100, 100);
+        rotationOff = new PVector(0, 0, 0);
 
-        circle = new Circle(v, new PVector(0, 0, 0));
+        // Visual objects
         horse = new HappyHorse(v, new PVector(0, 0, 0));
         squigglyArcs = new SquigglyArcs(v, new PVector(0, 0, 0));
         superStars = new SuperStars(v, new PVector(0, 0, 0));
 
-        v.seek(1, 48);
         setSceneAnimation();
     }
 
+    /**
+     * Set up scene animation
+     */
     public void setSceneAnimation() {
         sceneVisibility = new VAnimation(v.audioPlayer().length());
         sceneVisibility.addTransition(v.toMs(1, 48, 0), 0, 0, 100, EaseFunction.easeLinear);
@@ -56,58 +55,68 @@ public class AdriansVisual extends VScene {
     }
 
     public void render(int elapsed) {
-
+        System.out.println(v.frameRate);
         if (Math.round(sceneVisibility.getValue(elapsed)) == 0) {
             return;
         }
 
         v.blendMode(PApplet.BLEND);
-        // v.background(0);
-        v.fill(background, 20);
-        v.pushMatrix();
+        v.fill(background, 40);
+
+        // Background
         v.translateCenter();
+
+        v.pushMatrix();
         v.translate(0, 0, -2000);
         v.rectMode(PApplet.CENTER);
         v.rect(0, 0, v.width * 4, v.height * 4);
         v.popMatrix();
 
-        // 1:48 - 2:30 - Instrumental
-
-        //
-        v.translateCenter();
+        // Star background
         v.pushMatrix();
         v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 6 - Visual.HALF_PI / 6);
         superStars.render(elapsed);
         v.popMatrix();
 
-        v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 2 - Visual.HALF_PI / 2);
-        rotation.y = Visual.sin(elapsed * BEATMS * Visual.TWO_PI) * 0.3f;
-        rotation.y = elapsed * BEATMS * 0.3f;
+        // Rotate the stage
+
         v.ambientLight(300, 100, 100);
         v.pointLight(0, 100, 100, 100, -v.height, 1000);
+
+        // v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) *
+        // Visual.HALF_PI / 2 - Visual.HALF_PI / 2);
+        rotation.x = Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 2 - Visual.HALF_PI / 2;
+        rotation.y = Visual.sin(elapsed * BEATMS * Visual.TWO_PI) * 0.3f;
+        rotation.y = elapsed * BEATMS * 0.3f;
+        rotation.add(rotationOff);
         applyTransforms();
-        // circle.render();
-        // v.lights();
-        v.blendMode(PApplet.BLEND);
+
         squigglyArcs.render(elapsed);
+
+        v.blendMode(PApplet.BLEND);
+
         horse.render(elapsed);
+
         v.popMatrix();
+        rotateControls();
     }
 
-    class Circle extends VObject {
+    /**
+     * Stage rotation controls using mouse down and drag
+     */
+    int targetX = 0;
+    int targetY = 0;
 
-        Circle(Visual v, PVector pos) {
-            super(v, pos);
+    private void rotateControls() {
+        if (v.mousePressed) {
+            targetX -= v.mouseY - v.pmouseY;
+            targetY += v.mouseX - v.pmouseX;
+        } else {
+            targetX *= 0.9f;
+            targetY *= 0.9f;
         }
-
-        @Override
-        public void render() {
-            applyTransforms();
-            v.colorMode(PApplet.RGB);
-            v.fill(255, 0, 255);
-            v.circle(0, 0, v.audioAnalysis().mix().amplitude * 1000);
-            v.popMatrix();
-        }
+        rotationOff.x = PApplet.lerp(rotationOff.x, targetX / 100f, 0.9f); // adjust rate as needed
+        rotationOff.y = PApplet.lerp(rotationOff.y, targetY / 100f, 0.9f); // adjust rate as needed
     }
 
     class HappyHorse extends VObject {
@@ -136,15 +145,15 @@ public class AdriansVisual extends VScene {
      * SquigglyArcs
      */
     public class SquigglyArcs extends VObject {
-        private float halfH = v.height / 2;
-        private float halfW = v.width / 2;
         private AudioAnalysis aa;
+        private float HALF_PI;
         private float PI;
         private float TWO_PI;
 
         public SquigglyArcs(Visual v, PVector position) {
             super(v, position);
             aa = v.audioAnalysis();
+            HALF_PI = PApplet.HALF_PI;
             PI = PApplet.PI;
             TWO_PI = PApplet.TWO_PI;
         }
@@ -160,33 +169,35 @@ public class AdriansVisual extends VScene {
 
             v.pushMatrix();
             v.rectMode(PApplet.CENTER);
-            // v.translate(0, 100, -100);
-            // rect(0,0, width, height);
-            // v.square(halfW, halfH, v.height * 2);
-            // v.rotateX(PApplet.PI );
+
             v.translate(0, 200, 0);
-            v.rotateX(PApplet.HALF_PI);
+
+            v.rotateX(HALF_PI);
             v.scale(2);
             v.noFill();
+
             float sinMap = PApplet.map(PApplet.sin(off * 1.00001f / (60 * 3)), -1, 1, 2.090f, 2.110f);
+
             // How many arcs to render
             int count = (int) PApplet.map(lerpedAmplitude * 4, 0, 0.2f, 0, lerpedSpectrum.length - 1);
             count += PApplet.constrain((int) PApplet.map(lerpedAmplitude, 0.01f, 0, 0, lerpedSpectrum.length - 1), 0,
                     lerpedSpectrum.length);
-            v.blendMode(PApplet.BLEND);
-            // count = ab.size();
-            for (int i = 0; i < PApplet.constrain(count, 0, lerpedSpectrum.length) - 1; i++) {
-                float hue = 350 - PApplet.map(i, 0, lerpedSpectrum.length, 0, 360);
 
-                float sat = 100;
-                float val = 100;
-                float alpha = PApplet.map(i, 0, lerpedSpectrum.length, 100, 50) + (lerpedAmplitude * 2 * 100);
-                v.stroke(hue, sat, val, alpha);
+            int color;
+            float f, r;
 
-                float f = lerpedSpectrum[i] * PApplet.HALF_PI; //
+            for (int i = 100; i < PApplet.constrain(count, 100, lerpedSpectrum.length) - 1; i += 2) {
+                color = v.color(
+                        (PApplet.map(i, 100, lerpedSpectrum.length, 0, 360) + 360 * 2 - 120) % 360,
+                        100,
+                        100,
+                        PApplet.map(i, 0, lerpedSpectrum.length, 100, 50) + (lerpedAmplitude * 2 * 100));
+                v.stroke(color);
+
+                f = lerpedSpectrum[i] * HALF_PI; //
                 f += 0.1f;
 
-                float r = PApplet.sin(i * sinMap) / 1 * PI / 2; // Sine wave rotation
+                r = PApplet.sin(i * sinMap) / 1 * PI / 2; // Sine wave rotation
                 r += PApplet.sin(off / (120)) / 1 * PI / 2; // Sine wave rotation
                 r += v.millis() / 1000f; // 1 rotation per second
 
