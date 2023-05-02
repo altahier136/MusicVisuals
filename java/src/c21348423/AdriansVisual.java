@@ -1,7 +1,5 @@
 package c21348423;
 
-import com.jogamp.common.nio.Buffers;
-
 import ie.tudublin.visual.AudioAnalysis;
 import ie.tudublin.visual.EaseFunction;
 import ie.tudublin.visual.VAnimation;
@@ -68,9 +66,9 @@ public class AdriansVisual extends VScene {
         v.fill(background, 20);
         v.pushMatrix();
         v.translateCenter();
-        v.translate(0, 0, -1000);
+        v.translate(0, 0, -2000);
         v.rectMode(PApplet.CENTER);
-        v.rect(0, 0, v.width * 3, v.height * 3);
+        v.rect(0, 0, v.width * 4, v.height * 4);
         v.popMatrix();
 
         // 1:48 - 2:30 - Instrumental
@@ -78,7 +76,7 @@ public class AdriansVisual extends VScene {
         //
         v.translateCenter();
         v.pushMatrix();
-        v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 4 - Visual.HALF_PI / 4);
+        v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 6 - Visual.HALF_PI / 6);
         superStars.render(elapsed);
         v.popMatrix();
 
@@ -172,7 +170,7 @@ public class AdriansVisual extends VScene {
             v.noFill();
             float sinMap = PApplet.map(PApplet.sin(off * 1.00001f / (60 * 3)), -1, 1, 2.090f, 2.110f);
             // How many arcs to render
-            int count = (int) PApplet.map(lerpedAmplitude * 2, 0, 0.2f, 0, lerpedSpectrum.length - 1);
+            int count = (int) PApplet.map(lerpedAmplitude * 4, 0, 0.2f, 0, lerpedSpectrum.length - 1);
             count += PApplet.constrain((int) PApplet.map(lerpedAmplitude, 0.01f, 0, 0, lerpedSpectrum.length - 1), 0,
                     lerpedSpectrum.length);
             v.blendMode(PApplet.BLEND);
@@ -185,12 +183,12 @@ public class AdriansVisual extends VScene {
                 float alpha = PApplet.map(i, 0, lerpedSpectrum.length, 100, 50) + (lerpedAmplitude * 2 * 100);
                 v.stroke(hue, sat, val, alpha);
 
-                float f = lerpedSpectrum[i] * PI; //
+                float f = lerpedSpectrum[i] * PApplet.HALF_PI; //
                 f += 0.1f;
 
                 float r = PApplet.sin(i * sinMap) / 1 * PI / 2; // Sine wave rotation
                 r += PApplet.sin(off / (120)) / 1 * PI / 2; // Sine wave rotation
-                r += off / (60); // 1 rotation per second
+                r += v.millis() / 1000f; // 1 rotation per second
 
                 // Two arcs
                 v.arc(0, 0, i, i, r - f, r + f);
@@ -220,17 +218,20 @@ public class AdriansVisual extends VScene {
             v.blendMode(PApplet.SUBTRACT);
             v.noFill();
 
-            float hue = (-120 + PApplet.round(3.5f - (lerpedAmplitude) * 8) * 120 + 360) % 360;
+            float hue = (-120 + PApplet.round(3.5f + (lerpedAmplitude) * 8) * 120 + 360) % 360;
             float sat = 100;
             float val = 100;
+            if (lerpedAmplitude > 0.6f) {
+                sat = 0;
+            }
             v.stroke(hue, sat, val);
 
             // Render grid of superellipses
             v.translate((-elapsed / 10) % 200, 0, -100);
             for (int x = -200 - v.width; x < v.width + 200; x += 200) {
                 for (int y = -200 - v.height; y < v.height + 200; y += 200) {
-                    superellipse(x, y, 0.5f * lerpedAmplitude, 1.0f * lerpedAmplitude, 200 * lerpedAmplitude,
-                            200 * lerpedAmplitude);
+                    superellipse(x, y, 0.5f * lerpedAmplitude, 1.0f * lerpedAmplitude, 150 * lerpedAmplitude + 10,
+                            150 * lerpedAmplitude + 10);
                 }
             }
 
