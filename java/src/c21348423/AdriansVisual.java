@@ -23,8 +23,14 @@ public class AdriansVisual extends VScene {
     VAnimation sceneVisibility;
     Visual v;
     SquigglyArcs squigglyArcs;
+    VAnimation horseBounceAnimation;
     HappyHorse horse;
     SuperStars superStars;
+
+    // pi
+    float HALF_PI = PApplet.HALF_PI;
+    float PI = PApplet.PI;
+    float TWO_PI = PApplet.TWO_PI;
 
     // Colour pallet
 
@@ -48,10 +54,16 @@ public class AdriansVisual extends VScene {
      * Set up scene animation
      */
     public void setSceneAnimation() {
+        // Scene visibility
         sceneVisibility = new VAnimation(v.audioPlayer().length());
         sceneVisibility.addTransition(v.toMs(1, 48, 0), 0, 0, 100, EaseFunction.easeLinear);
         sceneVisibility.addTransition(v.toMs(2, 31, 0), 0, 100, 0, EaseFunction.easeLinear);
         sceneVisibility.addTransition(v.audioPlayer().length(), 0, 0, 0, EaseFunction.easeLinear);
+
+        // Horse bounce animation
+        horseBounceAnimation = new VAnimation(v.audioPlayer().length());
+        horseBounceAnimation.addTransition(v.toMs(1, 48, 0), 1000, -500, 0, EaseFunction.easeOutBounce);
+        horseBounceAnimation.addTransition(v.audioPlayer().length(), 0, 0, 0, EaseFunction.easeLinear);
     }
 
     public void render(int elapsed) {
@@ -73,7 +85,7 @@ public class AdriansVisual extends VScene {
 
         // Star background
         v.pushMatrix();
-        v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 6 - Visual.HALF_PI / 6);
+        v.rotateX(Visual.sin(-elapsed * BEATMS * HALF_PI * 0.1f) * HALF_PI / 6 - HALF_PI / 6);
         superStars.render(elapsed);
         v.popMatrix();
 
@@ -82,10 +94,10 @@ public class AdriansVisual extends VScene {
         v.ambientLight(300, 100, 100);
         v.pointLight(0, 100, 100, 100, -v.height, 1000);
 
-        // v.rotateX(Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) *
-        // Visual.HALF_PI / 2 - Visual.HALF_PI / 2);
-        rotation.x = Visual.sin(-elapsed * BEATMS * Visual.HALF_PI * 0.1f) * Visual.HALF_PI / 2 - Visual.HALF_PI / 2;
-        rotation.y = Visual.sin(elapsed * BEATMS * Visual.TWO_PI) * 0.3f;
+        // v.rotateX(Visual.sin(-elapsed * BEATMS * HALF_PI * 0.1f) *
+        // HALF_PI / 2 - HALF_PI / 2);
+        rotation.x = Visual.sin(-elapsed * BEATMS * HALF_PI * 0.1f + PI) * HALF_PI / 2 - HALF_PI / 2;
+        rotation.y = Visual.sin(elapsed * BEATMS * TWO_PI) * 0.3f;
         rotation.y = elapsed * BEATMS * 0.3f;
         rotation.add(rotationOff);
         applyTransforms();
@@ -94,6 +106,8 @@ public class AdriansVisual extends VScene {
 
         v.blendMode(PApplet.BLEND);
 
+        // Horse bounce in
+        v.translate(horseBounceAnimation.getValue(elapsed), horseBounceAnimation.getValue(elapsed), 0);
         horse.render(elapsed);
 
         v.popMatrix();
@@ -131,9 +145,9 @@ public class AdriansVisual extends VScene {
             applyTransforms();
             v.scale(40);
 
-            // v.rotateZ(Visual.sin(elapsed / 1000f * Visual.TWO_PI) + Visual.PI);
-            v.rotateZ(Visual.sin(elapsed * BEATMS * Visual.HALF_PI) / 2 + Visual.PI);
-            v.translate(0, Visual.sin(elapsed * BEATMS * Visual.TWO_PI) * 2 + 2);
+            // v.rotateZ(Visual.sin(elapsed / 1000f * TWO_PI) + PI);
+            v.rotateZ(Visual.sin(elapsed * BEATMS * HALF_PI) / 2 + PI);
+            v.translate(0, Visual.sin(elapsed * BEATMS * TWO_PI) * 2 + 2);
             // v.translate(0,200);
             v.shape(horse, 0, 2);
             v.popMatrix();
@@ -145,16 +159,10 @@ public class AdriansVisual extends VScene {
      */
     public class SquigglyArcs extends VObject {
         private AudioAnalysis aa;
-        private float HALF_PI;
-        private float PI;
-        private float TWO_PI;
 
         public SquigglyArcs(Visual v, PVector position) {
             super(v, position);
             aa = v.audioAnalysis();
-            HALF_PI = PApplet.HALF_PI;
-            PI = PApplet.PI;
-            TWO_PI = PApplet.TWO_PI;
         }
 
         @Override
@@ -202,7 +210,7 @@ public class AdriansVisual extends VScene {
 
                 // Two arcs
                 v.arc(0, 0, i, i, r - f, r + f);
-                r += PApplet.PI;
+                r += PI;
                 v.arc(0, 0, i, i, r - f, r + f);
 
             }
@@ -262,7 +270,7 @@ public class AdriansVisual extends VScene {
         public void superellipse(float posX, float posY, float m, float n, float a, float b) {
             v.beginShape();
             for (int i = 0; i < 360; i++) {
-                float t = i * Visual.TWO_PI / 360;
+                float t = i * TWO_PI / 360;
                 float x = PApplet.pow(PApplet.abs(PApplet.cos(t)), 2 / m) * a * Math.signum(PApplet.cos(t));
                 float y = PApplet.pow(PApplet.abs(PApplet.sin(t)), 2 / n) * b * Math.signum(PApplet.sin(t));
                 v.vertex(posX + x, posY + y);
