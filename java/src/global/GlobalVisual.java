@@ -29,9 +29,9 @@ public class GlobalVisual extends VScene {
             super(v);
             effect = new VAnimation(v.audioPlayer().length());
             // Start
-            effect.addTransition(0, 500, 0, 255, EaseFunction.easeLinear);
+            // effect.addTransition(0, 500, 0, 255, EaseFunction.easeLinear);
             // Transition to solo at 1:48
-            effect.addTransition(v.toMs(1, 47, 750), 500, 255, 0, EaseFunction.easeLinear);
+            // effect.addTransition(v.toMs(1, 47, 750), 500, 255, 0, EaseFunction.easeLinear);
             // Transition to Verse at 2:30
             effect.addTransition(v.toMs(2, 30, 750), 500, 0, 255, EaseFunction.easeLinear);
 
