@@ -168,8 +168,7 @@ public class SarahVisual extends VScene {
         public void render()
         {
             //inner waveform
-            cx = v.width/2;
-            cy = v.height/2;
+            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
             v.noFill();
             v.strokeWeight(2);
 
@@ -181,8 +180,8 @@ public class SarahVisual extends VScene {
                 v.stroke(c, 100, 100);
 
                 // calculate starting points on circle which each line will be drawn out of
-                float x1 = cx + PApplet.sin(theta) * radius;
-                float y1 = cx - PApplet.cos(theta) * radius;
+                float x1 = PApplet.sin(theta) * radius;
+                float y1 = -PApplet.cos(theta) * radius;
 
                 // get frequency at current position in Audio Buffer and make it visible
                 float f = ab.get(i) * 200 + 20;
@@ -200,7 +199,6 @@ public class SarahVisual extends VScene {
 
             //outer waveform
             v.beginShape();
-            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
             for(int i = 0; i < ab.size(); i++)
             {
                 float c = PApplet.map(i, 0, ab.size(), 0, 360);

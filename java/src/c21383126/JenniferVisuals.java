@@ -4,6 +4,7 @@ import ie.tudublin.visual.AudioAnalysis;
 import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
+import jogamp.opengl.glu.nurbs.Backend;
 import processing.core.PApplet;
 import processing.core.PShape;
 import processing.core.PVector;
@@ -49,19 +50,21 @@ public class JenniferVisuals extends VScene {
         // 1:03 - 1:48 - Second verse & chorus
         if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 14, 0))
         {
+            v.background(0);
             wf.render();
             speaker.render();
 
         }
         else if (elapsed > v.toMs(1, 14,0) && elapsed < v.toMs(1, 25, 0))
         {
-
+            v.background(0);
             hex.render();
             gv.render(elapsed);
 
         }
         else if (elapsed > v.toMs(1, 25,0) && elapsed < v.toMs(1, 37, 0))
         {
+            v.background(0);
             dots.render(elapsed);
             clock.render(elapsed);
 
@@ -69,6 +72,7 @@ public class JenniferVisuals extends VScene {
         }
         else if (elapsed > v.toMs(1, 37,0) && elapsed < v.toMs(1, 48, 0))
         {
+            v.background(0);
             gv.render(elapsed);
             stars.render(elapsed);
 
@@ -249,7 +253,7 @@ public class JenniferVisuals extends VScene {
             v.box(width, length, width);
 
             v.noStroke();
-            v.frameRate(1); //1 frame per second
+            // v.frameRate(1); //1 frame per second
             v.noFill();
             v.translate(-x3, -v.height/2, width);
             v.rotateX((float).02 * 0.2f);
