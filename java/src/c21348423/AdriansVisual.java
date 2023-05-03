@@ -60,7 +60,7 @@ public class AdriansVisual extends VScene {
         }
 
         v.blendMode(PApplet.BLEND);
-        v.fill(background, 40);
+        v.fill(background, 30);
 
         // Background
         v.translateCenter();
