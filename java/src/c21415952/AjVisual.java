@@ -1,11 +1,9 @@
 package c21415952;
 
-import ie.tudublin.visual.VObject;
+import ddf.minim.AudioBuffer;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
-import processing.core.PVector;
-import ddf.minim.AudioBuffer;
 
 public class AjVisual extends VScene {
     Visual v;
@@ -22,15 +20,15 @@ public class AjVisual extends VScene {
         // 1:48 - 2:30 - Instrumental
         if (elapsed > v.toMs(2, 31, 0) && elapsed < v.toMs(3, 58, 0)) {
             v.background(0);
-            
+
             // Set up spiral parameters
             float spiralSize = 100; // Size of spiral
             float spiralSpacing = 0.2f; // Distance between spiral points
             float spiralSpeed = 0.5f; // Rotation speed of spiral
-            
+
             // Map the amplitude of the music to the size of the spiral
             float spiralAmplitude = PApplet.map(ab.get(0), -1, 1, 0, 1) * 200 + 100;
-            
+
             // Draw rainbow spiral that reacts to music
             v.pushMatrix();
             v.translate(v.width / 2, v.height / 2); // Set origin to center of screen
@@ -38,15 +36,15 @@ public class AjVisual extends VScene {
                 float r = i / PApplet.TWO_PI * spiralSize;
                 float x = r * PApplet.sin(i + spiralSpeed * elapsed);
                 float y = r * PApplet.cos(i + spiralSpeed * elapsed);
-                
+
                 // Set color based on position along spiral
                 v.stroke(PApplet.map(i, 0, PApplet.TWO_PI * 5, 0, 255), 255, 255);
-                
+
                 // Draw spiral point
                 v.point(x, y, spiralAmplitude);
             }
             v.popMatrix();
-            
+
             // Draw expanding circle that reacts to music
             float circleSize = PApplet.map(ab.get(0), -1, 1, 0, v.width / 2);
             v.noFill();
@@ -55,5 +53,5 @@ public class AjVisual extends VScene {
             v.ellipse(v.width / 2, v.height / 2, circleSize, circleSize);
         }
     }
-    
+
 }
