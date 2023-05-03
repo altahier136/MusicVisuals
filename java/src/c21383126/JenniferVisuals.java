@@ -14,8 +14,6 @@ import global.GlobalVisual;
 public class JenniferVisuals extends VScene {
     Visual v;
     VObject speaker;
-    VObject circle;
-    VObject sw;
     Clock clock;
     VObject dots;
     VObject stars;
@@ -32,8 +30,6 @@ public class JenniferVisuals extends VScene {
         super(v);
         this.v = v;
         speaker = new Speaker(v, new PVector(v.width/4, v.height/4));
-        circle = new Circles(v, new PVector(v.width/4, v.height/4));
-        sw = new SinWave(v, new PVector(v.width/4, v.height/4));
         clock = new Clock(v, new PVector(v.width/4, v.height/4));
         dots = new Dots(v, new PVector(v.width/4, v.height/4));
         stars = new Stars(v, new PVector(v.width/4, v.height/4));
@@ -86,35 +82,38 @@ public class JenniferVisuals extends VScene {
         PShape star;
         Stars(Visual v, PVector pos){
             super(v, pos);
+            //load star object
             star = v.loadShape("estrellica.obj");
         }
         
-        int MAX = 150;
-        float rot = 0;
+        int MAX = 150; //maximum distance between the stars
+        float rot = 0; //rotation
         @Override
         public void render(int elapsed)
         {
-            v.lights();
-            float avg = aa.mix().lerpedAmplitude; 
-            v.translate(v.width/2, v.height/2, 0);        
+            v.lights(); //set the default light
+            float avg = aa.mix().lerpedAmplitude; //average lerped amplitude
+            v.translate(v.width/2, v.height/2, 0);   //translate to centre     
+            //rotate big cube
             v.rotateX(rot * .01f);
             v.rotateY(rot * .01f);
             v.rotateZ(rot * .01f);
-            for(int x = -MAX; x <= MAX; x += 50)
+            for(int x = -MAX; x <= MAX; x += 50) //width
             {
-                for(int y = -MAX; y <= MAX; y += 50)
+                for(int y = -MAX; y <= MAX; y += 50)//height
                 {
-                    for(int z = -MAX; z <= MAX; z += 50)
+                    for(int z = -MAX; z <= MAX; z += 50) //depth
                     {
                         v.pushMatrix();
-                        v.translate(x, y, z);
-                        v.rotateX(rot * 0.02f);
+                        v.translate(x, y, z); //new centre for each star
+                        //rotate each star
+                        v.rotateX(rot * .02f);
                         v.rotateY(rot * .02f);
                         v.rotateZ(rot * .02f);
                         
-                        float c = v.noise(elapsed / (100f), x + y + z) * 360;
-                        star.setFill(v.color(c, 100, 100));
-                        v.scale(avg * 50);
+                        float c = v.noise(elapsed / (100f), x + y + z) * 360; //get colour
+                        star.setFill(v.color(c, 100, 100)); //set colour
+                        v.scale(avg * 50); //size of each star
                         v.shape(star);
                         v.popMatrix();
                     }
@@ -139,9 +138,9 @@ public class JenniferVisuals extends VScene {
 
             for(int i = 0; i <= v.width; i += 20) {
                 for(int j = 0; j <= v.height; j += 20) {
-                    float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                    float c = PApplet.map(i, 0, ab.size(), 0, 360); //rainbow coloured
                     v.fill(c, 100, 100);
-                    float size = PApplet.dist(v.random(0, v.width), v.random(0, v.height), i, j);
+                    float size = PApplet.dist(v.random(0, v.width), v.random(0, v.height), i, j); //random sized
                     size = size/max_distance * 66;
                     v.ellipse(i, j, size, size);
                 }
@@ -165,7 +164,8 @@ public class JenniferVisuals extends VScene {
             v.fill(0);
             v.stroke(255);
             
-            int radius = PApplet.min(v.width, v.height) / 3;
+            int radius = PApplet.min(v.width, v.height) / 3; //circle radius
+            //smaller lines
             secondsRadius = (float)(radius * 0.72);
             minutesRadius = (float)(radius * 0.60);
             hoursRadius = (float)(radius * 0.50);
@@ -209,95 +209,6 @@ public class JenniferVisuals extends VScene {
 
     }   
 
-    class SinWave extends VObject{
-        SinWave(Visual v, PVector pos){
-            super(v, pos);
-        }
-
-        int xspacing = 16;   // How far apart should each horizontal location be spaced
-        int w = v.width + 16;              // Width of entire wave
-
-        float theta = 0;  // Start angle at 0
-        float amplitude = 75;  // Height of wave
-        float period = 500;  // How many pixels before the wave repeats
-        float dx = (PApplet.TWO_PI / period) * xspacing;  // Value for incrementing X, a function of period and xspacing
-        float[] yvalues = new float[w/xspacing];  // Using an array to store height values for the wave
-        
-        void calcWave() {
-            // Increment theta (try different values for 'angular velocity' here
-            theta += 0.02;
-          
-            // For every x value, calculate a y value with sine function
-            float x = theta;
-            for (int i = 0; i < yvalues.length; i++) {
-              yvalues[i] = PApplet.sin(x)*amplitude;
-              x+=dx;
-            }
-          }
-
-          void renderWave() {
-            v.noStroke();
-            //v.fill(255);
-            // A simple way to draw the wave with an ellipse at each location
-            for (int x = 0; x < yvalues.length; x++) 
-            {
-                float c = PApplet.map(ab.get(x), -1, 1, 0, 360);
-                v.fill(c, 100, 100);
-                v.ellipse(x*xspacing, v.height/2+yvalues[x], 16, 16);
-                v.fill(c+40, 100, 100);
-                v.ellipse(x*xspacing, v.height/4+yvalues[x], 16, 16);
-                v.fill(c+80, 100, 100);
-                v.ellipse(x*xspacing, (3*v.height/4)+yvalues[x], 16, 16);
-            }
-          }
-
-        @Override
-        public void render(){
-            calcWave();
-            renderWave();
-        }
-    }
-
-    class Circles extends VObject {
-        Circles(Visual v, PVector pos){
-            super(v, pos);
-        }
-
-        @Override
-        public void render(){
-            for (int i=0; i<360; i++)
-            {
-                // (x2, y2) (x3, y3)
-                //     (x1, x2)
-                // (x4, y4) (x5, y5)
-
-                v.stroke(109, 247, 240);
-                float f = ab.get(i) * v.height/2;
-                double x1 = v.width/2 + (Math.cos(i)*(Math.PI/180) * 100 * f);
-                double y1 = v.height/2 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                //v.line(v.width/2, v.height/2, (float)x1, (float)y1);
-
-                v.stroke(v.random(250, 360), 100, 100);
-                double x2 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
-                double y2 = v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(v.width/4, v.height/4, (float)x2, (float)y2);
-
-                double x3 = 3*v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
-                double y3 = v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(3*v.width/4, v.height/4, (float)x3, (float)y3);
-
-                double x4 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
-                double y4 = 3*v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(v.width/4, 3*v.height/4, (float)x4, (float)y4);
-
-                double x5 = 3*v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
-                double y5 = 3*v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(3*v.width/4, 3*v.height/4, (float)x5, (float)y5);
-                
-            }
-        }
-    }
-
     class Speaker extends VObject {
 
         Speaker(Visual v, PVector pos){
@@ -308,6 +219,7 @@ public class JenniferVisuals extends VScene {
         public void render(){
             v.stroke(255);
 
+            // circles
             // (x1,y1) (x3,y3)
             // (x2,y2) (x4,y4)
             
@@ -325,29 +237,29 @@ public class JenniferVisuals extends VScene {
 
             int length = ((y2 + border) - (y1 - border));
             int width = ((x2 + border) - (x1 - border));
-            float col = v.random(0,360);
+            float col = v.random(0,360); /// box colour
             v.fill(col, 100, 100);
-            //v.rect(x1 - border, y1 - border, width, length);
+
+            // 3D boxes            
             v.translate(x1, v.height/2);
             v.rotateX((float)1.5 * 0.2f);
             v.box(width, length, width);
 
             v.translate(-x1, -v.height/2);
             v.translate(x3, v.height/2);
-            //v.rect(x3 - border, y3 - border, width, length);
             v.box(width, length, width);
 
             v.noStroke();
-            v.frameRate(1); 
+            v.frameRate(1); //1 frame per second
             v.noFill();
             v.translate(-x3, -v.height/2, width);
             v.rotateX((float).02 * 0.2f);
             
             for(int i=0; i< ab.size(); i++)
             {
-                float c = PApplet.map(ab.get(i), -1, 1, 0, 360);
+                float c = PApplet.map(ab.get(i), -1, 1, 0, 360); 
                 v.stroke(c, 100, 100);
-                float radius = ab.get(i) * 1000 + 50;
+                float radius = ab.get(i) * 1000 + 50; //radius size determined by the music
                 v.circle(x1+30, y1+60, radius-1);
                 v.circle(x2+30, y2, radius-1);
                 v.circle(x3-30, y3+60, radius-1);
@@ -365,13 +277,13 @@ public class JenniferVisuals extends VScene {
         @Override
         public void render()
         {
+            //top and bottom of screen wave form
             for(int i = 0; i < ab.size(); i++)
             {                
-                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                float c = PApplet.map(i, 0, ab.size(), 0, 360); //rainbow coloured
                 v.stroke(c, 100, 100);
                 float f = ab.get(i) * v.height/2;
-                float x = PApplet.map(i, 0, ab.size(), 0, v.width);
-                //v.line(x,v.height/4 + f, x, v.height/4 - f);
+                float x = PApplet.map(i, 0, ab.size(), 0, v.width); // x value determined by music
                 v.line(x, y + f, x, y - f);
                 v.line(x, f, x, - f);
                 
@@ -387,15 +299,13 @@ public class JenniferVisuals extends VScene {
         @Override
         public void render()
         {
-            //v.background(0);
             v.noFill();
             v.translateCenter();
             v.beginShape();
             for(int i = 0; i < ab.size(); i++)
             {
-                v.stroke(v.random(0,360), 100, 100);
-                //float angle = PApplet.map(ab.get(i), 0, ab.size(), 0, PApplet.TWO_PI);    
-                float radius = ab.get(i) * 300 + 50;
+                v.stroke(v.random(0,360), 100, 100); //random coloured
+                float radius = ab.get(i) * 300 + 50; //radius determined by music
                 double x1 = (PApplet.cos(i)*(PApplet.PI/180)  * 100 * radius);
                 double y1 =  (PApplet.sin(i)*(PApplet.PI/180) * 100 * radius);
                 v.vertex((float)x1, (float)y1);
