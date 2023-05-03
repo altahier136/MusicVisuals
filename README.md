@@ -14,9 +14,9 @@ Music: Toto - Hold The Line (Official Video) - [https://www.youtube.com/watch?v=
 
 [![Toto - Hold The Line (Official Video)](https://img.youtube.com/vi/htgr3pvBr-I/hqdefault.jpg)](https://www.youtube.com/watch?v=htgr3pvBr-I)
 
-Video: ... - [https://img.youtube.com/vi/.../hqdefault.jpg](#)
+Video: Hold The Line - Music Visuals - [https://youtu.be/BiE8rncqw7Y](https://youtu.be/BiE8rncqw7Y)
 
-[![...](https://img.youtube.com/vi/.../hqdefault.jpg)](#)
+[![Hold The Line - Music Visuals](https://img.youtube.com/vi/BiE8rncqw7Y/hqdefault.jpg)](https://youtu.be/BiE8rncqw7Y)
 
 ### Adrian's Visuals
 
