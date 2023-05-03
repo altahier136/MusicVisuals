@@ -3,10 +3,10 @@ package ie.tudublin;
 import com.jogamp.newt.event.KeyEvent;
 
 import c21348423.AdriansVisual;
-import global.AnimationDemo;
 import c21383126.JenniferVisuals;
 import c21415904.SarahVisual;
 import c21415952.AjVisual;
+import global.AnimationDemo;
 import global.Demo;
 import global.GlobalVisual;
 import global.PressStart;
@@ -64,22 +64,22 @@ import ie.tudublin.visual.Visual;
     END - 03:58
 */
 public class HoldTheLine extends Visual {
-    VScene av;
-    VScene gv;
-    VScene sv;
-    VScene aj;
-    VScene demo;
-    VScene aDemo;
-    VScene pressStart;
+    VScene av; // Adrian's Visual
+    VScene jv; // Jennifer's Visual
+    VScene sv; // Sarah's Visual
+    VScene aj; // Altahier's Visual
+    VScene gv; // Global Visual
+    VScene demo; // Demo Visual
+    VScene aDemo; // Animation Demo Visual
+    VScene pressStart; // Press Start Visual
 
-    int debugMode;
-    VScene jv;
+    int visualMode; // 0: Main Music Visualisation, 1: Demo, 2: Animation Demo
 
     public boolean startScreen = true;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
-        debugMode = 0;
+        visualMode = 0; // Main Music Visualisation
     }
 
     public void settings() {
@@ -89,32 +89,30 @@ public class HoldTheLine extends Visual {
     public void setup() {
         colorMode(HSB, 360, 100, 100);
 
-        // Load song and lyrics
+        // Load song and lyrics file and pause it
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
         pause();
         background(0);
 
-        if (startScreen) {
+        pressStart = new PressStart(this);
 
-            av = new AdriansVisual(this);
-            sv = new SarahVisual(this);
-            jv = new JenniferVisuals(this);
-            aj = new AjVisual(this);
-            demo = new Demo(this);
-            aDemo = new AnimationDemo(this);
-            gv = new GlobalVisual(this);
-            pressStart = new PressStart(this);
-        }
+        av = new AdriansVisual(this);
+        jv = new JenniferVisuals(this);
+        sv = new SarahVisual(this);
+        aj = new AjVisual(this);
+        gv = new GlobalVisual(this);
+
+        demo = new Demo(this);
+        aDemo = new AnimationDemo(this);
     }
 
     /** Draw the visuals */
     public void draw() {
 
-        noLights();
         int elapsed = audioPlayer().position();
-        text(elapsed, 10, 10);
 
         // Resets
+        noLights();
         blendMode(BLEND);
         colorMode(HSB, 360, 100, 100);
 
@@ -123,7 +121,7 @@ public class HoldTheLine extends Visual {
             return;
         }
 
-        switch (debugMode) {
+        switch (visualMode) {
             case 0:
                 av.render(elapsed);
                 jv.render(elapsed);
@@ -142,6 +140,10 @@ public class HoldTheLine extends Visual {
 
     /**
      * 1-4: Seek to different parts of the song
+     * j: Seek -10 secs
+     * l: Seek +10 secs
+     * left arrow: Seek -5 secs
+     * right arrow: Seek +5 secs
      * q: Main Music Visualisation
      * w: Demo
      * e: Animation Demo
@@ -161,11 +163,6 @@ public class HoldTheLine extends Visual {
             case '4':
                 seek(2, 31);
                 break;
-            // j seek -10 secs
-            // k pause/play
-            // l seek +10 secs
-            // left arrow seek -5 secs
-            // right arrow seek +5 secs
             case KeyEvent.VK_J: // seek -10 secs
                 seek(-10000 + audioPlayer().position());
                 break;
@@ -179,15 +176,15 @@ public class HoldTheLine extends Visual {
                 seek(5000 + audioPlayer().position());
                 break;
             case KeyEvent.VK_Q:
-                debugMode = 0;
+                visualMode = 0;
                 System.out.println("Debug mode 0");
                 break;
             case KeyEvent.VK_W:
-                debugMode = 1;
+                visualMode = 1;
                 System.out.println("Debug mode 1");
                 break;
             case KeyEvent.VK_E:
-                debugMode = 2;
+                visualMode = 2;
                 System.out.println("Debug mode 2");
                 break;
             case KeyEvent.VK_K:
