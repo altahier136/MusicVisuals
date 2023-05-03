@@ -4,8 +4,10 @@ import c21348423.AdriansVisual;
 import global.AnimationDemo;
 import c21383126.JenniferVisuals;
 import c21415904.SarahVisual;
+import c21415952.AjVisual;
 import global.Demo;
 import global.GlobalVisual;
+import global.PressStart;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
 
@@ -63,11 +65,15 @@ public class HoldTheLine extends Visual {
     VScene av;
     VScene gv;
     VScene sv;
+    VScene aj;
     VScene demo;
     VScene aDemo;
+    VScene pressStart;
 
     int debugMode;
     VScene jv;
+
+    public boolean startScreen = true;
 
     HoldTheLine() {
         super(1024, 44100, 0.5f);
@@ -75,7 +81,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-      fullScreen(P3D);
+        fullScreen(P3D);
     }
 
     public void setup() {
@@ -83,19 +89,26 @@ public class HoldTheLine extends Visual {
 
         // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
-
+        pausePlay();
         background(0);
 
-        av = new AdriansVisual(this);
-        sv = new SarahVisual(this);
-        jv = new JenniferVisuals(this);
-        demo = new Demo(this);
-        aDemo = new AnimationDemo(this);
-        gv = new GlobalVisual(this);
+        if (startScreen) {
+
+            av = new AdriansVisual(this);
+            sv = new SarahVisual(this);
+            jv = new JenniferVisuals(this);
+            aj = new AjVisual(this);
+            demo = new Demo(this);
+            aDemo = new AnimationDemo(this);
+            gv = new GlobalVisual(this);
+            pressStart = new PressStart(this);
+        }
     }
 
     /** Draw the visuals */
     public void draw() {
+
+        noLights();
         int elapsed = audioPlayer().position();
         text(elapsed, 10, 10);
 
@@ -103,11 +116,17 @@ public class HoldTheLine extends Visual {
         blendMode(BLEND);
         colorMode(HSB, 360, 100, 100);
 
+        if (startScreen) {
+            pressStart.render();
+            return;
+        }
+
         switch (debugMode) {
             case 0:
                 av.render(elapsed);
                 jv.render(elapsed);
                 sv.render(elapsed);
+                aj.render(elapsed);
                 gv.render(elapsed);
                 break;
             case 1:
@@ -154,6 +173,7 @@ public class HoldTheLine extends Visual {
                 break;
             case ' ':
                 pausePlay();
+                startScreen = false;
                 break;
             default:
                 break;
