@@ -9,6 +9,7 @@ import processing.core.PShape;
 import processing.core.PVector;
 import ddf.minim.AudioBuffer;
 import ddf.minim.Minim;
+import global.GlobalVisual;
 
 public class JenniferVisuals extends VScene {
     Visual v;
@@ -19,6 +20,8 @@ public class JenniferVisuals extends VScene {
     VObject dots;
     VObject stars;
     VObject wf;
+    VObject hex;
+    GlobalVisual gv;
 
     Minim minim;
     AudioBuffer ab;
@@ -35,6 +38,8 @@ public class JenniferVisuals extends VScene {
         dots = new Dots(v, new PVector(v.width/4, v.height/4));
         stars = new Stars(v, new PVector(v.width/4, v.height/4));
         wf = new WaveForm(v, new PVector(v.width/4, v.height/4));
+        hex = new Hex(v, new PVector(v.width/4, v.height/4));
+        gv = new GlobalVisual(v);
 
 
         minim = new Minim(this);
@@ -46,24 +51,34 @@ public class JenniferVisuals extends VScene {
     public void render(int elapsed) {
       
         // 1:03 - 1:48 - Second verse & chorus
-        if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 48, 0)) 
+        if (elapsed > v.toMs(1, 3,0) && elapsed < v.toMs(1, 14, 0)) 
         {
-            //wf.render();
-            //speaker.render();
+            wf.render();
+            speaker.render();
+              
+        }
+        else if (elapsed > v.toMs(1, 14,0) && elapsed < v.toMs(1, 25, 0)) 
+        {
+         
+            hex.render();
+            gv.render(elapsed);
 
-            //circle.render();   
-                  
-            //sw.render(); 
+        }
+        else if (elapsed > v.toMs(1, 25,0) && elapsed < v.toMs(1, 37, 0)) 
+        {
+            dots.render(elapsed);  
+            clock.render(elapsed);
 
-            //dots.render(elapsed);  
-            //clock.render(elapsed);
 
+        }
+        else if (elapsed > v.toMs(1, 37,0) && elapsed < v.toMs(1, 48, 0)) 
+        {
+            gv.render(elapsed);
             stars.render(elapsed);
+
         }
         System.out.println(elapsed);
     }
-
-
 
 
     class Stars extends VObject {
@@ -74,7 +89,7 @@ public class JenniferVisuals extends VScene {
             star = v.loadShape("estrellica.obj");
         }
         
-        int OFF_MAX = 150;
+        int MAX = 150;
         float rot = 0;
         @Override
         public void render(int elapsed)
@@ -85,11 +100,11 @@ public class JenniferVisuals extends VScene {
             v.rotateX(rot * .01f);
             v.rotateY(rot * .01f);
             v.rotateZ(rot * .01f);
-            for(int x = -OFF_MAX; x <= OFF_MAX; x += 50)
+            for(int x = -MAX; x <= MAX; x += 50)
             {
-                for(int y = -OFF_MAX; y <= OFF_MAX; y += 50)
+                for(int y = -MAX; y <= MAX; y += 50)
                 {
-                    for(int z = -OFF_MAX; z <= OFF_MAX; z += 50)
+                    for(int z = -MAX; z <= MAX; z += 50)
                     {
                         v.pushMatrix();
                         v.translate(x, y, z);
@@ -106,9 +121,7 @@ public class JenniferVisuals extends VScene {
                 }
             }
             rot++;            
-            
         }
-
     }
 
     class Dots extends VObject { 
@@ -135,7 +148,6 @@ public class JenniferVisuals extends VScene {
             }
         }
     }
-
     
     class Clock extends VObject {
 
@@ -196,7 +208,6 @@ public class JenniferVisuals extends VScene {
         }
 
     }   
-
 
     class SinWave extends VObject{
         SinWave(Visual v, PVector pos){
@@ -264,9 +275,9 @@ public class JenniferVisuals extends VScene {
                 float f = ab.get(i) * v.height/2;
                 double x1 = v.width/2 + (Math.cos(i)*(Math.PI/180) * 100 * f);
                 double y1 = v.height/2 + (Math.sin(i)*(Math.PI/180) * 100 * f);
-                v.line(v.width/2, v.height/2, (float)x1, (float)y1);
+                //v.line(v.width/2, v.height/2, (float)x1, (float)y1);
 
-                v.stroke(176, 65, 240);
+                v.stroke(v.random(250, 360), 100, 100);
                 double x2 = v.width/4 + (Math.cos(i)*(Math.PI/180) * 100 * f);
                 double y2 = v.height/4 + (Math.sin(i)*(Math.PI/180) * 100 * f);
                 v.line(v.width/4, v.height/4, (float)x2, (float)y2);
@@ -342,20 +353,7 @@ public class JenniferVisuals extends VScene {
                 v.circle(x3-30, y3+60, radius-1);
                 v.circle(x4-30, y4, radius-1);
             }
-
-            /*
-            float h = v.random(ab.get(radius), 360);
-            for (int r = radius; r > 0; --r) {
-                v.fill(h, 90, 90);
-                v.ellipse(x1, y1, r, r);
-                v.ellipse(x2, y2, r, r);
-                v.ellipse(x3, y3, r, r);
-                v.ellipse(x4, y4, r, r);
-                h = (h + 1) % 360;
-            }    
-            */
         }
-        
     }
 
     class WaveForm extends VObject{
@@ -379,8 +377,30 @@ public class JenniferVisuals extends VScene {
                 
             }
         }
-        
     }
 
+    class Hex extends VObject{
+        Hex(Visual v, PVector pos) {
+            super(v, pos);
+        }
 
+        @Override
+        public void render()
+        {
+            //v.background(0);
+            v.noFill();
+            v.translateCenter();
+            v.beginShape();
+            for(int i = 0; i < ab.size(); i++)
+            {
+                v.stroke(v.random(0,360), 100, 100);
+                //float angle = PApplet.map(ab.get(i), 0, ab.size(), 0, PApplet.TWO_PI);    
+                float radius = ab.get(i) * 300 + 50;
+                double x1 = (PApplet.cos(i)*(PApplet.PI/180)  * 100 * radius);
+                double y1 =  (PApplet.sin(i)*(PApplet.PI/180) * 100 * radius);
+                v.vertex((float)x1, (float)y1);
+            }
+            v.endShape();
+        }
+    }
 }
