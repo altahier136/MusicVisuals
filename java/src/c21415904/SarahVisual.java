@@ -11,16 +11,12 @@ import ddf.minim.AudioBuffer;
 
 public class SarahVisual extends VScene {
     Visual v;
-    VObject so1;
     VObject wf;
     VObject cwf;
     VObject hex;
-    VObject ecwf;
     Spiral sp;
     VObject circamp;
-    VObject cube;
     VObject sw;
-    VObject orb;
     VObject mb;
     AudioBuffer ab;
     AudioAnalysis aa;
@@ -37,28 +33,40 @@ public class SarahVisual extends VScene {
         hex = new Hex(v, new PVector(v.width/2, v.height/2, 0));    
         sp = new Spiral(v, new PVector(v.width/2, v.height/2, 0));  // spiral 
         circamp = new CirclesAmp(v, new PVector(0, 0, 0)); 
-        cube = new Cube(v);
         sw = new soundWave(v, new PVector(0,0,0));
-        orb = new orbit(v, new PVector(0,0,0));
         mb = new metaBalls(v, new PVector(0,0,0));
     }
 
     public void render(int elapsed) {
-        // 1:48 - 2:30 - Instrumental
-        if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(1, 2, 0)) {
-            //sp.render();    
-            //wf.render();
-            //cube.render();
+        // 0:00 - 1:02 - Intro, V1, C1
+        if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(0, 10, 0)) {
+            sw.render();  
+            //mb.render(); 
+            //wf.render(); 
             //sw.render();
-            //circamp.render();
-            //td.render();
-            //sw.render();
-            //hex.render();
-            //clock.render(elapsed);
-            //orb.render();
-            mb.render();
-            
+                              
         }
+        
+        if (elapsed > v.toMs(0, 10, 0) && elapsed < v.toMs(0, 20, 0)) {
+            v.background(0);
+            circamp.render();  
+            //mb.render(); 
+            //wf.render(); 
+            //sw.render();                      
+        }
+        if (elapsed > v.toMs(0, 20, 0) && elapsed < v.toMs(0, 30, 0)) {
+            v.background(0);
+            sp.render();                    
+        }
+        if (elapsed > v.toMs(0, 30, 0) && elapsed < v.toMs(0, 40, 0)) {
+            v.background(0);
+            //sp.render();  
+            mb.render(); 
+            wf.render(); 
+            //sw.render();                    
+        }
+         
+        
         System.out.println(elapsed);
     }
 
@@ -66,53 +74,48 @@ public class SarahVisual extends VScene {
 
         Spiral(Visual v, PVector pos){
             super(v,pos);
-
             v.background(0);
         }
 
-        float theta = 0.0f;
-        float radius = 0.0f;
         float cx, cy;
-        float rot = 0;
-        float r = 20;
-        
+        float rot = 0;        
         
         @Override
-        public void render(){    
+        public void render(){  
 
-            cx = v.width/2;
-            cy = v.height/2;
-            v.noFill();
-            v.stroke(v.random(0,360), 100, 100);
-            float x = cx + PApplet.sin(theta) * radius;
-            float y = cx - PApplet.cos(theta) * radius;
-            //float y2 = cx + PApplet.cos(theta) * radius;
-            v.circle(x,y,20);
-            //v.circle(x,y2,20);
-            theta += 0.1f;
-            radius += 0.5f;   
-            
+            v.background(0);
+            float radius = 1f;
+            v.translateCenter(PApplet.CENTER, PApplet.CENTER);   
+            v.pushMatrix();
+            cx = 0;//v.width/2;
+            cy = 0;//v.height/2;
+            for (int i = 0; i < ab.size(); i++) {
+                
+                float c = PApplet.map(i, 0, ab.size(), 0, 360); 
+                v.strokeWeight(2);
+                v.stroke(c, c, c);
+                float theta =  i * (PApplet.TWO_PI/3 + aa.mix().lerpedAmplitude * 5);
 
-            /*
-            v.noFill();
-            v.beginShape();
+                v.pushMatrix();
+                float x = PApplet.sin(theta) * radius;
+                float y = -PApplet.cos(theta) * radius;
+                radius += 0.5f + aa.mix().lerpedAmplitude;
             
-            for(int i = 0; i < ab.size(); i++)
-            {
-                float c = PApplet.map(i, 0, ab.size(), 0, 360);
-                v.stroke(c, 100, 100);
-                cx = v.width/2;
-                cy = v.height/2;
-                float x = cx + PApplet.sin(theta) * radius;
-                float y = cx - PApplet.cos(theta) * radius;
-                v.circle(x,y,20);
-                theta += 0.1f;
-                radius += 
-            }
-            v.endShape();
-            */
-        }
-    }
+                //v.rotate(rot);
+                v.line(cx, cy, x, y);
+                cx = x;
+                cy = y;
+
+                v.popMatrix();
+
+            } // end for
+
+        v.popMatrix();   
+        //rot += PApplet.QUARTER_PI/100f;  
+
+        } // end render      
+
+    } // end Spiral
 
     
     class CirclesAmp extends VObject {
@@ -138,23 +141,35 @@ public class SarahVisual extends VScene {
                 
             for(int i = 0 ; i < bands.length; i ++)
             {
-                float c = PApplet.map(i, 0, bands.length, 0, 180);
-                float c2 = PApplet.map(i, 0, bands.length, 180, 360);
+                float c = PApplet.map(i, 0, bands.length, 0, 360);
    
                 v.stroke(c, 100, 100);
-                float r = bands[i] * 10 + 50;
+                float r = bands[i] * 10 + 100;
 
+                v.beginShape();
                 v.ellipseMode(PApplet.CENTER);
-                v.circle(0 + 36, 0 + 36, r);
-                v.circle(0 - 36, 0 - 36, r);
-                v.circle(0 + 36, 0 - 36, r);
-                v.circle(0 - 36, 0 + 36, r);     
+                v.circle(36, 36, r);
+                v.circle(-36, -36, r);
+                v.circle(36, -36, r);
+                v.circle(-36, 36, r);     
                 
-                v.stroke(c2,100,100);
                 v.circle(50, 0, r);
                 v.circle(-50, 0, r);
                 v.circle(0, 50, r);
                 v.circle(0, -50, r);
+                v.endShape();
+
+                c = PApplet.map(aa.mix().lerpedAmplitude, 0, bands.length, 0, 360);
+
+                v.pushMatrix();
+                v.stroke(c, 50, 50);
+                v.strokeWeight(0.5f);
+                v.rotateX(PApplet.radians(rot));
+                v.rotateY(PApplet.radians(rot));
+                v.rotateZ(PApplet.radians(rot));
+                v.sphere(2000* aa.mix().lerpedAmplitude + 200);
+                v.popMatrix();
+
             
             }
             rot += 1;  
@@ -162,56 +177,27 @@ public class SarahVisual extends VScene {
 
     }
 
-    class orbit extends VObject {
-        orbit(Visual v, PVector pos){
-            super(v, pos);
-        }
-
-        float rot1 = 1.25f;
-        float rot2 = -0.4f;
-        public void render()
-        {
-            v.pushMatrix();
-            v.translate(130, v.height/2, 0);
-            v.rotateY(rot1++);
-            v.rotateX(rot2++);
-            v.rotateZ(rot1++);
-            v.noStroke();
-            v.box(100);
-            v.popMatrix();
-
-            v.pushMatrix();
-            v.translate(500, v.height*0.35f, -200);
-            v.noFill();
-            v.stroke(255);
-            v.sphere(280);
-            v.popMatrix();
-        }
-    }
-
-    
-
-
+  
     class WaveForm extends VObject{
 
         WaveForm(Visual v, PVector pos) {
             super(v, pos);
         }
 
-        float y = v.height;
         @Override
         public void render()
         {
-            v.background(0);
+            v.beginShape();
             for(int i = 0; i < ab.size(); i++)
             {                
                 float c = PApplet.map(i, 0, ab.size(), 0, 360);
-                v.stroke(c, 100, 100);
+                v.stroke(c, 50,100);
+                v.strokeWeight(4);
                 float f = ab.get(i) * v.height/2;
-                float x = PApplet.map(i, 0, ab.size(), 0, v.width);
-                //v.line(x,v.height/4 + f, x, v.height/4 - f);
-                v.line(x,y + f, x, y - f);
+                float x = PApplet.map(i, 0, aa.mix().lerpedAmplitude * 10000, 0, v.width);
+                v.line(x,v.height/2 + f, x, v.height/2 - f);
             }
+            v.endShape();
         }
         
     }
@@ -333,6 +319,24 @@ public class SarahVisual extends VScene {
                 v.vertex(x1, y1);           
             }
             v.endShape();
+
+            
+            v.beginShape();
+            for(int i = 0; i < ab.size(); i++)
+            {                
+                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                v.stroke(c,100,100);
+                v.strokeWeight(4);
+                float f = ab.get(i) * v.height/2;
+                float x = PApplet.map(i, 0, aa.mix().lerpedAmplitude * 10000, -v.width, v.width);
+                v.line(x,v.height/2 + f, x, v.height/2 - f);
+                v.line(x, -v.height/2 + f, x, -v.height/2 - f);
+                v.line(-v.width/2, x - v.height/2, -v.width/2 + f, x - v.height/2);
+                v.line(v.width/2, x - v.height/2, v.width/2 + f, x - v.height/2);
+
+            }
+            v.endShape();
+            
       
         }
     }
@@ -382,6 +386,7 @@ public class SarahVisual extends VScene {
         public synchronized void render(){
             v.background(0,0,50);
 
+            v.beginShape();
             v.loadPixels();
             for(int x = 0; x < v.width; x+=4)
             {
@@ -404,67 +409,9 @@ public class SarahVisual extends VScene {
             {
                 b.update();
             }
+
+            v.endShape();
             
-        }
-    }
-
-    
-    class Cube extends VObject {
-
-        Cube(Visual v){
-            super(v);
-        }
-        
-        float x, y;
-        float size;
-        float c;
-        float rot = 0;
-
-        @Override
-        public void render(){
-
-            v.background(0);
-            v.stroke(100,100,100);
-            v.strokeWeight(5);
-            v.noFill();
-
-            v.pushMatrix();
-            v.translateCenter(PApplet.CENTER, PApplet.CENTER); 
-            v.rotateY(rot);
-            v.box(aa.mix().lerpedAmplitude * 1000 + 100);
-            v.popMatrix();
-
-            v.stroke(230,100,100);
-            v.pushMatrix();
-            v.translateCenter(PApplet.CENTER - 100, PApplet.CENTER + 100); 
-            v.rotateY(rot);
-            v.box(aa.mix().lerpedAmplitude * 1000 + 100);
-            v.popMatrix();
-
-            v.stroke(300,100,100);
-            v.pushMatrix();
-            v.translateCenter(PApplet.CENTER - 100, PApplet.CENTER - 100); 
-            v.rotateY(rot);
-            v.box(aa.mix().lerpedAmplitude * 1000 + 100);
-            v.popMatrix();
-
-            v.stroke(0,100,100);
-            v.pushMatrix();
-            v.translateCenter(PApplet.CENTER + 100, PApplet.CENTER - 100); 
-            v.rotateY(rot);
-            v.box(aa.mix().lerpedAmplitude * 1000 + 100);
-            v.popMatrix();
-
-            v.stroke(50,100,100);
-            v.pushMatrix();
-            v.translateCenter(PApplet.CENTER + 100, PApplet.CENTER + 100); 
-            v.rotateY(rot);
-            v.box(aa.mix().lerpedAmplitude * 1000 + 100);
-            v.popMatrix();
-            
-            rot += 0.1f;
-            
-
         }
     }
 }

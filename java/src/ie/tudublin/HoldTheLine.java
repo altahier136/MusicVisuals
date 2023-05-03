@@ -73,7 +73,7 @@ public class HoldTheLine extends Visual {
     }
 
     public void settings() {
-        size(800,800, P3D);
+        size(1024,1024, P3D);
     }
 
     public void setup() {
