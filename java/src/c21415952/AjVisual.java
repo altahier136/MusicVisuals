@@ -1,6 +1,7 @@
 package c21415952;
 
 import ddf.minim.AudioBuffer;
+import global.GlobalVisual;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
@@ -8,12 +9,14 @@ import processing.core.PApplet;
 public class AjVisual extends VScene {
     Visual v;
     AudioBuffer ab;
+    private VScene gv;
 
     public AjVisual(Visual v) {
         super(v);
         this.v = v;
 
         ab = v.audioPlayer().mix;
+        gv = new GlobalVisual(v);
     }
 
     public void render(int elapsed) {
@@ -51,6 +54,7 @@ public class AjVisual extends VScene {
             v.strokeWeight(2);
             v.stroke(255);
             v.ellipse(v.width / 2, v.height / 2, circleSize, circleSize);
+            gv.render(elapsed);
         }
     }
 

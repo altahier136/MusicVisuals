@@ -127,7 +127,7 @@ public class HoldTheLine extends Visual {
                 jv.render(elapsed);
                 sv.render(elapsed);
                 aj.render(elapsed);
-                gv.render(elapsed);
+                // gv.render(elapsed);
                 break;
             case 1:
                 demo.render();

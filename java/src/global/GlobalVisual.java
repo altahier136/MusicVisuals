@@ -6,6 +6,7 @@ import ie.tudublin.visual.VAnimation;
 import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
+import processing.core.PApplet;
 import processing.core.PVector;
 
 public class GlobalVisual extends VScene {
@@ -33,8 +34,15 @@ public class GlobalVisual extends VScene {
             // Transition to solo at 1:48
             // effect.addTransition(v.toMs(1, 47, 750), 500, 255, 0, EaseFunction.easeLinear);
             // Transition to Verse at 2:30
-            effect.addTransition(v.toMs(2, 30, 750), 500, 0, 255, EaseFunction.easeLinear);
 
+            // Sarah Visuals
+            effect.addTransition(v.toMs(0, 10, 800), 500, 0, 255, EaseFunction.easeLinear);
+            // Fade out at 3:58
+            effect.addTransition(v.toMs(1, 48, 0), 1000, 255, 0, EaseFunction.easeLinear);
+
+
+            // AJ Visuals
+            effect.addTransition(v.toMs(2, 30, 750), 500, 0, 255, EaseFunction.easeLinear);
             // Fade out at 3:58
             effect.addTransition(v.toMs(3, 54, 0), 1000, 255, 0, EaseFunction.easeLinear);
         }
@@ -46,6 +54,7 @@ public class GlobalVisual extends VScene {
 
             // Waveform line top left
             v.pushMatrix();
+            v.rectMode(PApplet.CORNER);
             v.translate(0, 0, 0);
             v.rotate(QUARTER_PI);
             waveformLine(new PVector(0, 0, 0), new PVector(0, 0, -4800), v.audioAnalysis());
