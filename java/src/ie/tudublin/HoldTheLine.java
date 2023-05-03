@@ -89,7 +89,7 @@ public class HoldTheLine extends Visual {
 
         // Load song and lyrics
         beginAudio("Toto - Hold The Line.wav", "Toto - Hold The Line.txt");
-        pausePlay();
+        pause();
         background(0);
 
         if (startScreen) {
