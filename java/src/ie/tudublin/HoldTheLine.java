@@ -1,5 +1,7 @@
 package ie.tudublin;
 
+import com.jogamp.newt.event.KeyEvent;
+
 import c21348423.AdriansVisual;
 import global.AnimationDemo;
 import c21383126.JenniferVisuals;
@@ -146,7 +148,7 @@ public class HoldTheLine extends Visual {
      * Space: Pause/Play
      */
     public void keyPressed() {
-        switch (key) {
+        switch (keyCode) {
             case '1':
                 seek(0);
                 break;
@@ -159,19 +161,37 @@ public class HoldTheLine extends Visual {
             case '4':
                 seek(2, 31);
                 break;
-            case 'q':
+            // j seek -10 secs
+            // k pause/play
+            // l seek +10 secs
+            // left arrow seek -5 secs
+            // right arrow seek +5 secs
+            case KeyEvent.VK_J: // seek -10 secs
+                seek(-10000 + audioPlayer().position());
+                break;
+            case KeyEvent.VK_L: // seek +10 secs
+                seek(10000 + audioPlayer().position());
+                break;
+            case LEFT: // seek -5 secs
+                seek(-5000 + audioPlayer().position());
+                break;
+            case RIGHT: // seek +5 secs
+                seek(5000 + audioPlayer().position());
+                break;
+            case KeyEvent.VK_Q:
                 debugMode = 0;
                 System.out.println("Debug mode 0");
                 break;
-            case 'w':
+            case KeyEvent.VK_W:
                 debugMode = 1;
                 System.out.println("Debug mode 1");
                 break;
-            case 'e':
+            case KeyEvent.VK_E:
                 debugMode = 2;
                 System.out.println("Debug mode 2");
                 break;
-            case ' ':
+            case KeyEvent.VK_K:
+            case KeyEvent.VK_SPACE:
                 pausePlay();
                 startScreen = false;
                 break;
