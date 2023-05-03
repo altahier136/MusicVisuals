@@ -1,25 +1,22 @@
 # Music Visualiser Project
 
-Name - Student Number:
+Name - Student Number - Class Group:
 
-- Sarah Barron - C21415904
-- Adrian Thomas Capacite - C21348423
-- Jennifer Kearns - C21383126
-- Altahier Saleh - C21415952
+- Sarah Barron - C21415904 - TU856-2
+- Adrian Thomas Capacite - C21348423 - TU856-2
+- Jennifer Kearns - C21383126 - TU856-2
+- Altahier Saleh - C21415952 - TU856-2
 
-## Repo Instructions
-
-- Fork this repository and use it a starter project for your assignment
-- Create a new package named your student number and put all your code in this package.
-- You should start by creating a subclass of ie.tudublin.Visual
-- There is an example visualiser called MyVisual in the example package
-- Check out the WaveForm and AudioBandsVisual for examples of how to call the Processing functions from other classes that are not subclasses of PApplet
 
 ## Description of the assignment
 
-Toto - Hold The Line (Official Video) - [https://www.youtube.com/watch?v=htgr3pvBr-I](https://www.youtube.com/watch?v=htgr3pvBr-I)
+Music: Toto - Hold The Line (Official Video) - [https://www.youtube.com/watch?v=htgr3pvBr-I](https://www.youtube.com/watch?v=htgr3pvBr-I)
 
 [![Toto - Hold The Line (Official Video)](https://img.youtube.com/vi/htgr3pvBr-I/hqdefault.jpg)](https://www.youtube.com/watch?v=htgr3pvBr-I)
+
+Video: ... - [https://img.youtube.com/vi/.../hqdefault.jpg](#)
+
+[![...](https://img.youtube.com/vi/.../hqdefault.jpg)](#)
 
 ### Adrian's Visuals
 
@@ -39,7 +36,29 @@ music, enhancing the scene's atmosphere and complementing Pony Hopps and the sta
 Together, Adrian's visuals provide a captivating and immersive
 environment that beautifully showcases the integration of 3D elements, color palettes, animations, and audio for a unique Music Visualizer.
 
+### Sarah's Visuals
+
+...
+
+### Jennifer's Visuals
+
+...
+
+### Altahier's Visuals
+
+...
+
 ## Instructions
+
+### Repo Instructions
+
+- Fork this repository and use it a starter project for your assignment
+- Create a new package named your student number and put all your code in this package.
+- You should start by creating a subclass of ie.tudublin.Visual
+- There is an example visualiser called MyVisual in the example package
+- Check out the WaveForm and AudioBandsVisual for examples of how to call the Processing functions from other classes that are not subclasses of PApplet
+
+### Running the Visualiser
 
 1. Follow repo instructions above.
 2. If you are using the Java debugger in VSCode, you can run the code from the debugger.
@@ -51,7 +70,7 @@ environment that beautifully showcases the integration of 3D elements, color pal
 
 ## How it works
 
-### The Visual Framework
+### The Visual Framework - `ie.tudublin.Visual`
 
 The `ie.tudublin.visual` package is a collection of classes designed to create and manage a Music Visualizer application.
 
@@ -84,14 +103,14 @@ custom visual objects for the visualizer.
 Visualizer. It is intended to contain a student's visuals in a dedicated time space within the visuals. It provides methods to manage and render
 scenes, including adding VObjects and handling transitions between different parts of the visualization.
 
-### Putting it all together
+### Putting it all together - `HoldTheLine.java`
 
 A class `HoldTheLine.java` is created to extend the `Visual.java` class. This class is responsible for creating the visualizer
 by managing each of the visual scenes created by the students.
 
 Finally we have the Main.java which starts the `HoldTheLine.java` PApplet sketch.
 
-### Adrian's Visuals
+### Adrian's Visuals - `AdriansVisuals.java`
 
 Adrian's visuals features a Horse named Pony Hopps on a rainbow stage and a starry background of superelpises.
 
@@ -103,6 +122,17 @@ components and sets the scene animations. The `render(int elapsed)` method is re
 
 In summary, the `AdriansVisuals.java` class is an extension of `VScene` that provides a customized visual scene for the Music Visualizer application. It showcases the use of various visual components, color palettes, animations, and audio integration to create a dynamic and engaging visual experience.
 
+### Sarah's Visuals - `SarahsVisuals.java`
+
+...
+
+### Jennifer's Visuals - `JennifersVisuals.java`
+
+...
+
+### Altahier's Visuals - `AltahiersVisuals.java`
+
+...
 ## What I am most proud of in the assignment
 
 ### Sarah Barron
@@ -110,6 +140,14 @@ In summary, the `AdriansVisuals.java` class is an extension of `VScene` that pro
 ### Adrian Thomas Capacite
 
 I am most proud of the Visual PApplet framework that I have created for this assignment. As well as that the demos that demonstrate the use of the framework.
+
+I set up the PApplet framework `ie.tudublin.visual` to make the process of creating the visuals and scenes easier.
+I also set up two demos to demonstrate the use of the framework such as one for demoing the AudioAnalysis and the other for
+demoing the VAnimation and VObject classes.
+I also created Pony Hopps The Happy Horse along with the other visuals in the scene. The other visuals are
+the Squiggly Arcs and the Super Stars.
+
+I am most
 
 ### Jennifer Kearns
 
