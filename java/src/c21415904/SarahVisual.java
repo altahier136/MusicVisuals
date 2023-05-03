@@ -43,7 +43,7 @@ public class SarahVisual extends VScene {
         // 0:00 - 1:02 - Intro, V1, C1
         if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(0, 10, 800)) {
             v.background(0);
-            sp1.render();                            
+            sp1.render();                                        
         }       
         if (elapsed > v.toMs(0, 10, 800) && elapsed < v.toMs(0, 21, 0)) {
             v.background(0);
@@ -55,9 +55,10 @@ public class SarahVisual extends VScene {
             sw.render();                    
         }
         if (elapsed > v.toMs(0, 30, 0) && elapsed < v.toMs(0, 40, 0)) {
-            v.background(0);
-            gv.render(elapsed);
-            cs.render();                   
+            v.background(0); 
+            v.strokeWeight(2);  
+            gv.render(elapsed);  
+            cs.render();                      
         }
         if (elapsed > v.toMs(0, 40, 0) && elapsed < v.toMs(0, 50, 0)) {
             v.background(0); 
@@ -167,9 +168,10 @@ public class SarahVisual extends VScene {
         @Override
         public void render()
         {
+            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
             //inner waveform
-            cx = v.width/2;
-            cy = v.height/2;
+            //cx = v.width/2;
+            //cy = v.height/2;
             v.noFill();    
             v.strokeWeight(2);
 
@@ -181,8 +183,8 @@ public class SarahVisual extends VScene {
                 v.stroke(c, 100, 100);
 
                 // calculate starting points on circle which each line will be drawn out of
-                float x1 = cx + PApplet.sin(theta) * radius;
-                float y1 = cx - PApplet.cos(theta) * radius;
+                float x1 =  PApplet.sin(theta) * radius;
+                float y1 = -PApplet.cos(theta) * radius;
                 
                 // get frequency at current position in Audio Buffer and make it visible
                 float f = ab.get(i) * 200 + 20;
@@ -200,7 +202,7 @@ public class SarahVisual extends VScene {
 
             //outer waveform
             v.beginShape();
-            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
+            //v.translateCenter(PApplet.CENTER, PApplet.CENTER);
             for(int i = 0; i < ab.size(); i++)
             {
                 float c = PApplet.map(i, 0, ab.size(), 0, 360);
@@ -374,8 +376,8 @@ public class SarahVisual extends VScene {
 
         @Override 
         public synchronized void render(){
-            v.background(0,0,50);
 
+            v.background(0,0,50);
             v.beginShape();
 
             v.loadPixels();
