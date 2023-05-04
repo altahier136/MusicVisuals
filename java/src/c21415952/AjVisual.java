@@ -34,6 +34,7 @@ public class AjVisual extends VScene {
 
             // Draw rainbow spiral that reacts to music
             v.pushMatrix();
+            v.stroke(10);
             v.translate(v.width / 2, v.height / 2); // Set origin to center of screen
             for (float i = 0; i < PApplet.TWO_PI * 5; i += spiralSpacing) {
                 float r = i / PApplet.TWO_PI * spiralSize;
@@ -46,11 +47,12 @@ public class AjVisual extends VScene {
                 // Draw spiral point
                 v.point(x, y, spiralAmplitude);
             }
+            v.stroke(1);
             v.popMatrix();
 
             // Draw expanding circle that reacts to music
             float circleSize = PApplet.map(ab.get(0), -1, 1, 0, v.width / 2);
-            v.noFill();
+            v.fill(60);
             v.strokeWeight(2);
             v.stroke(255);
             v.ellipse(v.width / 2, v.height / 2, circleSize, circleSize);
