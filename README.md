@@ -255,7 +255,7 @@ The JenniferVisuals class also contains some additional fields and variables for
 | Class/Asset | Source |
 | --- | --- |
 | JenniferVisuals.java | Jennifer |
-| estrellica.obj | Modified by Jennifer from [Star 3D Model](https://free3d.com/3d-model/star-mobile-ready-60-tris-49986.html) |
+| estrellica.obj | From [Star 3D Model](https://free3d.com/3d-model/star-mobile-ready-60-tris-49986.html) |
 
 ### Altahier's Visuals - `AJVisual.java`
 
