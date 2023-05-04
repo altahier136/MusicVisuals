@@ -14,9 +14,9 @@ Music: Toto - Hold The Line (Official Video) - [https://www.youtube.com/watch?v=
 
 [![Toto - Hold The Line (Official Video)](https://img.youtube.com/vi/htgr3pvBr-I/hqdefault.jpg)](https://www.youtube.com/watch?v=htgr3pvBr-I)
 
-Video: ... - [https://img.youtube.com/vi/.../hqdefault.jpg](#)
+Video: Hold The Line - Music Visuals - [https://youtu.be/BiE8rncqw7Y](https://youtu.be/BiE8rncqw7Y)
 
-[![...](https://img.youtube.com/vi/.../hqdefault.jpg)](#)
+[![Hold The Line - Music Visuals](https://img.youtube.com/vi/BiE8rncqw7Y/hqdefault.jpg)](https://youtu.be/BiE8rncqw7Y)
 
 ### Adrian's Visuals
 
@@ -42,7 +42,16 @@ environment that beautifully showcases the integration of 3D elements, color pal
 
 ### Jennifer's Visuals
 
-...
+Jennifer’s visuals features 3D speakers, hexagons, a clock and a 3D cube of stars that all react to the music. The class JenniferVisuals extends VScene and contains classes for the different visuals.
+
+The speakers are 3D models of speakers that change colour and size based on the music.
+
+The size of the hexagons increase and decrease based on the music. There are waveforms in the background going from the corners to the centre.
+
+The clock is created where the radius outer circle is determined using the amplitude of the song and the seconds hand ticks in time to the song. The clock is on a background of colourful circles of random sizes.
+ 
+The cube of stars is an animated 3D space filled with stars that rotate and change colour based on Perlin noise and the average amplitude of the audio input. There are waveforms in the background going from the corners to the centre.
+
 
 ### Altahier's Visuals
 
@@ -128,7 +137,14 @@ In summary, the `AdriansVisuals.java` class is an extension of `VScene` that pro
 
 ### Jennifer's Visuals - `JennifersVisuals.java`
 
-...
+'JenniferVisuals' is a Java class file that contains a program for generating audiovisual effects. It imports various classes from the processing, ddf.minim, and global packages, as well as custom classes such as AudioAnalysis, Clock, Dots, Hex, Speaker, Stars, VObject, and VScene.
+
+The main method in this class is the 'render' method, which takes an integer value representing the amount of time elapsed and generates audiovisual effects accordingly. The 'render' method first checks the elapsed time and then the 'render' methods of several other classes (Speaker, Clock, Dots, Stars, WaveForm, Hex, and GlobalVisual) based on the current elapsed time in the song. This method is called once per frame, so it is constantly updating the visual display based on the progress of the song.
+
+The 'Stars,' 'Dots,' 'WaveForm', 'Hex' and 'Clock' classes are all custom classes that extend the VObject class and implement their own 'render' methods to generate specific audiovisual effects. The 'Clock' class also takes an additional argument, 'elapsed,' to keep track of the time elapsed.
+
+The JenniferVisuals class also contains some additional fields and variables for managing the audio that is being played, such as the 'minim', 'ab', and 'aa' variables. These are used to access and analyse the audio data in real-time so that the visual effects can be synchronised with the audio.
+
 
 ### Altahier's Visuals - `AltahiersVisuals.java`
 
@@ -150,5 +166,7 @@ the Squiggly Arcs and the Super Stars.
 I am most
 
 ### Jennifer Kearns
+
+I am most proud of the 3D rotating cube of stars that I made for this assignment. I got to learn how to create 3D visuals and how to move and rotate them. I also learned how to load objects from another file and how to create, scale and colour them, and how to move and rotate them in reaction to the music. I was very happy with how it turned out in the end. 
 
 ### Altahier Saleh
