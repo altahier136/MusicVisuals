@@ -13,26 +13,42 @@ import processing.core.PVector;
 /**
  * AdriansVisual
  * 1:48 - 2:30 - Instrumental
+ * Adrian's visuals present a dynamic and engaging Music Visualizer scene
+ * featuring a horse called Pony Hopps, a rainbow stage, and a starry background
+ * of superellipses.
+ *
+ * Pony Hopps is a 3D object imported into the scene, illuminated with
+ * purple/red lights. The horse dynamically moves and hops in sync with the
+ * music while the camera perspective shifts around it. The character was
+ * inspired by Maxwell the Cat, who spins happily to a cheerful song.
+ *
+ * The stage is a visually reactive disk composed of rainbow-colored arcs, which
+ * respond to the music by changing their length and color, creating a vibrant
+ * and mesmerizing experience.
+ *
+ * The background consists of a grid of superellipses that adapt their size and
+ * color according to the music, enhancing the scene's atmosphere and
+ * complementing Pony Hopps and the stage.
+ *
+ * Together, Adrian's visuals provide a captivating and immersive environment
+ * that beautifully showcases the integration of 3D elements, color palettes,
+ * animations, and audio for a unique Music Visualizer.
  */
 public class AdriansVisual extends VScene {
 
     public final int BPM = 96;
     public final float BEATMS = 1 / (1000 / (BPM / 60.0f)); // Multiply with elapsed to get beat
-    PVector rotationOff;
+    private final float HALF_PI = PApplet.HALF_PI;
+    private float PI = PApplet.PI;
+    private float TWO_PI = PApplet.TWO_PI;
 
-    VAnimation sceneVisibility;
-    Visual v;
-    SquigglyArcs squigglyArcs;
-    VAnimation horseBounceAnimation;
-    HappyHorse horse;
-    SuperStars superStars;
-
-    // pi
-    float HALF_PI = PApplet.HALF_PI;
-    float PI = PApplet.PI;
-    float TWO_PI = PApplet.TWO_PI;
-
-    // Colour pallet
+    private PVector rotationOff;
+    private VAnimation sceneVisibility;
+    private Visual v;
+    private SquigglyArcs squigglyArcs;
+    private VAnimation horseBounceAnimation;
+    private HappyHorse horse;
+    private SuperStars superStars;
 
     private int background;
 
@@ -71,10 +87,10 @@ public class AdriansVisual extends VScene {
             return;
         }
 
+        // Background
         v.blendMode(PApplet.BLEND);
         v.fill(background, 30);
 
-        // Background
         v.translateCenter();
 
         v.pushMatrix();
@@ -89,24 +105,25 @@ public class AdriansVisual extends VScene {
         superStars.render(elapsed);
         v.popMatrix();
 
-        // Rotate the stage
+        // End background
 
+        // Light up the horse
         v.ambientLight(300, 100, 100);
         v.pointLight(0, 100, 100, 100, -v.height, 1000);
 
-        // v.rotateX(Visual.sin(-elapsed * BEATMS * HALF_PI * 0.1f) *
-        // HALF_PI / 2 - HALF_PI / 2);
+        // Rotate the stage
         rotation.x = Visual.sin(-elapsed * BEATMS * HALF_PI * 0.1f + PI) * HALF_PI / 2 - HALF_PI / 2;
         rotation.y = Visual.sin(elapsed * BEATMS * TWO_PI) * 0.3f;
         rotation.y = elapsed * BEATMS * 0.3f;
         rotation.add(rotationOff);
         applyTransforms();
 
+        // The Squiggly Arcs stage
         squigglyArcs.render(elapsed);
 
-        v.blendMode(PApplet.BLEND);
 
-        // Horse bounce in
+        // Pony Hopps the Happy Horse
+        v.blendMode(PApplet.BLEND);
         v.translate(horseBounceAnimation.getValue(elapsed), horseBounceAnimation.getValue(elapsed), 0);
         horse.render(elapsed);
 
@@ -132,6 +149,9 @@ public class AdriansVisual extends VScene {
         rotationOff.y = PApplet.lerp(rotationOff.y, targetY / 100f, 0.9f); // adjust rate as needed
     }
 
+    /**
+     * Pony Hopps the Happy Horse
+     */
     class HappyHorse extends VObject {
         PShape horse;
 
