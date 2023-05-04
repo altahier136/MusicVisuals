@@ -7,7 +7,6 @@ Name - Student Number - Class Group:
 - Jennifer Kearns - C21383126 - TU856-2
 - Altahier Saleh - C21415952 - TU856-2
 
-
 ## Description of the assignment
 
 Music: Toto - Hold The Line (Official Video) - [https://www.youtube.com/watch?v=htgr3pvBr-I](https://www.youtube.com/watch?v=htgr3pvBr-I)
@@ -20,21 +19,39 @@ Video: Hold The Line - Music Visuals - [https://youtu.be/BiE8rncqw7Y](https://yo
 
 ### Adrian's Visuals
 
-Adrian's visuals present a dynamic and engaging Music Visualizer scene featuring a horse called Pony Hopps, a rainbow stage, and a starry
-background of superellipses.
+Adrian's visuals present a dynamic and engaging Music Visualizer scene featuring
+a horse called Pony Hopps, a rainbow stage, and a starry background of
+superellipses.
 
-Pony Hopps is a 3D object imported into the scene, illuminated with purple/red lights. The horse dynamically moves and
-hops in sync with the music while the camera perspective shifts around it. The character was inspired by Maxwell the Cat, who spins happily to a
-cheerful song.
+Pony Hopps is a 3D object imported into the scene, illuminated with purple/red
+lights. The horse dynamically moves and hops in sync with the music while the
+camera perspective shifts around it. The character was inspired by Maxwell the
+Cat, who spins happily to a cheerful song.
 
-The stage is a visually reactive disk composed of rainbow-colored arcs, which respond to the music by changing their length and color,
-creating a vibrant and mesmerizing experience.
+The stage is a visually reactive disk composed of rainbow-colored arcs, which
+respond to the music by changing their length and color, creating a vibrant and
+mesmerizing experience.
 
-The background consists of a grid of superellipses that adapt their size and color according to the
-music, enhancing the scene's atmosphere and complementing Pony Hopps and the stage.
+The background consists of a grid of superellipses that adapt their size and
+color according to the music, enhancing the scene's atmosphere and complementing
+Pony Hopps and the stage.
 
-Together, Adrian's visuals provide a captivating and immersive
-environment that beautifully showcases the integration of 3D elements, color palettes, animations, and audio for a unique Music Visualizer.
+Together, Adrian's visuals provide a captivating and immersive environment that
+beautifully showcases the integration of 3D elements, color palettes, animations,
+and audio for a unique Music Visualizer.
+
+### Global Visuals
+
+Global Visuals contains visuals that are shared between the group members. It
+contains a Waveform Frame which displays the audio samples as a waveform line
+extending from each corner of the screen towards the center.
+
+### Press Start Visuals
+
+Press Start is presented at first when the program is run. It is a simple
+visual that displays the text "Press Start" in the center of the screen. When
+the user clicks on it or the space bar, it fades out then the music and visuals
+start.
 
 ### Sarah's Visuals
 
@@ -49,7 +66,7 @@ The speakers are 3D models of speakers that change colour and size based on the 
 The size of the hexagons increase and decrease based on the music. There are waveforms in the background going from the corners to the centre.
 
 The clock is created where the radius outer circle is determined using the amplitude of the song and the seconds hand ticks in time to the song. The clock is on a background of colourful circles of random sizes.
- 
+
 The cube of stars is an animated 3D space filled with stars that rotate and change colour based on Perlin noise and the average amplitude of the audio input. There are waveforms in the background going from the corners to the centre.
 
 
@@ -84,33 +101,57 @@ The cube of stars is an animated 3D space filled with stars that rotate and chan
 The `ie.tudublin.visual` package is a collection of classes designed to create and manage a Music Visualizer application.
 
 1. `Visual.java`:
-This abstract class serves as the main framework for a Music Visualizer. It extends the PApplet class from the Processing library and encapsulates
-several audio and analysis classes, including `Minim`, `AudioInput`, `AudioPlayer`, `FFT`, `BeatDetect`, and `AudioAnalysis`. The class contains fields
-like `bufferSize`, `sampleRate`, lyrics, and various audio objects. The constructor takes in parameters for the buffer size, sample rate, and lerp
-amount. The buffer size must be a power of 2. The class also contains several abstract methods like `settings()`, `setup()`, and `draw()` to be
-implemented by subclasses. Additional methods provided in this class include audio-related methods like `beginAudio()`, `pausePlay()`, and `seek()` as
-well as lyric-related methods like `loadLyrics()` and `getLyrics()`. The class also provides helper methods for translating the origin to the center of
-the screen and converting between time formats.
+This abstract class serves as the main framework for a Music Visualizer. It
+extends the PApplet class from the Processing library and encapsulates several
+audio and analysis classes, including `Minim`, `AudioInput`, `AudioPlayer`,
+`FFT`, `BeatDetect`, and `AudioAnalysis`. The class contains fields like
+`bufferSize`, `sampleRate`, lyrics, and various audio objects. The constructor
+takes in parameters for the buffer size, sample rate, and lerp amount. The
+buffer size must be a power of 2. The class also contains several abstract
+methods like `settings()`, `setup()`, and `draw()` to be implemented by
+subclasses. Additional methods provided in this class include audio-related
+methods like `beginAudio()`, `pausePlay()`, and `seek()` as well as lyric-
+related methods like `loadLyrics()` and `getLyrics()`. The class also provides
+helper methods for translating the origin to the center of the screen and
+converting between time formats.
 
-2. `AudioAnalysis.java`: This class is responsible for managing audio analysis and implements the
-AudioListener interface. It processes samples to provide values such as amplitude, waveform, bands, spectrum, and their lerped counterparts, such as
-lerpedAmplitude, lerpedWaveform, etc. It includes handling FFT (Fast Fourier Transform) and BeatDetect objects and provides methods to analyze and
-process audio data, allowing for the generation of visualization based on the audio input.
+2. `AudioAnalysis.java`: This class is responsible for managing audio analysis
+and implements the AudioListener interface. It processes samples to provide
+values such as amplitude, waveform, bands, spectrum, and their lerped
+counterparts, such as lerpedAmplitude, lerpedWaveform, etc. It includes handling
+FFT (Fast Fourier Transform) and BeatDetect objects and provides methods to
+analyze and process audio data, allowing for the generation of visualization
+based on the audio input.
 
-3. `EaseFunction.java`: This interface represents an easing
-function that can be applied to animations or transitions within the visualizer. It provides lambda functions for smooth and visually appealing
-interpolation of values over time.
+3. `EaseFunction.java`: This interface represents an easing function that can be
+applied to animations or transitions within the visualizer. It provides lambda
+functions for smooth and visually appealing interpolation of values over time.
 
-4. `VAnimation.java`: This class manages animations and transitions within the visualizer. It provides methods to
-define and control animations, including timing and easing functions, allowing for a dynamic visual experience based on the audio input.
+4. `VAnimation.java`: This class manages animations and transitions within the
+visualizer. It provides methods to define and control animations, including
+timing and easing functions, allowing for a dynamic visual experience based on
+the audio input.
 
-5. `VObject.java`: This abstract class represents a visual object in the visualizer scene, including position, rotation, scale, and effect. It provides
-overridable functions for `render()` and `render(elapsed)` to manage the object's characteristics. Subclasses can override these methods to create
-custom visual objects for the visualizer.
+5. `VObject.java`: This abstract class represents a visual object in the
+visualizer scene, including position, rotation, scale, and effect. It provides
+overridable functions for `render()` and `render(elapsed)` to manage the
+object's characteristics. Subclasses can override these methods to create custom
+visual objects for the visualizer.
 
-6. `VScene.java`: This class inherits from VObject and manages the overall visual presentation of the Music
-Visualizer. It is intended to contain a student's visuals in a dedicated time space within the visuals. It provides methods to manage and render
-scenes, including adding VObjects and handling transitions between different parts of the visualization.
+6. `VScene.java`: This class inherits from VObject and manages the overall
+visual presentation of the Music Visualizer. It is intended to contain a
+student's visuals in a dedicated time space within the visuals. It provides
+methods to manage and render scenes, including adding VObjects and handling
+transitions between different parts of the visualization.
+
+| Class/Asset | Source |
+| --- | --- |
+| AudioAnalysis.java | Adrian |
+| EaseFunction.java | Adrian |
+| VAnimation.java | Adrian |
+| Visual.java | Modified by Adrian from Starter Code |
+| VObject.java | Adrian |
+| VScene.java | Adrian |
 
 ### Putting it all together - `HoldTheLine.java`
 
@@ -119,23 +160,89 @@ by managing each of the visual scenes created by the students.
 
 Finally we have the Main.java which starts the `HoldTheLine.java` PApplet sketch.
 
+| Class/Asset | Source |
+| --- | --- |
+| HoldTheLine.java | Team |
+| Main.java | Starter Code |
+
 ### Adrian's Visuals - `AdriansVisuals.java`
 
-Adrian's visuals features a Horse named Pony Hopps on a rainbow stage and a starry background of superelpises.
+Adrian's visuals features a Horse named Pony Hopps on a rainbow stage and a
+starry background of superelpises.
 
-`AdriansVisuals.java` is a class that extends `VScene` and provides a custom visual scene for the Music Visualizer application. The class is part of the `c21348423` package and includes various visual components like `VObject`, custom animations, and color palettes.
+`AdriansVisuals.java` is a class that extends `VScene` and provides a custom
+visual scene for the Music Visualizer application. The class is part of the
+`c21348423` package and includes various visual components like `VObject`,
+custom animations, and color palettes.
 
-In this class, different visual components such as `Circle`, `HappyHorse`, `SquigglyArcs`, and `SuperStars` are created, which extend `VObject` for customized rendering. It also utilizes the `EaseFunction` and `VAnimation` from the `ie.tudublin.visual` package to create smooth animations and transitions within the visualizer.  The `Circle`, `HappyHorse` The constructor of`AdriansVisual`initializes the visual components and sets the scene animations. The`render(int elapsed)` method is responsible for rendering the visual elements in this custom scene based on the elapsed time and audio input.
+In this class, different visual components such as `Circle`, `HappyHorse`,
+`SquigglyArcs`, and `SuperStars` are created, which extend `VObject` for
+customized rendering. It also utilizes the `EaseFunction` and `VAnimation` from
+the `ie.tudublin.visual` package to create smooth animations and transitions
+within the visualizer.  The `Circle`, `HappyHorse` The constructor of
+`AdriansVisual`initializes the visual components and sets the scene animations.
+The `render(int elapsed)` method is responsible for rendering the visual
+elements in this custom scene based on the elapsed time and audio input.
 
-components and sets the scene animations. The `render(int elapsed)` method is responsible for rendering the visual elements in this custom scene based on the elapsed time and audio input.  The `Circle`, `HappyHorse`, `SquigglyArcs`, and `SuperStars` classes are inner classes in `AdriansVisuals`, which render unique visuals within the scene. These classes override the `render()` function in their parent `VObject` class to create custom visualizations.
+The `render(int elapsed)` method is responsible for rendering the visual
+elements in this custom scene based on the elapsed time and audio input. The
+`Circle`, `HappyHorse`, `SquigglyArcs`, and `SuperStars` classes are inner
+classes in `AdriansVisuals`, which render unique visuals within the scene. These
+classes override the `render()` function in their parent `VObject` class to
+create custom visualizations.
 
-In summary, the `AdriansVisuals.java` class is an extension of `VScene` that provides a customized visual scene for the Music Visualizer application. It showcases the use of various visual components, color palettes, animations, and audio integration to create a dynamic and engaging visual experience.
+| Class/Asset | Source |
+| --- | --- |
+| AdriansVisuals.java | Adrian |
+| Horse.obj | Modified by Adrian from [Horse 3D Model](https://free3d.com/3d-model/horse-39028.html) |
 
-### Sarah's Visuals - `SarahsVisuals.java`
+### Global Visuals - `GlobalVisuals.java`
+
+Global Visual features four waveform lines drawn from each corner of the screen
+to the center. The line displays the amplitude of each sample in the waveform
+array.
+
+The `WaveformFrame` draws four waveform lines that extend from each corner of
+the screen to the center. The amplitude of each sample in the array is used to
+determine the offset of each line segment. The `WaveformFrame` also contains a
+`VAnimation` object that defines the transitions in time that result in the
+visual effects.
+
+| Class/Asset | Source |
+| --- | --- |
+| GlobalVisuals.java | Adrian |
+
+### Press Start Visuals - `PressStart.java`
+
+`PressStart.java` is a class that extends `VSceVune`, offering a custom initial
+screen for the Music Visualizer program. This class is part of the `global`
+package and employs 3d text, custom spotlights, and interactive functionalities.
+
+In this class, the key elements are a 3D text called "Press Start" and multiple
+spotlights that illuminate the text. The `PressStart` constructor initializes
+these components by loading the 3D text model and adjusting its
+appearance. It also sets up the stage for user interactivity by handling
+mouse-over and click events.
+
+The `render()` method, responsible for drawing the scene, sets the background
+color and configures the spotlights to add depth to the 3D text. It then checks
+if the mouse is hovering over the text area, enlarges the text accordingly, and
+starts the visualizer when clicked. The `render()` method also manages visual
+transitions when moving from the initial screen to the visualizer scene.
+
+| Class/Asset | Source |
+| --- | --- |
+| PressStart.java | Adrian |
+
+### Sarah's Visuals - `SarahVisuals.java`
 
 ...
 
-### Jennifer's Visuals - `JennifersVisuals.java`
+| Class/Asset | Source |
+| --- | --- |
+| SarahVisuals.java | Sarah |
+
+### Jennifer's Visuals - `JenniferVisuals.java`
 
 'JenniferVisuals' is a Java class file that contains a program for generating audiovisual effects. It imports various classes from the processing, ddf.minim, and global packages, as well as custom classes such as AudioAnalysis, Clock, Dots, Hex, Speaker, Stars, VObject, and VScene.
 
@@ -145,28 +252,49 @@ The 'Stars,' 'Dots,' 'WaveForm', 'Hex' and 'Clock' classes are all custom classe
 
 The JenniferVisuals class also contains some additional fields and variables for managing the audio that is being played, such as the 'minim', 'ab', and 'aa' variables. These are used to access and analyse the audio data in real-time so that the visual effects can be synchronised with the audio.
 
+| Class/Asset | Source |
+| --- | --- |
+| JenniferVisuals.java | Jennifer |
+| estrellica.obj | Modified by Jennifer from [Star 3D Model](https://free3d.com/3d-model/star-mobile-ready-60-tris-49986.html) |
 
-### Altahier's Visuals - `AltahiersVisuals.java`
+### Altahier's Visuals - `AJVisual.java`
 
 ...
+
+| Class/Asset | Source |
+| --- | --- |
+| AJVisual.java | Altahier |
+
 ## What I am most proud of in the assignment
 
 ### Sarah Barron
 
 ### Adrian Thomas Capacite
 
-I am most proud of the Visual PApplet framework that I have created for this assignment. As well as that the demos that demonstrate the use of the framework.
+I am most proud of the Visual PApplet framework that I have created for this
+assignment. As well as that the demos that demonstrate the use of the framework.
 
-I set up the PApplet framework `ie.tudublin.visual` to make the process of creating the visuals and scenes easier.
-I also set up two demos to demonstrate the use of the framework such as one for demoing the AudioAnalysis and the other for
-demoing the VAnimation and VObject classes.
-I also created Pony Hopps The Happy Horse along with the other visuals in the scene. The other visuals are
-the Squiggly Arcs and the Super Stars.
+I set up the PApplet framework `ie.tudublin.visual` to make the process of
+creating the visuals and scenes easier.  I also set up two demos to demonstrate
+the use of the framework such as one for demoing the AudioAnalysis and the other
+for demoing the VAnimation and VObject classes.
 
-I am most
+I also created Pony Hopps The Happy Horse along with the other visuals in the
+scene. The other visuals are the Squiggly Arcs and the Super Stars.
+
+I am most proud of the PApplet framework that I have created for the team to use.
+It allowed us to collaborate and easily create the visuals for the music
+visualizer.  This resulted in a visual that was able to flow and transition
+between the different scenes.
+
+What I have learned from this assignment are the different methods of creating
+generative art with maths and code. An example of this is the Super Starts which
+are created with superelipses.
 
 ### Jennifer Kearns
 
-I am most proud of the 3D rotating cube of stars that I made for this assignment. I got to learn how to create 3D visuals and how to move and rotate them. I also learned how to load objects from another file and how to create, scale and colour them, and how to move and rotate them in reaction to the music. I was very happy with how it turned out in the end. 
+I am most proud of the 3D rotating cube of stars that I made for this assignment. I got to learn how to create 3D visuals and how to move and rotate them. I also learned how to load objects from another file and how to create, scale and colour them, and how to move and rotate them in reaction to the music. I was very happy with how it turned out in the end.
 
 ### Altahier Saleh
+
+...
