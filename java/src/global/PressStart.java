@@ -9,12 +9,16 @@ import processing.core.PShape;
 public class PressStart extends VScene {
     PShape text;
     HoldTheLine htl;
+    float effect;
+    boolean active;
 
     public PressStart(Visual v) {
         super(v);
         htl = (HoldTheLine) v;
         text = v.loadShape("Start Here.obj");
         text.setFill(v.color(0, 0, 800));
+        effect = 1;
+        active = true;
     }
 
     float scale = 1;
@@ -26,15 +30,15 @@ public class PressStart extends VScene {
         v.translateCenter();
         // v.ambientLight(0, 0, 100);
         v.lightFalloff(0.5f, 0.001f, 0);
-        v.spotLight(0, 0, 200, // Hue, saturation, brightness
+        v.spotLight(0, 0, 200 * effect, // Hue, saturation, brightness
                 200, -400, 200, // position
                 -1, 1, 0, // direction
                 PApplet.HALF_PI * 1.5f, 1); // angle, concentration
-        v.spotLight(240, 80, 50, // Hue, saturation, brightness
+        v.spotLight(240, 80, 50 * effect, // Hue, saturation, brightness
                 -200, -400, 200, // position
                 1, 1, 0, // direction
                 PApplet.HALF_PI * 1.5f, 1); // angle, concentration
-        v.spotLight(300, 80, 50, // Hue, saturation, brightness
+        v.spotLight(300, 80, 50 * effect, // Hue, saturation, brightness
                 0, 400, 200, // position
                 0, -1, 0, // direction
                 PApplet.HALF_PI * 1.5f, 1); // angle, concentration
@@ -46,11 +50,17 @@ public class PressStart extends VScene {
                 && v.mouseY < v.height / 2 + 200) {
             scale = PApplet.lerp(scale, 1.2f, 0.1f);
             if (v.mousePressed) {
-                htl.startScreen = false;
-                v.pausePlay();
+                active = false;
             }
         } else {
             scale = PApplet.lerp(scale, 1, 0.1f);
+        }
+        if (!active) {
+            effect = PApplet.lerp(effect, 0, 0.05f);
+        }
+        if (effect <= 0.01f && active == false) {
+            htl.startScreen = false;
+            v.play();
         }
         v.pushMatrix();
         v.scale(scale);

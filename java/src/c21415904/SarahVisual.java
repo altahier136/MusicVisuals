@@ -1,250 +1,390 @@
 package c21415904;
 
+import ie.tudublin.visual.AudioAnalysis;
 import ie.tudublin.visual.VObject;
 import ie.tudublin.visual.VScene;
 import ie.tudublin.visual.Visual;
 import processing.core.PApplet;
 import processing.core.PVector;
+
 import ddf.minim.AudioBuffer;
+import global.GlobalVisual;
 
 public class SarahVisual extends VScene {
     Visual v;
-    Clock clock;
-    VObject so1;
     VObject wf;
-    VObject cwf;
-    VObject hwf;
-    VObject ecwf;
-    VObject sp;
-    VObject td;
+    Spiral1 sp1;
+    Spiral2 sp2;
+    VObject cs;
+    VObject sw;
+    VObject mb;
 
+    GlobalVisual gv;
     AudioBuffer ab;
-
+    AudioAnalysis aa;
 
     public SarahVisual(Visual v) {
         super(v);
         this.v = v;
 
         ab = v.audioPlayer().mix;
+        aa = v.audioAnalysis();
 
-        clock = new Clock(v, new PVector(0, 0, 0));
-        so1 = new SphereOrbit(v, new PVector(0, 0, 0));
+        sp1 = new Spiral1(v, new PVector(0, 0, 0));
+        sp2 = new Spiral2(v, new PVector(0, 0, 0));
+        sw = new SoundWaves(v, new PVector(0, 0, 0));
+        cs = new Circles(v, new PVector(0, 0, 0));
         wf = new WaveForm(v, new PVector(0, 0, 0));
-        cwf = new CircleWF(v, new PVector(v.width/2, v.height/2, 0));
-        hwf = new Hex(v, new PVector(v.width/2, v.height/2, 0));
-        td = new twoDist(v, new PVector(0, 0, 0));
+        mb = new metaBalls(v, new PVector(0, 0, 0));
+        gv = new GlobalVisual(v);
     }
 
     public void render(int elapsed) {
-        // 1:48 - 2:30 - Instrumental
-        if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(1, 2, 0)) {
-            v.fill(0);
-            v.rect(0, 0, v.width, v.height);
-            //clock.render(elapsed);
-            //so1.render();
-            td.render();
-            clock.render(elapsed);
-            //sp.render();
+        // 0:00 - 1:02 - Intro, V1, C1
+        if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(0, 10, 800)) {
+            v.background(0);
+            sp1.render();
         }
-        /*
-        if (elapsed > v.toMs(0, 15, 0) && elapsed < v.toMs(0, 30, 0)) {
-            hwf.render();
+        if (elapsed > v.toMs(0, 10, 800) && elapsed < v.toMs(0, 21, 0)) {
+            v.background(0);
+            gv.render(elapsed);
+            sp2.render();
         }
-        if (elapsed > v.toMs(0, 30, 0) && elapsed < v.toMs(0, 45, 0)) {
-            clock.render(elapsed);
+        if (elapsed > v.toMs(0, 21, 0) && elapsed < v.toMs(0, 40, 0)) {
+            v.background(0);
+            sw.render();
         }
-        */
+        if (elapsed > v.toMs(0, 40, 0) && elapsed < v.toMs(0, 50, 0)) {
+            v.background(0);
+            v.strokeWeight(2);
+            gv.render(elapsed);
+            cs.render();
+        }
+        if (elapsed > v.toMs(0, 50, 0) && elapsed < v.toMs(1, 3, 0)) {
+            v.background(0);
+            mb.render();
+            wf.render();
+        }
 
+        System.out.println(elapsed);
     }
 
-    class Clock extends VObject {
+    class Spiral1 extends VObject {
 
-        Clock(Visual v, PVector pos) {
+        Spiral1(Visual v, PVector pos) {
             super(v, pos);
+            v.background(0);
         }
 
-        public void render(int elapsed) {
-            int cx, cy;
-            float secondsRadius;
-            float minutesRadius;
-            float hoursRadius;
-            float clockDiameter;
-
-            v.fill(0);
-            v.stroke(255);
-
-            int radius = PApplet.min(v.width, v.height) / 2;
-            secondsRadius = (float)(radius * 0.72);
-            minutesRadius = (float)(radius * 0.60);
-            hoursRadius = (float)(radius * 0.50);
-            clockDiameter = (float)(radius * 1.8);
-
-            cx = v.width / 2;
-            cy = v.height / 2;
-
-            v.circle(cx, cy, clockDiameter + v.audioAnalysis().mix().lerpedAmplitude * 1000);
-
-            // Angles for sin() and cos() start at 3 o'clock;
-            // subtract HALF_PI to make them start at the top
-            // Seconds hand ticks in time to the beat (96BPM) -> 96/60 = 1.6
-            float s = PApplet.map((int)(elapsed/(1000/1.6f)), 0, 60, 0, PApplet.TWO_PI) - PApplet.HALF_PI;
-            float m = PApplet.map(PApplet.minute() + PApplet.norm(PApplet.second(), 0, 60), 0, 60, 0, PApplet.TWO_PI) - PApplet.HALF_PI;
-            float h = PApplet.map(PApplet.hour() + PApplet.norm(PApplet.minute(), 0, 60), 0, 24, 0, PApplet.TWO_PI * 2) - PApplet.HALF_PI;
-
-            // Draw the hands of the clock
-            v.stroke(255);
-            v.strokeWeight(1);
-            v.line(cx, cy, cx + PApplet.cos(s) * secondsRadius, cy + PApplet.sin(s) * secondsRadius);
-            v.strokeWeight(2);
-            v.line(cx, cy, cx + PApplet.cos(m) * minutesRadius, cy + PApplet.sin(m) * minutesRadius);
-            v.strokeWeight(4);
-            v.line(cx, cy, cx + PApplet.cos(h) * hoursRadius, cy + PApplet.sin(h) * hoursRadius);
-
-
-            // Draw the minute ticks
-            v.strokeWeight(2);
-            v.beginShape(PApplet.POINTS);
-            for (int a = 0; a < 360; a+=6) {
-                float angle = PApplet.radians(a);
-                float x = cx + PApplet.cos(angle) * secondsRadius;
-                float y = cy + PApplet.sin(angle) * secondsRadius;
-                v.vertex(x, y);
-            }
-            v.strokeWeight(2);
-            v.endShape();
-
-        }
-
-    }
-
-    class SphereOrbit extends VObject{
-
-        SphereOrbit(Visual v, PVector pos)
-        {
-            super(v, pos);
-        }
+        float cx = v.width / 2;
+        float cy = v.height / 2;
+        float theta = 0.0f;
 
         public void render() {
 
-            v.pushMatrix();
-            this.rotation.y += 10;
-            applyTransforms(); // Push matrix
+            v.noStroke();
+            v.translate(cx, cy);
 
-            v.fill(255);
-            v.pushMatrix();
-            v.translate(v.width, v.height/2, 0);
+            for (int i = 0; i < ab.size(); i++) {
+                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                v.fill(c, 100, 100);
+                v.scale((float) 0.99);
+                v.rotate(PApplet.radians(theta));
+                v.ellipse(cx, cy, 50 + (aa.mix().lerpedAmplitude * 750), 50 + (aa.mix().lerpedAmplitude * 750));
 
-            v.box(100);
+            }
+            theta += 0.08;
+        }
+
+    }
+
+    class Spiral2 extends VObject {
+
+        Spiral2(Visual v, PVector pos) {
+            super(v, pos);
+            v.background(0);
+        }
+
+        float cx, cy;
+        float rot = 0;
+
+        @Override
+        public void render() {
+
+            // make center of screen (0,0)
+            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
+            float radius = 1f;
+
+            v.pushMatrix();
+            cx = 0;
+            cy = 0;
+            for (int i = 0; i < ab.size(); i++) {
+
+                // colour calculation
+                float c = PApplet.map(i, 0, ab.size(), 0, 240);
+                v.strokeWeight(2);
+                v.stroke(c, c, c);
+
+                // calculate angle, TWO_PI/3 -> each segment has three points, shape moves up
+                // and down with amplitude
+                float theta = i * (PApplet.TWO_PI / 3 + aa.mix().lerpedAmplitude * 5);
+
+                // find points on
+                v.pushMatrix();
+                float x = PApplet.sin(theta) * radius;
+                float y = -PApplet.cos(theta) * radius;
+
+                // increase radius to create spiral effect, add lerped amplitude so shape
+                // expands and contracts with music
+                radius += 0.2f + aa.mix().lerpedAmplitude;
+
+                v.line(cx, cy, x, y);
+
+                // draw line out from last line to build up
+                cx = x;
+                cy = y;
+
+                v.popMatrix();
+
+            } // end for
+
             v.popMatrix();
-            // End the apply Transform
+
+        } // end render
+
+    } // end Spiral
+
+    class SoundWaves extends VObject {
+
+        SoundWaves(Visual v, PVector pos) {
+            super(v, pos);
+        }
+
+        float cx, cy;
+        float theta = 0;
+        float radius = 100;
+        float rot = 0;
+
+        @Override
+        public void render() {
+            // inner waveform
+            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
+            v.noFill();
+            v.strokeWeight(2);
+
+            v.pushMatrix();
+            for (int i = 0; i < ab.size(); i++) {
+
+                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                v.stroke(c, 100, 100);
+
+                // calculate starting points on circle which each line will be drawn out of
+                float x1 = PApplet.sin(theta) * radius;
+                float y1 = -PApplet.cos(theta) * radius;
+
+                // get frequency at current position in Audio Buffer and make it visible
+                float f = ab.get(i) * 200 + 20;
+
+                // calculate endpoint of each line, line will expand and contract with frequency
+                float x2 = (x1 + (PApplet.sin(i) * (PApplet.PI / 180) * radius * f));
+                float y2 = (y1 + (-PApplet.cos(i) * (PApplet.PI / 180) * radius * f));
+
+                v.line(x1, y1, x2, y2);
+
+                // increment angle to form circle
+                theta += 0.1f;
+            }
             v.popMatrix();
+
+            // outer waveform
+            v.beginShape();
+            for (int i = 0; i < ab.size(); i++) {
+                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                v.stroke(c, 100, 100);
+
+                // map the position in the audio buffer on TWO_PI
+                float angle = PApplet.map(i, 0, ab.size(), 0, PApplet.TWO_PI);
+                float radius = ab.get(i) * 200 + 300;
+
+                // get point on circle
+                float x = PApplet.sin(angle) * radius;
+                float y = -PApplet.cos(angle) * radius;
+                v.vertex(x, y);
+            }
+            v.endShape();
+
+            // Waveforms on edge of screen
+            v.beginShape();
+            for (int i = 0; i < ab.size(); i++) {
+                float c = PApplet.map(i, 0, ab.size(), 0, 360);
+                v.stroke(c, 100, 100);
+                v.strokeWeight(4);
+
+                float f = ab.get(i) * v.height / 2;
+                float x = PApplet.map(i, 0, aa.mix().lerpedAmplitude * 10000, -v.width, v.width);
+
+                v.line(x, v.height / 2 + f, x, v.height / 2 - f); // bottom
+                v.line(x, -v.height / 2 + f, x, -v.height / 2 - f); // top
+                v.line(-v.width / 2, x - v.height / 2, -v.width / 2 + f, x - v.height / 2); // left
+                v.line(v.width / 2, x - v.height / 2, v.width / 2 + f, x - v.height / 2); // right
+
+            }
+            v.endShape();
 
         }
     }
 
-    class WaveForm extends VObject{
+    class Circles extends VObject {
+
+        Circles(Visual v, PVector pos) {
+            super(v, pos);
+        }
+
+        float rot = 0;
+
+        @Override
+        public void render() {
+
+            v.noFill();
+            v.translateCenter(PApplet.CENTER, PApplet.CENTER);
+
+            v.rotate(PApplet.radians(rot));
+
+            // store array of smoothed frequency bands
+            float bands[] = aa.mix().lerpedBands;
+            v.strokeWeight(2);
+
+            for (int i = 0; i < bands.length; i++) {
+
+                float c = PApplet.map(i, 0, bands.length, 0, 360);
+                v.stroke(c, 100, 100);
+                v.strokeWeight(4);
+
+                // radius corresponds to frequency
+                float r = bands[i] * 10 + 100;
+
+                // circles
+                v.beginShape();
+                v.ellipseMode(PApplet.CENTER);
+                v.circle(36, 36, r);
+                v.circle(-36, -36, r);
+                v.circle(36, -36, r);
+                v.circle(-36, 36, r);
+
+                v.circle(50, 0, r);
+                v.circle(-50, 0, r);
+                v.circle(0, 50, r);
+                v.circle(0, -50, r);
+                v.endShape();
+
+                // sphere
+                v.pushMatrix();
+                v.stroke(v.random(0, 360), 50, 50);
+                v.strokeWeight(0.5f);
+                v.rotateX(PApplet.radians(rot));
+                v.rotateY(PApplet.radians(rot));
+                v.rotateZ(PApplet.radians(rot));
+                v.sphere(2000 * aa.mix().lerpedAmplitude + 200);
+                v.popMatrix();
+            }
+            rot += 1;
+        }
+
+    }
+
+    class WaveForm extends VObject {
 
         WaveForm(Visual v, PVector pos) {
             super(v, pos);
         }
 
         @Override
-        public void render()
-        {
-            for(int i = 0; i < ab.size(); i++)
-            {
-                float c = PApplet.map(ab.get(i), -1, 1, 0, 255);
-                v.stroke(c, 255, 255);
-                float f = ab.get(i) * v.height/2;
-                float x = PApplet.map(i, 0, ab.size(), 0, v.width);
-                v.line(x,v.height/2 + f, x, v.height/2 - f);
-            }
-        }
-
-    }
-
-    class CircleWF extends VObject{
-
-        CircleWF(Visual v, PVector pos) {
-            super(v, pos);
-        }
-
-        @Override
-        public void render()
-        {
-            v.noFill();
-            v.translateCenter();
+        public void render() {
             v.beginShape();
-            for(int i = 0; i < ab.size(); i++)
-            {
+            for (int i = 0; i < ab.size(); i++) {
                 float c = PApplet.map(i, 0, ab.size(), 0, 360);
-                v.stroke(c, 100, 100);
-                float angle = PApplet.map(i, 0, ab.size(), 0, PApplet.TWO_PI);
-                float radius = ab.get(i) * 1000 + 50;
-
-                float x1 = PApplet.sin(angle) * radius;
-                float y1 = PApplet.cos(angle) * radius;
-                v.vertex((float)x1, (float)y1);
-
+                v.stroke(c, 50, 100);
+                v.strokeWeight(4);
+                float f = ab.get(i) * v.height / 2;
+                float x = PApplet.map(i, 0, aa.mix().lerpedAmplitude * 10000, 0, v.width);
+                v.line(x, v.height / 2 + f, x, v.height / 2 - f);
             }
             v.endShape();
         }
 
     }
 
-    class Hex extends VObject{
+    class metaBalls extends VObject {
 
-        Hex(Visual v, PVector pos) {
-            super(v, pos);
-        }
+        class Blob {
+            PVector pos;
+            PVector vel;
+            float r;
 
-        @Override
-        public void render()
-        {
-            v.noFill();
-            v.translateCenter();
-            v.beginShape();
-            for(int i = 0; i < ab.size(); i++)
-            {
-                float c = PApplet.map(ab.get(i), -1, 1, 0, 360);
-                v.stroke(c, 100, 100);
-                //float angle = PApplet.map(ab.get(i), 0, ab.size(), 0, PApplet.TWO_PI);
-                float radius = ab.get(i) * v.height/2;
-                double x1 = (PApplet.cos(i)*(PApplet.PI/180)  * 100 * radius);
-                double y1 =  (PApplet.sin(i)*(PApplet.PI/180) * 100 * radius);
-                v.vertex((float)x1, (float)y1);
+            Blob(float x, float y) {
+                pos = new PVector(x, y); // position of blob
+                vel = PVector.random2D(); // velocity of blob
+                vel.mult(v.random(2, 5)); // randomise velocity
+                r = 40;
             }
-            v.endShape();
-        }
 
-    }
+            public void update() {
+                // keep blobs moving
+                pos.add(vel);
 
-    class twoDist extends VObject {
-        twoDist(Visual v, PVector pos){
-            super(v, pos);
-        }
-
-        @Override
-        public void render(){
-
-            float max_distance;
-            v.background(0);
-            v.noStroke();
-            max_distance = PApplet.dist(0, 0, v.width, v.height);
-
-            for(int i = 0; i <= v.width; i += 20) {
-                for(int j = 0; j <= v.height; j += 20) {
-                    float c = PApplet.map(i, 0, ab.size(), 0, 360);
-                    v.fill(c, 100, 100);
-                    float size = PApplet.dist(v.random(0, v.width), v.random(0, v.height), i, j);
-                    size = size/max_distance * 66;
-                    v.ellipse(i, j, size, size);
+                // stop blobs from leaving screen
+                if (pos.x > v.width || pos.x < 0) {
+                    vel.x *= -1;
+                }
+                if (pos.y > v.height || pos.y < 0) {
+                    vel.y *= -1;
                 }
             }
+
         }
 
+        // array of blobs
+        Blob[] blobs = new Blob[20];
 
+        metaBalls(Visual v, PVector pos) {
+            super(v, pos);
 
+            // create blobs
+            for (int i = 0; i < blobs.length; i++) {
+                blobs[i] = new Blob(v.random(v.width), v.random(v.height));
+            }
+        }
+
+        @Override
+        public synchronized void render() {
+            v.background(0, 0, 50);
+
+            v.beginShape();
+
+            v.loadPixels();
+            // show every fourth pixel so processor can handle image
+            for (int x = 0; x < v.width; x += 4) {
+                for (int y = 0; y < v.height; y += 4) {
+                    int index = x + y * v.width;
+                    float sum = 0;
+
+                    for (Blob b : blobs) {
+                        float d = PApplet.dist(x, y, b.pos.x, b.pos.y);
+                        sum += 100 * b.r / d * (aa.mix().lerpedAmplitude * 50);
+                    }
+
+                    v.pixels[index] = v.color(sum % 360, 100, 100); // modulus operator makes ball inside of ball
+
+                }
+            }
+            v.updatePixels();
+
+            for (Blob b : blobs) {
+                b.update();
+            }
+
+            v.endShape();
+
+        }
     }
-
 }

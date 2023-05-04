@@ -202,6 +202,21 @@ public abstract class Visual extends PApplet {
 
     }
 
+    public void pause() {
+        aPlayer.pause();
+        System.out.println("Paused");
+    }
+
+    public void play() {
+        aPlayer.play();
+        System.out.println("Playing");
+    }
+
+    public void mute() {
+        aPlayer.mute();
+        System.out.println("Muted");
+    }
+
     // ======== Lyrics ========
 
     /**
