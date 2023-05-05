@@ -41,6 +41,8 @@ public class SarahVisual extends VScene {
 
     public void render(int elapsed) {
         // 0:00 - 1:02 - Intro, V1, C1
+
+        //intro
         if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(0, 10, 800)) {
             v.background(0);
             sp1.render();
@@ -359,6 +361,7 @@ public class SarahVisual extends VScene {
         public synchronized void render() {
             v.background(0, 0, 50);
 
+            v.background(0,0,50);
             v.beginShape();
 
             v.loadPixels();
