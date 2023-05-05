@@ -17,6 +17,7 @@ public class AnimationDemo extends VScene {
     @Override
     public void render(int elapsed) {
         elapsed = elapsed % 5000;
+        v.background(0);
 
         v.pushMatrix();
         v.translateCenter();
