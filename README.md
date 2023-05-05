@@ -59,7 +59,16 @@ start.
 
 ### Sarah's Visuals
 
-...
+Visual 1: A rotating spiral of colour-changing ellipses that get smaller as they get closer to the centre of the screen. The radius of each ellipse expands and contracts based on amplitude.
+
+Visual 2: Looks like a rotating throwing star. Spiral pattern is drawn using lines that emanate from the centre of the screen. The amplitude of the music affects the radius of the spiral.
+
+Visual 3: Two circular waveforms: one is an expanding and contracting circular pattern in the centre of the screen, and the other is a series of lines that move from points on a radius outwards. They respond to the amplitude and frequency of the music. This visual also features waveforms on the edges of the screen.
+
+Visual 4: The visual from the Circles class is composed of 5 circles and a sphere. The radii of the circles change according to the amplitude of the music. The circles all rotate in unison and are encompassed by a sphere that bounces to the music. 
+
+Visual 5: The final visual consists of a standard waveform at the front of the screen with metaballs in the back. The metaballs are moving around the screen and globbing together in a random pattern but they are expanding and contracting with the music.
+
 
 ### Jennifer's Visuals
 
@@ -240,7 +249,16 @@ transitions when moving from the initial screen to the visualizer scene.
 
 ### Sarah's Visuals - `SarahVisuals.java`
 
-...
+In the `Spiral1` class, an ellipse is drawn with gradually decreasing size while rotating around the centre of the screen. The colour of each ellipse changes according to its position in the buffer. The amplitude of the music affects the size of the ellipse. The ellipses are drawn with their centres at (cx, cy) but are not necessarily centred on the screen. The position of the ellipses changes as the theta angle is incremented and the rotate() and scale() functions are called.
+
+In the `Spiral2 class`, generates a visual representation of a spiral composed of a series of lines. The colour of each line is determined by mapping the position in the audio buffer between 240 and 360. This value is used for the hue, saturation and brightness, creating the vortex-like effect at the centre of the spiral. The angle of each point is calculated using the value of i and a constant value, TWO_PI/3, which represents the angle between each segment of the spiral. The cx and cy variables are updated with the current x and y values, to draw a line from the last point to the current point, creating the effect of a triangle spinning. The radius of the spiral is incremented for each point using the value of the amplitude of the audio input, which causes the shape to expand and contract with the music.
+
+In the `SoundWaves class`, the outer circular waveform is plotted point by point. The position in the audio. The angle at which each point should be plotted is obtained by mapping the position in the audio buffer onto TWO_PI, and the radius of the circle at each point is also based on the position in the audio buffer. The inner waveform is created by drawing lines around a circumference. The starting points of each line are plotted on the circle and the endpoints of each line expand and contract with the frequency at each position in the audio buffer.
+
+In the `Circles class`, 5 circles are drawn. Their radii are based on frequency bands. They all rotate together. The sphere rotates on the x, y, and z axes, and the radius of the sphere is tied to the lerped Amplitude.
+
+In the `metaballs` classThe screen is populated with 20 blobs using an array of Blob objects. `Blob` is a nested class in `metaballs`. Every four pixels are coloured to allow the processor to handle the graphics. The colour of the pixel is determined by a modulo calculation of the sum of the radii of the Blob objects divided by the distance from the pixel to each Blob object. The use of the modulo operator creates the recursive blob effect. The amplitude is used to modulate the size of the metaballs. The update() method keeps each Blob moving on the screen and prevents them from moving off the screen.
+
 
 | Class/Asset | Source |
 | --- | --- |
@@ -272,6 +290,7 @@ The JenniferVisuals class also contains some additional fields and variables for
 ## What I am most proud of in the assignment
 
 ### Sarah Barron
+I am most proud of my use of mathematics to create spiralling effects in my visuals. I watched a number of videos about the maths behind spirals and I applied it, removing and adding values to get a better understanding of how it works. I’m also very proud of the metaballs visual. It was a learning process, and I hope to apply the knowledge I gained from doing this visual in future projects.
 
 ### Adrian Thomas Capacite
 
