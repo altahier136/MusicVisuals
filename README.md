@@ -1,11 +1,19 @@
-# Music Visualiser Project
+# Hold The Line - Music Visualiser
 
-Name - Student Number - Class Group:
+Music Visualisation for Hold The Line - Toto.
 
-- Sarah Barron - C21415904 - TU856-2
-- Adrian Thomas Capacite - C21348423 - TU856-2
-- Jennifer Kearns - C21383126 - TU856-2
-- Altahier Saleh - C21415952 - TU856-2
+A collection of captivating and immersive environment that
+beautifully showcases the integration of 3D elements, color palettes, animations,
+and audio for a unique Music Visualizer. Made by a group of amazing students.
+
+## Contributors
+
+| Name | Student Number | Class Group |
+| --- | --- | --- |
+| Sarah Barron | C21415904 | TU856-2 |
+| Adrian Thomas Capacite | C21348423 | TU856-2 |
+| Jennifer Kearns | C21383126 | TU856-2 |
+| Altahier Saleh | C21415952 | TU856-2 |
 
 ## Description of the assignment
 
@@ -35,10 +43,6 @@ mesmerizing experience.
 The background consists of a grid of superellipses that adapt their size and
 color according to the music, enhancing the scene's atmosphere and complementing
 Pony Hopps and the stage.
-
-Together, Adrian's visuals provide a captivating and immersive environment that
-beautifully showcases the integration of 3D elements, color palettes, animations,
-and audio for a unique Music Visualizer.
 
 ### Global Visuals
 
