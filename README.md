@@ -76,7 +76,11 @@ The cube of stars is an animated 3D space filled with stars that rotate and chan
 
 ### Altahier's Visuals
 
-...
+Aj’s visuals presents classes containing different visuals. The program creates a rainbow spiral and an expanding circle that reacts to music. 
+
+The rainbow spiral has a size, spacing and speed that can be adjusted, and is mapped to the amplitude of the music to create a dynamic visual effect. The expanding circle also reacts to the music, with its size being mapped to the amplitude of the music. 
+
+The background of the program is set to black, creating a contrast that allows the rainbow spiral and the expanding circle to stand out. The code also imports various libraries and sets up an audio buffer to process the music.
 
 ## Instructions
 
