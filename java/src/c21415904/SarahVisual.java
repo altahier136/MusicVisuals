@@ -41,26 +41,32 @@ public class SarahVisual extends VScene {
 
     public void render(int elapsed) {
         // 0:00 - 1:02 - Intro, V1, C1
+
+        //intro
         if (elapsed > v.toMs(0, 0, 0) && elapsed < v.toMs(0, 10, 800)) {
             v.background(0);
             sp1.render();                                        
-        }       
+        } 
+        //bow bow bow bow bow      
         if (elapsed > v.toMs(0, 10, 800) && elapsed < v.toMs(0, 21, 0)) {
             v.background(0);
             gv.render(elapsed);
             sp2.render();                   
         }
-        if (elapsed > v.toMs(0, 21, 0) && elapsed < v.toMs(0, 30, 0)) {
+        // it's not in the way
+        if (elapsed > v.toMs(0, 21, 0) && elapsed < v.toMs(0, 40, 0)) {
             v.background(0);
-            sw.render();                    
+            sw.render();  
+                            
         }
-        if (elapsed > v.toMs(0, 30, 0) && elapsed < v.toMs(0, 40, 0)) {
+        if (elapsed > v.toMs(0, 40, 0) && elapsed < v.toMs(0, 50, 0)) {
             v.background(0); 
             v.strokeWeight(2);  
             gv.render(elapsed);  
-            cs.render();                      
-        }
-        if (elapsed > v.toMs(0, 40, 0) && elapsed < v.toMs(0, 50, 0)) {
+            cs.render();                 
+                               
+        }                                      
+        if (elapsed > v.toMs(0, 50, 0) && elapsed < v.toMs(1, 3, 0)) {
             v.background(0); 
             mb.render(); 
             wf.render();                  
@@ -85,6 +91,7 @@ public class SarahVisual extends VScene {
             v.noStroke();
             v.translate(cx, cy);
     
+            v.beginShape();
             for(int i = 0; i < ab.size(); i++)
             {
                 float c = PApplet.map(i,0,ab.size(),0,360);
@@ -95,6 +102,7 @@ public class SarahVisual extends VScene {
                 
             }
             theta += 0.08; 
+            v.endShape();
         }
 
     }
@@ -170,8 +178,6 @@ public class SarahVisual extends VScene {
         {
             v.translateCenter(PApplet.CENTER, PApplet.CENTER);
             //inner waveform
-            //cx = v.width/2;
-            //cy = v.height/2;
             v.noFill();    
             v.strokeWeight(2);
 
@@ -196,7 +202,7 @@ public class SarahVisual extends VScene {
                 v.line(x1, y1, x2, y2);
 
                 // increment angle to form circle
-                theta += 0.1f;             
+                theta += 0.08f;             
             }
             v.popMatrix();
 
